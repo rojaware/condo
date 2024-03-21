@@ -1,0 +1,53 @@
+<div class="list row">
+  <div class="col-md-12">
+    <div class="input-group">
+      <div class="form-outline">
+        <mat-form-field class="example-full-width">
+          <mat-label>Search by property</mat-label>
+          <input type="search" matInput placeholder="abell" />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- side property list -->
+  <div class="col-md-2">
+    <h4>Property List</h4>
+    <ul class="list-group">
+      @for (property of properties; track property.name; let i = $index) {
+      <li class="list-group-item" [class.active]="i == currentIndex" (click)="setActiveProperty(property, i)">
+        {{ property.name }}
+      </li>
+      }
+    </ul>
+
+    <button class="m-3 btn btn-md btn-warning" (click)="addProperty()">
+      Add
+    </button>
+  </div>
+  <!-- #docregion slow-animation-duration -->
+  <div class="col-md-8">
+    <mat-tab-group animationDuration="2000ms">
+      <!-- #enddocregion slow-animation-duration -->
+      <mat-tab label="Property">
+        <div class="col-md-8">
+          <app-property [viewMode]="true" [currentProperty]="currentProperty"></app-property>
+        </div>
+      </mat-tab>
+      <mat-tab label="Tenant">
+        <div class="col-md-8">
+          <app-tenant [viewMode]="true" [currentProperty]="currentProperty"></app-tenant>
+        </div>
+      </mat-tab>
+      <mat-tab label="Expense">        <div class="col-md-8">
+        <app-expense [viewMode]="true" [currentProperty]="currentProperty"></app-expense>
+      </div></mat-tab>
+    </mat-tab-group>
+  </div>
+
+
+
+</div>

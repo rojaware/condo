@@ -1,0 +1,7 @@
+.list {
+  text-align: left;
+  margin: inherit;
+}
+.input-group {
+  flex-wrap: inherit;
+}

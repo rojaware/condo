@@ -1,0 +1,46 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Tenant } from '../models/tenant.model';
+
+const baseUrl = 'http://localhost:8090/api/tenants';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TenantService {
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable<Tenant[]> {
+    return this.http.get<Tenant[]>(baseUrl);
+  }
+
+  getByProperty(propertyName: any): Observable<Tenant> {
+    return this.http.get<Tenant>(`${baseUrl}ByProperty/${propertyName}`);
+  }
+
+  getByTenant(primaryName: any): Observable<Tenant> {
+    return this.http.get<Tenant>(`${baseUrl}ByName/${primaryName}`);
+  }  
+  
+  delete(primaryName?: string, propertyName?: string): Observable<any> {
+    return this.http.delete(`${baseUrl}/${primaryName}/${propertyName}`);
+  }
+
+  purge(propertyName?: string): Observable<any> {
+    return this.http.delete(`${baseUrl}Purge/${propertyName}`);
+  }
+  
+  deleteAll(): Observable<any> {
+    return this.http.delete(baseUrl);
+  }
+
+  create(data: any): Observable<any> {
+    return this.http.post(baseUrl, data);
+  }
+
+  update(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}`, data);
+  }
+
+}

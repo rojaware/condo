@@ -1,0 +1,41 @@
+1. select a property to look up
+2. open detail
+   - nickName
+   - address
+   - roll no
+   - property customer no
+   - mortgageBank
+   - size
+   - builder
+   - closingDate
+   - occupancyDate
+   - (rent) start date
+   - rentFee
+   - (rent) end date
+   - 
+   - purchase price
+   - TSCC
+   - HomeInsurancePolicyNo
+   - note
+3. expense
+   - month
+   - year
+   - travel
+   - maintenance
+   - commissions
+   - insurance
+   - legal
+   - managementFee
+   - mortgageInterest   
+   - repairs
+   - supplies
+   - propertyTax
+   - utilities
+   - depreciation
+   - income
+   
+4. tenants
+   - primary full name
+   - secondary full name
+   - contact
+   - idDocuments   

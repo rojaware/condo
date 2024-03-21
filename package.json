@@ -1,0 +1,14 @@
+{
+  "name": "condo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ui" : "cd ui & npm run local",
+    "api" : "cd api & npm run local"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
