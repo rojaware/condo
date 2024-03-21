@@ -1,69 +1,24 @@
-@if (viewMode) { 
+
   @if (currentProperty.name) {
-<div style="display: flex">
-  <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
-  <button class="badge badge-warning right_header" (click)="viewMode = false">
-    <mat-icon>edit</mat-icon>
-  </button>
-</div>
-
-<div class="demo">
-  <!-- <span><label>Name:</label> {{ currentProperty.name }}</span> -->
-  <mat-form-field class="edit-form-field">
-    <mat-label>Name</mat-label>
-    <input id="name" matInput type="text" [(ngModel)]="currentProperty.name" name="name" [disabled]="viewMode"/>
-    @if (currentProperty.name && !viewMode) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.name = ''">
-      <mat-icon>close</mat-icon>
-    </button>
-    }
-  </mat-form-field>  
-  <span><label>Owner:</label> {{ currentProperty.owner }}</span>
-</div>
-<div>
-  <span><label>Address:</label> {{ currentProperty.address }}</span>
-</div>
-<div class="demo">
-  <span><label>Property Tax Roll #:</label> {{ currentProperty.rollNo }}</span>
-  <span><label>Property Tax Customer #:</label> {{ currentProperty.propertyCustomerNo }}</span>
-</div>
-
-<div class="demo">
-  <span><label>Mortgage Bank:</label> {{ currentProperty.bank }}</span>
-  <span><label>Builder:</label> {{ currentProperty.builder }}</span>
-  <span><label>Size (sq):</label> {{ currentProperty.size }}</span>
-</div>
-
-<div class="demo">
-  <span><label>Occupancy Date:</label> {{ currentProperty.occupancyDate | date }}</span>
-  <span><label>Closing Date:</label> {{ currentProperty.closingDate | date }}</span>
-</div>
-
-<div class="demo">
-  <span><label>Lease Start Date:</label> {{ currentProperty.startDate | date }}</span>
-  <span><label>Lease End Date:</label> {{ currentProperty.endDate | date }}</span>
-</div>
-<div class="demo">
-  <span><label>Monthly Rent:</label> {{ currentProperty.rentFee | currency }}</span>
-  <span><label>Purchase Price:</label> {{ currentProperty.purchasePrice | currency }}</span>
-</div>
-
-  } @else {
-    <p>Select a property to lookup...</p>
-  }
-} @else { @if (currentProperty.name) {
 <div class="edit-form">
   <div style="display: flex">
     <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
-    <button class="badge badge-warning right_header" (click)="viewMode = true">
-      <mat-icon>view_comfy</mat-icon>
-    </button>
+    @if (viewMode) {
+      <button class="badge badge-warning right_header" (click)="viewMode = false">
+        <mat-icon>edit</mat-icon>
+      </button>
+    } @else {
+      <button class="badge badge-warning right_header" (click)="viewMode = true">
+        <mat-icon>view_comfy</mat-icon>
+      </button>
+    }
+
   </div>
   <form>
     <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Name</mat-label>
-        <input id="name" matInput type="text" [(ngModel)]="currentProperty.name" name="name" [disabled]="viewMode"/>
+        <input id="name" matInput type="text" [(ngModel)]="currentProperty.name" name="name" [readonly]="viewMode"/>
         @if (currentProperty.name && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.name = ''">
           <mat-icon>close</mat-icon>
@@ -72,8 +27,8 @@
       </mat-form-field>
       <mat-form-field class="edit-form-field">
         <mat-label>Owner</mat-label>
-        <input id="owner" matInput type="text" [(ngModel)]="currentProperty.owner" name="owner" />
-        @if (currentProperty.owner) {
+        <input id="owner" matInput type="text" [(ngModel)]="currentProperty.owner" name="owner" [readonly]="viewMode"/>
+        @if (currentProperty.owner && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.owner = ''">
           <mat-icon>close</mat-icon>
         </button>
@@ -84,8 +39,8 @@
     <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Address</mat-label>
-        <input id="address" matInput type="text" [(ngModel)]="currentProperty.address" name="address" />
-        @if (currentProperty.address) {
+        <input id="address" matInput type="text" [(ngModel)]="currentProperty.address" name="address" [readonly]="viewMode"/>
+        @if (currentProperty.address && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.address = ''">
           <mat-icon>close</mat-icon>
         </button>
@@ -95,8 +50,8 @@
     <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Property Tax Roll #</mat-label>
-        <input id="rollNo" matInput type="text" [(ngModel)]="currentProperty.rollNo" name="rollNo" />
-        @if (currentProperty.rollNo) {
+        <input id="rollNo" matInput type="text" [(ngModel)]="currentProperty.rollNo" name="rollNo" [readonly]="viewMode"/>
+        @if (currentProperty.rollNo && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.rollNo = ''">
           <mat-icon>close</mat-icon>
         </button>
@@ -104,9 +59,8 @@
       </mat-form-field>
       <mat-form-field class="edit-form-field">
         <mat-label>Property Tax Customer #</mat-label>
-        <input id="propertyCustomerNo" matInput type="text" [(ngModel)]="currentProperty.propertyCustomerNo"
-          name="propertyCustomerNo" />
-        @if (currentProperty.propertyCustomerNo) {
+        <input id="propertyCustomerNo" matInput type="text" [(ngModel)]="currentProperty.propertyCustomerNo" name="propertyCustomerNo" [readonly]="viewMode"/>
+        @if (currentProperty.propertyCustomerNo && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.propertyCustomerNo = ''">
           <mat-icon>close</mat-icon>
         </button>
@@ -117,8 +71,8 @@
     <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Mortgage Bank</mat-label>
-        <input id="bank" matInput type="text" [(ngModel)]="currentProperty.bank" name="bank" />
-        @if (currentProperty.bank) {
+        <input id="bank" matInput type="text" [(ngModel)]="currentProperty.bank" name="bank" [readonly]="viewMode"/>
+        @if (currentProperty.bank && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.bank = ''">
           <mat-icon>close</mat-icon>
         </button>
@@ -126,8 +80,8 @@
       </mat-form-field>
       <mat-form-field class="edit-form-field">
         <mat-label>Builder</mat-label>
-        <input id="builder" matInput type="text" [(ngModel)]="currentProperty.builder" name="builder" />
-        @if (currentProperty.builder) {
+        <input id="builder" matInput type="text" [(ngModel)]="currentProperty.builder" name="builder" [readonly]="viewMode"/>
+        @if (currentProperty.builder && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.builder = ''">
           <mat-icon>close</mat-icon>
         </button>
@@ -135,8 +89,8 @@
       </mat-form-field>
       <mat-form-field class="edit-form-field">
         <mat-label>Size (sq)</mat-label>
-        <input id="size" matInput type="text" [(ngModel)]="currentProperty.size" name="size" />
-        @if (currentProperty.size) {
+        <input id="size" matInput type="text" [(ngModel)]="currentProperty.size" name="size" [readonly]="viewMode"/>
+        @if (currentProperty.size && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.size = 0">
           <mat-icon>close</mat-icon>
         </button>
@@ -147,9 +101,8 @@
       <div class="form-group">
         <mat-form-field class="edit-form-field">
           <mat-label>Occupancy Date (YYYY-MM-DD)</mat-label>
-          <input id="occupancyDate" matInput type="text" [(ngModel)]="currentProperty.occupancyDate"
-            name="occupancyDate" />
-          @if (currentProperty.occupancyDate) {
+          <input id="occupancyDate" matInput type="text" [(ngModel)]="currentProperty.occupancyDate" name="occupancyDate" [readonly]="viewMode"/>
+          @if (currentProperty.occupancyDate && !viewMode) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.occupancyDate = ''">
             <mat-icon>close</mat-icon>
           </button>
@@ -157,8 +110,8 @@
         </mat-form-field>
         <mat-form-field class="edit-form-field">
           <mat-label>Closing Date (YYYY-MM-DD)</mat-label>
-          <input id="closingDate" matInput type="text" [(ngModel)]="currentProperty.closingDate" name="closingDate" />
-          @if (currentProperty.closingDate) {
+          <input id="closingDate" matInput type="text" [(ngModel)]="currentProperty.closingDate" name="closingDate"  [readonly]="viewMode"/>
+          @if (currentProperty.closingDate && !viewMode) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.closingDate = ''">
             <mat-icon>close</mat-icon>
           </button>
@@ -169,8 +122,8 @@
       <div class="form-group">
         <mat-form-field class="edit-form-field">
           <mat-label>Lease Start Date (YYYY-MM-DD)</mat-label>
-          <input id="startDate" matInput type="text" [(ngModel)]="currentProperty.startDate" name="startDate" />
-          @if (currentProperty.startDate) {
+          <input id="startDate" matInput type="text" [(ngModel)]="currentProperty.startDate" name="startDate"  [readonly]="viewMode"/>
+          @if (currentProperty.startDate && !viewMode) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.startDate = ''">
             <mat-icon>close</mat-icon>
           </button>
@@ -178,8 +131,8 @@
         </mat-form-field>
         <mat-form-field class="edit-form-field">
           <mat-label>Lease End Date (YYYY-MM-DD)</mat-label>
-          <input id="endDate" matInput type="text" [(ngModel)]="currentProperty.endDate" name="endDate" />
-          @if (currentProperty.endDate) {
+          <input id="endDate" matInput type="text" [(ngModel)]="currentProperty.endDate" name="endDate"  [readonly]="viewMode"/>
+          @if (currentProperty.endDate && !viewMode) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.endDate = ''">
             <mat-icon>close</mat-icon>
           </button>
@@ -190,8 +143,8 @@
       <div class="form-group">
         <mat-form-field class="edit-form-field">
           <mat-label>Rent Fee</mat-label>
-          <input id="rentFee" matInput type="text" [(ngModel)]="currentProperty.rentFee" name="rentFee" />
-          @if (currentProperty.rentFee) {
+          <input id="rentFee" matInput type="text" [(ngModel)]="currentProperty.rentFee" name="rentFee"  [readonly]="viewMode"/>
+          @if (currentProperty.rentFee && !viewMode) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.rentFee = 0">
             <mat-icon>close</mat-icon>
           </button>
@@ -200,8 +153,8 @@
         <mat-form-field class="edit-form-field">
           <mat-label>Purchase Price</mat-label>
           <input id="purchasePrice" matInput type="text" [(ngModel)]="currentProperty.purchasePrice"
-            name="purchasePrice" />
-          @if (currentProperty.purchasePrice) {
+            name="purchasePrice"  [readonly]="viewMode"/>
+          @if (currentProperty.purchasePrice && !viewMode) {
           <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.purchasePrice = 0">
             <mat-icon>close</mat-icon>
           </button>
@@ -210,6 +163,7 @@
       </div>
     
   </form>
+  @if (!viewMode) {
   <div class="right_header">
     <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
       <mat-icon>cancel</mat-icon>
@@ -223,8 +177,9 @@
       <mat-icon>save</mat-icon>
     </button>
   </div>
+  }
   <p>{{ message }}</p>
 </div>
 } @else {
 <p>Cannot access this Property...</p>
-} }
+} 

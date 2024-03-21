@@ -107,7 +107,7 @@ router.route('/tenants').get((request, response) => {
             response.status(404)
             response.send('no data')
         } else {
-            response.json(result);
+            response.json(result[0]);
         }
     })
 })
@@ -207,7 +207,7 @@ router.route('/expenses').get((request, response) => {
             response.status(404)
             response.send('no data')
         } else {
-            response.status(201).json(result);
+            response.status(201).json(result[0]);
         }
     })
 })
@@ -219,7 +219,7 @@ router.route('/expensesByProperty/:name').get((request, response) => {
             console.log("no data...");
             response.status(404).send('no data')
         } else {
-            response.status(201).json(result);
+            response.status(201).json(result[0]);
         }
     })
 })
@@ -231,7 +231,7 @@ router.route('/expensesByYear/:name/:year').get((request, response) => {
             console.log("no data...");
             response.status(404).send('no data')
         } else {
-            response.status(201).json(result);
+            response.status(201).json(result[0]);
         }
     })
 })
@@ -243,7 +243,7 @@ router.route('/expensesByMonth/:name/:year/:month').get((request, response) => {
             console.log("no data...");
             response.status(404).send('no data')
         } else {
-            response.status(201).json(result);
+            response.status(201).json(result[0]);
         }
     })
 })

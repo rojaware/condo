@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,6 +12,8 @@ import {MaterialModule} from './material/material.module'
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { TenantComponent } from './tenant/tenant.component';
 import { ExpenseComponent } from './expense/expense.component'
+import { ConfigService } from './config.service';
+import { BaseComponent } from './base/base.component';
 
 @NgModule({
   declarations: [
@@ -19,9 +21,11 @@ import { ExpenseComponent } from './expense/expense.component'
     PropertyComponent,
     PropertyListComponent,
     TenantComponent,
-    ExpenseComponent
+    ExpenseComponent,
+    BaseComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
@@ -29,7 +33,16 @@ import { ExpenseComponent } from './expense/expense.component'
     MaterialModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return () => configService.loadConfig();
+      },
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

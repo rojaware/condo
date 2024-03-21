@@ -11,8 +11,7 @@ import { Property } from '../../models/property.model';
 
 export class PropertyComponent implements OnInit {
   @Input() viewMode = false;
-
-  @Input() currentProperty: Property = {};
+  @Input() currentProperty: Property = {} as Property;
   
   dateToday: number = Date.now();
   message = '';
@@ -22,25 +21,7 @@ export class PropertyComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {}
-/**
- *  = {
-    name: '',
-    address: '',
-    rollNo: '',
-    propertyCustomerNo: '',
-    owner: '',
-    bank: '',
-    size: 0,
-    builder: '',
-    closingDate: '',
-    occupancyDate: '',
-    startDate: '',
-    endDate: '',
-    rentFee: 0,
-    purchasePrice: 0
-  };
 
- */
   ngOnInit(): void {
     if (!this.viewMode ) {
       this.message = '';

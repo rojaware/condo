@@ -1,1 +1,62 @@
-<p>tenant works!</p>
+<pre>{{ currentProperty | json }}</pre>
+debug {{ currentProperty['tenant'].primaryName }}
+=debug {{ tenant | json }}
+@if (currentProperty.tenant.primaryName) {
+  <div class="edit-form">
+    <div style="display: flex">
+      <h4 class="button-space">{{ currentProperty.tenant.primaryName | uppercase }}</h4>
+      @if (viewMode) {
+        <button class="badge badge-warning right_header" (click)="viewMode = false">
+          <mat-icon>edit</mat-icon>
+        </button>
+      } @else {
+        <button class="badge badge-warning right_header" (click)="viewMode = true">
+          <mat-icon>view_comfy</mat-icon>
+        </button>
+      }
+  
+    </div>
+    <form>
+      <div class="form-group">
+        <mat-form-field class="edit-form-field">
+          <mat-label>Primary Name</mat-label>
+          <input id="primaryName" matInput type="text" [(ngModel)]="currentProperty.tenant.primaryName" name="primaryName" [readonly]="viewMode"/>
+          @if (currentProperty.tenant.primaryName && !viewMode) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.tenant.primaryName = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+        <mat-form-field class="edit-form-field">
+          <mat-label>Secondary Name</mat-label>
+          <input id="secondaryName" matInput type="text" [(ngModel)]="currentProperty.tenant.secondaryName" name="secondaryName" [readonly]="viewMode"/>
+          @if (currentProperty.tenant.secondaryName && !viewMode) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.tenant.secondaryName = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+      </div>
+  
+      
+    </form>
+    @if (!viewMode) {
+    <div class="right_header">
+      <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
+        <mat-icon>cancel</mat-icon>
+      </button>
+  
+      <button class="badge badge-danger mr-2" (click)="delete()" matTooltip="Delete Tenant">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+  
+      <button type="submit" class="badge badge-success mb-2" (click)="update()" matTooltip="Update Tenant">
+        <mat-icon>save</mat-icon>
+      </button>
+    </div>
+    }
+    <p>{{ message }}</p>
+  </div>
+  } @else {
+  <p>Cannot access this Tenant...</p>
+  } 

@@ -9,9 +9,10 @@ const routes: Routes = [
   { path: '', redirectTo: 'properties', pathMatch: 'full' },
   { path: 'properties', component: PropertyListComponent },
   { path: 'properties/:name', component: PropertyComponent },
-  { path: 'tenant', component: TenantComponent },
-  { path: 'expense', component: ExpenseComponent },
-  
+  { path: 'tenants', component: TenantComponent },
+  { path: 'tenants/:propertyName', component: TenantComponent },
+  { path: 'expenses', component: ExpenseComponent },
+  { path: 'expenses/:propertyName/:year', component: ExpenseComponent },
 ];
 
 @NgModule({

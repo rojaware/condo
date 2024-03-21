@@ -11,8 +11,8 @@ import { PropertyService } from '../services/property.service';
 export class ExpenseComponent implements OnInit{
   @Input() viewMode = false;
 
-  @Input() currentProperty: Property = {};
-  
+  @Input() currentProperty: Property = {} as Property;
+
   dateToday: number = Date.now();
   message = '';
 
