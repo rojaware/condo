@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
+import { ConfigService } from '../services/config.service';
+import { Router } from '@angular/router';
+import { Config } from '../models/config.model';
 
 @Component({
   selector: 'app-base',
-  templateUrl: './base.component.html',
-  styleUrl: './base.component.css'
+  template: ` <p>base works!</p> `,
+  styleUrl: './base.component.css',
 })
 export class BaseComponent implements OnInit {
+  config: Config =  ConfigService.config;
+  loading = false;
+  submitted = false;
+  errMessage: string;
 
-  constructor (private configService: ConfigService) {}
+  constructor(protected router: Router) {}
 
   ngOnInit(): void {
-    const apiUrl = this.configService.params('apiEndpint');
-    console.log('API URL:', apiUrl);
   }
-
-
 }

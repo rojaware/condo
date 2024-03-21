@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { Property } from '../../models/property.model';
+import { BaseComponent } from '../../base/base.component';
 
 @Component({
   selector: 'app-property',
@@ -9,7 +10,7 @@ import { Property } from '../../models/property.model';
   styleUrls: ['./property.component.css'],
 })
 
-export class PropertyComponent implements OnInit {
+export class PropertyComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
   @Input() currentProperty: Property = {} as Property;
   
@@ -17,10 +18,12 @@ export class PropertyComponent implements OnInit {
   message = '';
 
   constructor(
+    protected router: Router,
     private propertyService: PropertyService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private route: ActivatedRoute,    
+  ) {
+    super(router);
+  }
 
   ngOnInit(): void {
     if (!this.viewMode ) {

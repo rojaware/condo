@@ -8,8 +8,6 @@
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
-
-
     </div>
   </div>
 
@@ -40,8 +38,8 @@
         </div>
       </mat-tab>
       <mat-tab label="Tenant">
-        <div class="col-md-8">
-          <app-tenant [viewMode]="true" [currentProperty]="currentProperty"></app-tenant>          
+        <div class="col-md-8">          
+          <app-tenant [viewMode]="true" [tenant]="currentTenant" ></app-tenant>          
         </div>
       </mat-tab>
       <mat-tab label="Expense">

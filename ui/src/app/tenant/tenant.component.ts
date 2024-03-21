@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Tenant } from '../models/tenant.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '../services/tenant.service';
+import { BaseComponent } from '../base/base.component';
 import { Property } from '../models/property.model';
 
 @Component({
@@ -9,30 +10,34 @@ import { Property } from '../models/property.model';
   templateUrl: './tenant.component.html',
   styleUrl: './tenant.component.css',
 })
-export class TenantComponent implements OnInit {
-  @Input() viewMode = false;
-  @Input() currentProperty: Property = {} as Property;  
-  tenant: Tenant = { } as Tenant;
+export class TenantComponent extends BaseComponent implements OnInit {
+  @Input() viewMode = true;  
+  @Input() tenant: Tenant = {} as Tenant;
+  
   dateToday: number = Date.now();
   message: string;
 
   constructor(
+    protected router: Router,
     private tenantService: TenantService,
-    private route: ActivatedRoute,
-    private router: Router
+    private route: ActivatedRoute,    
   ) {
+    super(router);
     this.message = '';
   }
 
   ngOnInit(): void {
-    this.message = '';    
-    this.tenant = this.currentProperty['tenant'];
+    this.message = '';   
+    
+    // if (this.config?.user?.property) {
+    //   this.tenant = this.config.user.property.tenant;
+    // }
   }
-
+  
   get(propertyName: string): void {
     this.tenantService.getByProperty(propertyName).subscribe({
       next: (data) => {
-        this.currentProperty.tenant = data;
+        this.tenant = data;
         console.log(data);
       },
       error: (e) => console.error(e),
@@ -42,7 +47,7 @@ export class TenantComponent implements OnInit {
   update(): void {
     this.message = '';
 
-    this.tenantService.update(this.currentProperty.tenant).subscribe({
+    this.tenantService.update(this.tenant).subscribe({
       next: (res) => {
         console.log(res);
         this.message = res.message
@@ -54,7 +59,7 @@ export class TenantComponent implements OnInit {
   }
 
   delete(): void {
-    this.tenantService.delete(this.currentProperty.name).subscribe({
+    this.tenantService.delete(this.tenant.propertyName).subscribe({
       next: (res) => {
         console.log(res);
         this.router.navigate(['/properties']);

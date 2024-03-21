@@ -1,34 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Property } from '../../models/property.model';
 import { PropertyService } from '../../services/property.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '../../services/tenant.service';
 import { Tenant } from '../../models/tenant.model';
+import { BaseComponent } from '../../base/base.component';
+import { User } from '../../models/user.model';
+import { TenantComponent } from '../../tenant/tenant.component';
 
 @Component({
   selector: 'app-property-list',
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.css'],
 })
-export class PropertyListComponent implements OnInit {
+export class PropertyListComponent extends BaseComponent implements OnInit, AfterViewInit  {
   properties?: Property[];
   currentProperty: Property;
-  
+  currentTenant: Tenant;
+
   currentIndex? = -1;
   name = '';
   search: String = '';
 
   constructor(
+    protected router: Router,
     private propertyService: PropertyService,
     private tenantService: TenantService,
-    private route: ActivatedRoute,
-    private router: Router
+    private route: ActivatedRoute,    
   ) {
+    super(router);
   }
-
   ngOnInit(): void {
     this.retrievePropertyList();
+  }
+
+  ngAfterViewInit() {
+    console.log('current config is ' + JSON.stringify(this.config) );
   }
 
   retrievePropertyList(): void {
@@ -46,7 +54,7 @@ export class PropertyListComponent implements OnInit {
 
   private appendTenantToProperty(property: Property): void {
     this.tenantService.getByProperty(property.name).subscribe({
-      next: (data) => {
+      next: (data: Tenant) => {
         property.tenant = data;
         console.log(data);
       },
@@ -57,6 +65,7 @@ export class PropertyListComponent implements OnInit {
   onTabChanged(event: MatTabChangeEvent): void {
     switch (event.index) {
       case 1: // index of the tenant
+      // this.router.navigate(['/tenants'])
         break;
       case 2:
         // do stuff with content or do nothing :)
@@ -72,6 +81,11 @@ export class PropertyListComponent implements OnInit {
 
   setActiveProperty(property: Property, index?: number): void {
     this.currentProperty = property;
+    this.currentTenant = property.tenant;
+    if (!this.config.user) {
+      this.config.user = {} as User;
+    }
+    this.config.user.property = property;
     this.currentIndex = index;
   }
 

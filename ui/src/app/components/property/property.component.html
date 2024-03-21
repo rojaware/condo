@@ -1,5 +1,6 @@
-
-  @if (currentProperty.name) {
+@if (!currentProperty || !currentProperty.name) {
+  <p>Please select a property ...</p>
+}  @else {  
 <div class="edit-form">
   <div style="display: flex">
     <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
@@ -180,6 +181,4 @@
   }
   <p>{{ message }}</p>
 </div>
-} @else {
-<p>Cannot access this Property...</p>
 } 

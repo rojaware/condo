@@ -18,7 +18,7 @@ async function getTenantByProperty(name) {
         let item = await pool.request()
             .input('input_parameter', sql.VarChar, name)
             .query("SELECT * from TENANTS where propertyName = @input_parameter");
-        return item.recordsets;
+        return item.recordset;
     }
     catch (error) {
         console.log(error);
@@ -31,7 +31,7 @@ async function getTenantByName(name) {
         let item = await pool.request()
             .input('input_parameter', sql.VarChar, name)
             .query("SELECT * from TENANTS where primaryName = @input_parameter OR secondaryName = @input_parameter");
-        return item.recordsets;
+        return item.recordset;
     }
     catch (error) {
         console.log(error);
@@ -65,7 +65,7 @@ async function addTenant(body) {
             .input('documents', sql.VarBinary, body.documents)            
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
-        return item.recordsets;
+        return item.recordset;
     }
     catch (err) {
         console.log(err);
@@ -81,7 +81,7 @@ async function deleteTenant(primaryName, propertyName) {
             .input('primaryName', sql.NVarChar, primaryName)            
             .input('propertyName', sql.NVarChar, propertyName)   
             .query(query);
-        return item.recordsets;
+        return item.rowsAffected;
     }
     catch (err) {
         console.log(err);
@@ -96,7 +96,7 @@ async function purgeTenants(name) {
         let item = await pool.request()
             .input('name', sql.NVarChar, name)            
             .query(query);
-        return item.recordsets;
+        return item.rowsAffected;
     }
     catch (err) {
         console.log(err);
@@ -109,7 +109,7 @@ async function deleteAllTenants() {
         let pool = await sql.connect(config);
         let item = await pool.request()
                 .query(query);
-        return item.recordsets;
+        return item.rowsAffected;
     }
     catch (err) {
         console.log(err);
@@ -136,7 +136,7 @@ async function updateTenant(body) {
             .input('documents', sql.VarBinary, body.documents)
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
-        return item.recordsets;
+        return item.recordset;
     }
     catch (err) {
         console.log(err);
