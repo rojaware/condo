@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -33,7 +33,8 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     FormsModule,
     HttpClientModule,
     MaterialModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule,    
+    ReactiveFormsModule,
   ],
   providers: [
     {
