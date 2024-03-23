@@ -25,11 +25,6 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { ExpenseService } from '../services/expense.service';
 import { Expense } from '../models/expense.model';
-import {
-  DateAdapter,
-  MAT_DATE_LOCALE,
-  MAT_DATE_FORMATS,
-} from '@angular/material/core';
 
 const moment = _rollupMoment || _moment;
 
@@ -47,17 +42,6 @@ export const YEAR_MONTH_FORMATS = {
   },
 };
 
-export const YEAR_FORMATS = {
-  parse: {
-    dateInput: 'YYYY',
-  },
-  display: {
-    dateInput: 'YYYY',
-    monthYearLabel: 'YYYY',
-    monthYearA11yLabel: 'YYYY',
-  },
-};
-
 @Component({
   selector: 'app-expense',
   templateUrl: './expense.component.html',
@@ -67,15 +51,6 @@ export const YEAR_FORMATS = {
     // to your app config. We provide it at the component level here, due to limitations
     // of our example generation script.
     provideMomentDateAdapter(YEAR_MONTH_FORMATS),
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: YEAR_FORMATS,
-    },
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -104,18 +79,25 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     }
   }
 
-  
-  setYearOnly(ev: any, input: any) {
-    let { _i } = ev;
-    this.year = _i.year;
-    this.picker.close();
-  }
-
-  yearOnly = new FormControl(moment());
   date = new FormControl(moment());
   
   year: number;
   month: number;
+  
+  setYear(
+    normalizedMonthAndYear: Moment,
+    datepicker: MatDatepicker<Moment>
+  ) {
+    const ctrlValue = this.date.value ?? moment();
+    this.year = normalizedMonthAndYear.year();
+    
+    
+    ctrlValue.year(normalizedMonthAndYear.year());
+    this.date.setValue(ctrlValue);
+    
+    // retrieve expenses by year and month
+    
+  }
 
   setMonthAndYear(
     normalizedMonthAndYear: Moment,
@@ -128,8 +110,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
     datepicker.close();
-    // retrieve expenses by year and month
-    this.getByMonth();
+   
   }
 
   getByYear(): void {

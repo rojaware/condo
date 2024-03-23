@@ -41,3 +41,12 @@ span label {
   display: flex;
   margin-top: 1rem;
 }
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+  margin-left: 8px;
+}
+
+.example-disabled {
+  display: inline-block;
+}
