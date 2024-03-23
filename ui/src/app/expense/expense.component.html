@@ -1,8 +1,10 @@
-<!-- select only year -->
+
 <div class="form-group">
-  <mat-form-field>
+  <!-- select only year -->
+  <mat-form-field class="edit-form-field">
     <mat-label>Year Only</mat-label>
     <input matInput [matDatepicker]="picker" [formControl]="yearOnly"/>
+    <mat-hint *ngIf="year"></mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
     <mat-datepicker #picker 
                     startView="multi-year" 
@@ -10,11 +12,8 @@
                     panelClass="example-month-picker">
     </mat-datepicker>
   </mat-form-field>
-</div>
-You selected {{ year }}
-<!-- select until month -->
-<div class="form-group">
-  <mat-form-field>
+  <!-- select until month -->
+  <mat-form-field class="edit-form-field">
     <mat-label>Month and Year</mat-label>
     <input matInput [matDatepicker]="dp" [formControl]="date" >
     <mat-hint>MM/YYYY</mat-hint>
@@ -24,13 +23,12 @@ You selected {{ year }}
                     (monthSelected)="setMonthAndYear($event, dp)"
                     panelClass="example-month-picker">
     </mat-datepicker>
-  </mat-form-field>  
+  </mat-form-field>
 </div>
-  @if (expenses.length == 0 || currentExpense.propertyName !== config.user.property.name) {
-  <p> <strong> Select year and month for {{ config.user.property.name }} ...</strong></p>
-  } @else {
-  
 
+  @if (expenses.length == 0 || currentExpense.propertyName !== config.user.property.name) {
+  <p> Select year and month for {{ config.user.property.name }} ...</p>
+  } @else {
 
 <div class="edit-form">
   <div style="display: flex">
@@ -142,5 +140,5 @@ You selected {{ year }}
 
 <p></p>
 TODO <br>
-1. Viewer for annual Viewer <br>
+1. Prepare API for annual expense <br>
 2. Download/Upload csv mat-form-field
