@@ -3,7 +3,6 @@ import { Tenant } from '../models/tenant.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '../services/tenant.service';
 import { BaseComponent } from '../base/base.component';
-import { Property } from '../models/property.model';
 
 @Component({
   selector: 'app-tenant',

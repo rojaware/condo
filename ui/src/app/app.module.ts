@@ -14,6 +14,7 @@ import { TenantComponent } from './tenant/tenant.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { BaseComponent } from './base/base.component';
 import { ConfigService } from './services/config.service';
+import { MonthNamePipe } from './shared/month-name.pipe';
 
 export const initConfig = (configService: ConfigService): any => () => configService.load();
 
@@ -25,6 +26,7 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     TenantComponent,
     ExpenseComponent,
     BaseComponent,
+    MonthNamePipe,
   ],
   imports: [
     HttpClientModule,

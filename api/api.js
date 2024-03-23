@@ -1,4 +1,3 @@
-var property = require('./property');
 const propertyController = require('./controllers/property-controller');
 const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
@@ -15,7 +14,7 @@ app.use(cors());
 app.use('/api', router);
 
 router.use((request, response, next) => {
-    console.log('hoho...');
+    console.log('ho ho...');
     next();
 })
 
@@ -212,9 +211,9 @@ router.route('/expenses').get((request, response) => {
     })
 })
 
-router.route('/expensesByProperty/:name').get((request, response) => {
+router.route('/expenses/:propertyName/:year/:month').get((request, response) => {
     const params = request.params;
-    expenseController.getExpensesByProperty(params.name).then(result => {
+    expenseController.getExpenseByYearMonth(params.propertyName, params.year, params.month).then(result => {
         if (!result) {
             console.log("no data...");
             response.status(404).send('no data')
@@ -224,33 +223,9 @@ router.route('/expensesByProperty/:name').get((request, response) => {
     })
 })
 
-router.route('/expensesByYear/:name/:year').get((request, response) => {
+router.route('/expenses/:propertyName/:year?/:month?').delete((request, response) => {
     const params = request.params;
-    expenseController.getExpensesByYear(params.name, params.year).then(result => {
-        if (!result) {
-            console.log("no data...");
-            response.status(404).send('no data')
-        } else {
-            response.status(201).json(result[0]);
-        }
-    })
-})
-
-router.route('/expensesByMonth/:name/:year/:month').get((request, response) => {
-    const params = request.params;
-    expenseController.getExpensesByMonth(params.name, params.year, params.month).then(result => {
-        if (!result) {
-            console.log("no data...");
-            response.status(404).send('no data')
-        } else {
-            response.status(201).json(result[0]);
-        }
-    })
-})
-
-router.route('/expenses/:name/:year?/:month?').delete((request, response) => {
-    const params = request.params;
-    expenseController.deleteExpense(params.name, params.year, params.month).then(result => {
+    expenseController.deleteExpense(params.propertyName, params.year, params.month).then(result => {
         if (!result) {
             console.log("no data...");
             response.status(404).send('no data')

@@ -15,7 +15,12 @@ async function getProperties() {
                ,CONVERT(char(10), endDate ,126) as endDate
                ,[rentFee]
                ,[purchasePrice]
-               ,[owner] from Properties`;    
+               ,mortgageAccountNo
+               ,mortgageType
+               ,mortgageRate
+               ,CONVERT(char(10), maturityDate ,126) as maturityDate
+               ,comment
+               ,[owner] from Properties`;               
     try {
         let pool = await sql.connect(config);
         let properties = await pool.request().query(query);
@@ -40,6 +45,11 @@ async function getProperty(name) {
                ,CONVERT(char(10), endDate ,126) as endDate
                ,[rentFee]
                ,[purchasePrice]
+               ,mortgageAccountNo
+               ,mortgageType
+               ,mortgageRate
+               ,CONVERT(char(10), maturityDate ,126) as maturityDate
+               ,comment
                ,[owner] from Properties where name = @name`;
     try {
         let pool = await sql.connect(config);
@@ -69,9 +79,18 @@ async function addProperty(property) {
                ,[endDate]
                ,[rentFee]
                ,[purchasePrice]
+               ,mortgageAccountNo
+               ,mortgageType
+               ,mortgageRate
+               ,maturityDatem, comment
                ,[owner])
          VALUES
-               (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder, @closingDate, @occupancyDate, @startDate, @endDate, @rentFee, @purchasePrice, @owner);
+               (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder, @closingDate, 
+                @occupancyDate, @startDate, @endDate, @rentFee, @purchasePrice, @mortgageAccountNo
+                ,@mortgageType
+                ,@mortgageRate
+                ,@maturityDate, @comment
+                ,@owner);
          SELECT @name as name;`;
     try {
         let pool = await sql.connect(config);
@@ -90,6 +109,11 @@ async function addProperty(property) {
             .input('endDate', sql.Date, property.endDate)
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
+            .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
+            .input('mortgageType', sql.NVarChar, property.mortgageType)
+            .input('mortgageRate', sql.Decimal, property.mortgageRate)
+            .input('maturityDate', sql.Date, property.maturityDate)
+            .input('comment', sql.NVarChar, property.comment)
             .query(query);
         return item.recordsets;
     }
@@ -130,6 +154,11 @@ async function updateProperty(property) {
        ,[endDate] = @endDate
        ,[rentFee] = @rentFee
        ,[purchasePrice] = @purchasePrice
+       ,[mortgageAccountNo] = @mortgageAccountNo
+       ,[mortgageType] = @mortgageType
+       ,[mortgageRate] = @mortgageRate
+       ,[maturityDate] = @maturityDate
+       ,[comment] = @comment
     WHERE name = @name;
              SELECT @name as name;`;
     try {
@@ -149,6 +178,11 @@ async function updateProperty(property) {
             .input('endDate', sql.Date, property.endDate)
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
+            .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
+            .input('mortgageType', sql.NVarChar, property.mortgageType)
+            .input('mortgageRate', sql.Decimal, property.mortgageRate)
+            .input('maturityDate', sql.Date, property.maturityDate)            
+            .input('comment', sql.NVarChar, property.comment)    
             .query(query);
         return item.recordsets;
     }

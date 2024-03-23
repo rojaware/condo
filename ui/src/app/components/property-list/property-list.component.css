@@ -5,3 +5,6 @@
 .input-group {
   flex-wrap: inherit;
 }
+::ng-deep .mat-mdc-tab-body-wrapper {
+  display: grid !important;
+}

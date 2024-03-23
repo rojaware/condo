@@ -12,12 +12,12 @@ async function getExpenses() {
     }
 }
 
-async function getExpenseByProperty(name, year) {
+async function getExpenseByProperty(propertyName, year) {
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('name', sql.VarChar, name)
-            .query("SELECT * from EXPENSES where name = @name ");
+            .input('propertyName', sql.VarChar, propertyName)
+            .query("SELECT * from EXPENSES where propertyName = @propertyName ");
         return item.recordsets;
     }
     catch (error) {
@@ -25,28 +25,21 @@ async function getExpenseByProperty(name, year) {
     }
 }
 
-async function getExpenseByYear(name, year) {
-    try {
-        let pool = await sql.connect(config);
-        let item = await pool.request()
-            .input('name', sql.VarChar, name)
-            .input('year', sql.Int, year)
-            .query("SELECT * from EXPENSES where name = @name AND year = @year");
-        return item.recordsets;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
+async function getExpenseByYearMonth(propertyName, year, month) {
+    const query = 
+    `SELECT *  FROM [dbo].[expenses] 
+     WHERE propertyName = @propertyName
+       AND month = COALESCE(@month, month)
+       AND year = COALESCE(@year, year);
+     SELECT @propertyName as propertyName, @year as year, @month as month`;
 
-async function getExpenseByMonth(name, year, month) {
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('name', sql.VarChar, name)
+            .input('propertyName', sql.VarChar, propertyName)
             .input('year', sql.Int, year)
             .input('month', sql.Int, month)
-            .query("SELECT * from EXPENSES where name = @name AND year = @year AND month = @month");
+            .query(query);
         return item.recordsets;
     }
     catch (error) {
@@ -57,7 +50,7 @@ async function getExpenseByMonth(name, year, month) {
 async function addExpense(body) {
     const query = `
     INSERT INTO [dbo].[expenses]
-        ([name]
+        ([propertyName]
         ,[month]
         ,[year]
         ,[travel]
@@ -74,12 +67,12 @@ async function addExpense(body) {
         ,[depreciation]
         ,[income])
     VALUES
-        (@name ,@month ,@year ,@travel,@maintenance,@commission,@insurance,@legal,@managementFee,@mortgageInterest,@repairs,@supplies,@tax,@utilities,@depreciation,@income);
-         SELECT @name as name, @year as year, @month as month;`;
+        (@propertyName ,@month ,@year ,@travel,@maintenance,@commission,@insurance,@legal,@managementFee,@mortgageInterest,@repairs,@supplies,@tax,@utilities,@depreciation,@income);
+         SELECT @propertyName as propertyName, @year as year, @month as month;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('name', sql.NVarChar, body.name)
+            .input('propertyName', sql.NVarChar, body.propertyName)
             .input('month', sql.Int, body.month)
             .input('year', sql.Int, body.year)
             .input('travel', sql.Money, body.travel)
@@ -103,18 +96,18 @@ async function addExpense(body) {
     }
 }
 
-async function deleteExpense(name, year, month) {
+async function deleteExpense(propertyName, year, month) {
     const query = 
      `DELETE FROM [dbo].[expenses] 
-      WHERE name = @name
+      WHERE propertyName = @propertyName
         AND month = COALESCE(@month, month)
         AND year = COALESCE(@year, year);
-      SELECT @name as name, @year as year, @month as month`;
+      SELECT @propertyName as propertyName, @year as year, @month as month`;
 
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('name', sql.NVarChar, name)            
+            .input('propertyName', sql.NVarChar, propertyName)            
             .input('year', sql.Int, year)    
             .input('month', sql.Int, month)    
             .query(query);
@@ -143,7 +136,7 @@ async function purgeExpense() {
 
 async function updateExpense(body) {
     const query = `UPDATE [dbo].[expenses]
-            SET [name] = @name
+            SET [propertyName] = @propertyName
                 ,[month] = @month
                 ,[year] = @year
                 ,[travel] = @travel
@@ -159,12 +152,12 @@ async function updateExpense(body) {
                 ,[utilities] = @utilities
                 ,[depreciation] = @depreciation
                 ,[income] = @income
-            WHERE  name = @name AND year = @year AND month = @month;
-            SELECT @name as name, @year as year, @month as month`;
+            WHERE  propertyName = @propertyName AND year = @year AND month = @month;
+            SELECT @propertyName as propertyName, @year as year, @month as month`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('name', sql.NVarChar, body.name)
+            .input('propertyName', sql.NVarChar, body.propertyName)
             .input('month', sql.Int, body.month)
             .input('year', sql.Int, body.year)
             .input('travel', sql.Money, body.travel)
@@ -191,8 +184,7 @@ async function updateExpense(body) {
 module.exports = {
     getExpenses: getExpenses,
     getExpensesByProperty: getExpenseByProperty,
-    getExpensesByYear : getExpenseByYear,
-    getExpensesByMonth : getExpenseByMonth,
+    getExpenseByYearMonth : getExpenseByYearMonth,
     addExpense : addExpense,
     deleteExpense : deleteExpense,
     purgeExpense: purgeExpense,

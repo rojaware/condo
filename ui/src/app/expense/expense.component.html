@@ -1,13 +1,129 @@
-<p>expense works!</p>
-
 <mat-form-field>
   <mat-label>Month and Year</mat-label>
   <input matInput [matDatepicker]="dp" [formControl]="date">
   <mat-hint>MM/YYYY</mat-hint>
   <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-  <mat-datepicker #dp
-                  startView="multi-year"
-                  (monthSelected)="setMonthAndYear($event, dp)"
-                  panelClass="example-month-picker">
+  <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)"
+    panelClass="example-month-picker">
   </mat-datepicker>
 </mat-form-field>
+
+@if (!config.user.property) {
+Select a property to start with...
+} @else {
+@if (expenses.length == 0 || currentExpense.propertyName !== config.user.property.name) {
+<p> <strong> Select year and month for {{ config.user.property.name }} ...</strong></p>
+} @else {
+<p> <strong> You selected <span>{{ month | monthname }}</span>  {{ year }}  </strong></p>
+
+
+<div class="edit-form">
+  <div style="display: flex">
+    <h4 class="button-space">{{ currentExpense.propertyName | uppercase }}</h4>
+    @if (viewMode) {
+    <button class="badge badge-warning " (click)="viewMode = false">
+      <mat-icon>edit</mat-icon>
+    </button>
+    } @else {
+    <button class="badge badge-warning " (click)="viewMode = true">
+      <mat-icon>remove_red_eye</mat-icon>
+    </button>
+    }
+
+  </div>
+  <form style="height: 300px;">
+    <!-- Income -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Monthly Income</mat-label>
+        <input id="income" matInput [(ngModel)]="currentExpense.income" name="income" [readonly]="viewMode" />
+      </mat-form-field>
+    </div>
+    <!-- travel, maintenance, commission, insurance -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Travel</mat-label>
+        <input id="travel" matInput [(ngModel)]="currentExpense.travel" name="travel" [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Maintenance</mat-label>
+        <input id="maintenance" matInput [(ngModel)]="currentExpense.maintenance" name="maintenance"
+          [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Commission</mat-label>
+        <input id="commission" matInput [(ngModel)]="currentExpense.commission" name="commission"
+          [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Insurance</mat-label>
+        <input id="insurance" matInput [(ngModel)]="currentExpense.insurance" name="insurance" [readonly]="viewMode" />
+      </mat-form-field>
+    </div>
+
+    <!-- legal, managementFee, mortgageInterest, repairs -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Legal Fee</mat-label>
+        <input id="legal" matInput [(ngModel)]="currentExpense.legal" name="legal" [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Management Fee</mat-label>
+        <input id="managementFee" matInput [(ngModel)]="currentExpense.managementFee" name="managementFee"
+          [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Mortgage Interest</mat-label>
+        <input id="mortgageInterest" matInput [(ngModel)]="currentExpense.mortgageInterest" name="mortgageInterest"
+          [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Repairs</mat-label>
+        <input id="repairs" matInput [(ngModel)]="currentExpense.repairs" name="repairs" [readonly]="viewMode" />
+      </mat-form-field>
+    </div>
+
+    <!-- supplies, tax, utilities, depreciation -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Supplies</mat-label>
+        <input id="supplies" matInput [(ngModel)]="currentExpense.supplies" name="supplies" [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Tax</mat-label>
+        <input id="tax" matInput [(ngModel)]="currentExpense.tax" name="tax" [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Utilities</mat-label>
+        <input id="utilities" matInput [(ngModel)]="currentExpense.utilities" name="utilities" [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Depreciation</mat-label>
+        <input id="depreciation" matInput [(ngModel)]="currentExpense.depreciation" name="depreciation"
+          [readonly]="viewMode" />
+      </mat-form-field>
+    </div>
+
+    @if (!viewMode) {
+    <div class="form-group">
+      <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
+        <mat-icon>cancel</mat-icon>
+      </button>
+
+      <button class="badge badge-danger mr-2" (click)="delete()" matTooltip="Delete Tenant">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+
+      <button type="submit" class="badge badge-success mb-2" (click)="update()" matTooltip="Update Tenant">
+        <mat-icon>save</mat-icon>
+      </button>
+    </div>
+    }
+  </form>
+  <p>{{ message }}</p>
+</div>
+}
+}
+TODO <br>
+1. Viewer for annual Viewer <br>
+2. Download/Upload csv mat-form-field

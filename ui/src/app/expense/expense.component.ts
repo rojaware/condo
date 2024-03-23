@@ -16,6 +16,8 @@ import * as _moment from 'moment';
 import {default as _rollupMoment, Moment} from 'moment';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { ExpenseService } from '../services/expense.service';
+import { Expense } from '../models/expense.model';
 
 const moment = _rollupMoment || _moment;
 
@@ -47,15 +49,17 @@ export const MY_FORMATS = {
 })
 export class ExpenseComponent extends BaseComponent implements OnInit{
   @Input() viewMode = false;
-
   @Input() currentProperty: Property = {} as Property;
+  expenses: Expense[] = [];
+  currentExpense: Expense;
+  
 
   dateToday: number = Date.now();
   message = '';
 
   constructor(
     protected router: Router,
-    private propertyService: PropertyService,
+    private expenseService: ExpenseService,
     private route: ActivatedRoute,    
   ) {
     super(router);
@@ -64,17 +68,75 @@ export class ExpenseComponent extends BaseComponent implements OnInit{
   ngOnInit(): void {
     if (!this.viewMode ) {
       this.message = '';
-      // this.getProperty(this.route.snapshot.params['name']);
+      // this.getProperty(this.route.snapshot.params['propertyName']);
     }
   }
 
   date = new FormControl(moment());
+  year: number;
+  month: number;
 
   setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
     const ctrlValue = this.date.value ?? moment();
+    this.year = normalizedMonthAndYear.year();
+    this.month = normalizedMonthAndYear.month();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
     datepicker.close();
+    // retrieve expenses by year and month
+    this.get();
+  }
+
+  get(): void {
+    const propertyName = this.config.user.property.name;
+    this.expenseService.getByYearMonth(propertyName, this.year, this.month).subscribe({
+      next: (data) => {
+        this.expenses = data;
+        this.config.user.property.expenses = data;
+        this.currentExpense = data[0];
+        console.log(data);
+      },
+      error: (e) => console.error(e),
+    });
+  }
+
+  // getByMonth(year: number, month: number): void {
+  //   const propertyName = this.config.user.property.name;
+  //   this.expenseService.getByYearMonth(propertyName, year, month).subscribe({
+  //     next: (data) => {
+  //       this.expenses = data;
+  //       this.config.user.property.expenses = data;
+  //       // useful for single record result for expense
+  //       this.currentExpense = data[0];
+  //       console.log(data);
+  //     },
+  //     error: (e) => console.error(e),
+  //   });
+  // }
+
+  
+  update(): void {
+    this.message = '';
+
+    this.expenseService.update(this.currentExpense).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.message = res.message
+          ? res.message
+          : 'This tenant was updated successfully!';
+      },
+      error: (e) => console.error(e),
+    });
+  }
+
+  delete(): void {
+    this.expenseService.delete(this.currentExpense.propertyName).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.router.navigate(['/properties']);
+      },
+      error: (e) => console.error(e),
+    });
   }
 }

@@ -62,17 +62,6 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     });
   }
 
-  onTabChanged(event: MatTabChangeEvent): void {
-    switch (event.index) {
-      case 1: // index of the tenant
-      // this.router.navigate(['/tenants'])
-        break;
-      case 2:
-        // do stuff with content or do nothing :)
-        break;
-    }
-  }
-
   refreshList(): void {
     this.retrievePropertyList();
     this.currentProperty = {} as Property;

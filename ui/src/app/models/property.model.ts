@@ -16,6 +16,11 @@ export class Property {
   endDate: string;
   rentFee: number;
   purchasePrice: number;
+  mortgageAccountNo: string;
+  mortgageType: string;
+  mortgageRate: number;
+  maturityDate: string;
+  comment: string;
   tenant: Tenant;
   expenses: Expense[];
 }
