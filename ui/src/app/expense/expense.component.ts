@@ -61,16 +61,18 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   expenses: Expense[] = [];
   currentExpense: Expense;
-  selectedYear: number;
   dateToday: number = Date.now();
   message = '';
+
+  date = new FormControl(moment());  
+  year: number;
+  month: number;
 
   constructor(
     protected router: Router,
     private expenseService: ExpenseService,
-    private route: ActivatedRoute
-  ) {
-    super(router);
+    private route: ActivatedRoute) {
+      super(router);
   }
 
   ngOnInit(): void {
@@ -78,11 +80,6 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       this.message = '';
     }
   }
-
-  date = new FormControl(moment());
-  
-  year: number;
-  month: number;
   
   setYear(
     normalizedMonthAndYear: Moment,
@@ -121,7 +118,6 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         next: (data) => {
           this.expenses = data;
           this.config.user.property.expenses = data;
-          // this.currentExpense = data[0];
           console.log(data);
         },
         error: (e) => console.error(e),
@@ -142,20 +138,26 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         error: (e) => console.error(e),
       });
   }
-
-  // getByMonth(year: number, month: number): void {
-  //   const propertyName = this.config.user.property.name;
-  //   this.expenseService.getByYearMonth(propertyName, year, month).subscribe({
-  //     next: (data) => {
-  //       this.expenses = data;
-  //       this.config.user.property.expenses = data;
-  //       // useful for single record result for expense
-  //       this.currentExpense = data[0];
-  //       console.log(data);
-  //     },
-  //     error: (e) => console.error(e),
-  //   });
-  // }
+/**
+ *  {
+    "propertyName": "abell     ",
+    "month": 3,
+    "year": 2024,
+    "travel": 200.22,
+    "maintenance": 100,
+    "commission": 0,
+    "insurance": 20,
+    "legal": 0,
+    "managementFee": 231.22,
+    "mortgageInterest": 450,
+    "repairs": 9.33,
+    "supplies": 3.45,
+    "tax": 233.11,
+    "utilities": 78.05,
+    "depreciation": 0,
+    "income": 3000
+  },
+ */
 
   update(): void {
     this.message = '';

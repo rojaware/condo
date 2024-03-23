@@ -17,7 +17,8 @@
     <button mat-raised-button color="primary" (click)="getByMonth()">Retrieve {{ month | monthname }}</button>
     <button mat-raised-button color="accent" (click)="getByYear()">Retrieve {{ year }}</button>
   </div>
-  
+  debug currentExpense :: <pre>{{ currentExpense | json }}</pre>
+  debug expenses :: <pre>{{ expenses | json }}</pre>
   
 </div>
 

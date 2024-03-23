@@ -211,7 +211,7 @@ router.route('/expenses').get((request, response) => {
     })
 })
 
-router.route('/expenses/:propertyName/:year/:month').get((request, response) => {
+router.route('/expenses/:propertyName/:year/:month?').get((request, response) => {
     const params = request.params;
     expenseController.getExpenseByYearMonth(params.propertyName, params.year, params.month).then(result => {
         if (!result) {

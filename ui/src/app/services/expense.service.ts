@@ -19,8 +19,12 @@ export class ExpenseService {
     return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
   }
   
-  getByYearMonth(propertyName: any, year: any, month?: any): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${baseUrl}/${propertyName}/${year}/${month}`);
+  getByYearMonth(propertyName: any, year: any, month?: any): Observable<Expense[]> {    
+    if (month) {
+      return this.http.get<Expense[]>(`${baseUrl}/${propertyName}/${year}/${month}`);
+    } else {
+      return this.http.get<Expense[]>(`${baseUrl}/${propertyName}/${year}`);      
+    }    
   }
   
   delete(propertyName: any, year?: any, month?: any): Observable<any> {
