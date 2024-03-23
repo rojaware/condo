@@ -1,11 +1,20 @@
-import { Component, ViewEncapsulation, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Property } from '../models/property.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PropertyService } from '../services/property.service';
 import { BaseComponent } from '../base/base.component';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
+import { FormControl } from '@angular/forms';
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MomentDateAdapter,
+  provideMomentDateAdapter,
+} from '@angular/material-moment-adapter';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 // Depending on whether rollup is used, moment needs to be imported differently.
 // Since Moment.js doesn't have a default export, we normally need to import using the `* as`
@@ -13,17 +22,20 @@ import {MatDatepicker, MatDatepickerModule} from '@angular/material/datepicker';
 // the `default as` syntax.
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
-import {default as _rollupMoment, Moment} from 'moment';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { default as _rollupMoment, Moment } from 'moment';
 import { ExpenseService } from '../services/expense.service';
 import { Expense } from '../models/expense.model';
+import {
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MAT_DATE_FORMATS,
+} from '@angular/material/core';
 
 const moment = _rollupMoment || _moment;
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
-export const MY_FORMATS = {
+export const YEAR_MONTH_FORMATS = {
   parse: {
     dateInput: 'MM/YYYY',
   },
@@ -35,6 +47,17 @@ export const MY_FORMATS = {
   },
 };
 
+export const YEAR_FORMATS = {
+  parse: {
+    dateInput: 'YYYY',
+  },
+  display: {
+    dateInput: 'YYYY',
+    monthYearLabel: 'YYYY',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
 @Component({
   selector: 'app-expense',
   templateUrl: './expense.component.html',
@@ -43,40 +66,61 @@ export const MY_FORMATS = {
     // Moment can be provided globally to your app by adding `provideMomentDateAdapter`
     // to your app config. We provide it at the component level here, due to limitations
     // of our example generation script.
-    provideMomentDateAdapter(MY_FORMATS),
+    provideMomentDateAdapter(YEAR_MONTH_FORMATS),
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: YEAR_FORMATS,
+    },
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class ExpenseComponent extends BaseComponent implements OnInit{
+export class ExpenseComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
   @Input() currentProperty: Property = {} as Property;
+  @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
+
   expenses: Expense[] = [];
   currentExpense: Expense;
-  
-
+  selectedYear: number;
   dateToday: number = Date.now();
   message = '';
 
   constructor(
     protected router: Router,
     private expenseService: ExpenseService,
-    private route: ActivatedRoute,    
+    private route: ActivatedRoute
   ) {
     super(router);
   }
 
   ngOnInit(): void {
-    if (!this.viewMode ) {
+    if (!this.viewMode) {
       this.message = '';
-      // this.getProperty(this.route.snapshot.params['propertyName']);
     }
   }
 
+  
+  setYearOnly(ev: any, input: any) {
+    let { _i } = ev;
+    this.year = _i.year;
+    this.picker.close();
+  }
+
+  yearOnly = new FormControl(moment());
   date = new FormControl(moment());
+  
   year: number;
   month: number;
 
-  setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
+  setMonthAndYear(
+    normalizedMonthAndYear: Moment,
+    datepicker: MatDatepicker<Moment>
+  ) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
     this.month = normalizedMonthAndYear.month();
@@ -85,20 +129,37 @@ export class ExpenseComponent extends BaseComponent implements OnInit{
     this.date.setValue(ctrlValue);
     datepicker.close();
     // retrieve expenses by year and month
-    this.get();
+    this.getByMonth();
   }
 
-  get(): void {
+  getByYear(): void {
     const propertyName = this.config.user.property.name;
-    this.expenseService.getByYearMonth(propertyName, this.year, this.month).subscribe({
-      next: (data) => {
-        this.expenses = data;
-        this.config.user.property.expenses = data;
-        this.currentExpense = data[0];
-        console.log(data);
-      },
-      error: (e) => console.error(e),
-    });
+    this.expenseService
+      .getByYearMonth(propertyName, this.year, null)
+      .subscribe({
+        next: (data) => {
+          this.expenses = data;
+          this.config.user.property.expenses = data;
+          // this.currentExpense = data[0];
+          console.log(data);
+        },
+        error: (e) => console.error(e),
+      });
+  }
+
+  getByMonth(): void {
+    const propertyName = this.config.user.property.name;
+    this.expenseService
+      .getByYearMonth(propertyName, this.year, this.month)
+      .subscribe({
+        next: (data) => {
+          this.expenses = data;
+          this.config.user.property.expenses = data;
+          this.currentExpense = data[0];
+          console.log(data);
+        },
+        error: (e) => console.error(e),
+      });
   }
 
   // getByMonth(year: number, month: number): void {
@@ -115,7 +176,6 @@ export class ExpenseComponent extends BaseComponent implements OnInit{
   //   });
   // }
 
-  
   update(): void {
     this.message = '';
 
