@@ -30,3 +30,9 @@ div.demo span {
 span label {
   font-weight: bold;
 }
+mat-button-toggle {
+  border: 1px solid hsl(76, 49%, 68%) !important;
+}
+mat-button-toggle-group {
+  height: max-content;
+}

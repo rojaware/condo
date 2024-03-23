@@ -41,7 +41,6 @@ const material = [
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule,
   MatListModule,
   // MatMenuModule,
   // MatNativeDateModule,

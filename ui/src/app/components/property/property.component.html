@@ -180,17 +180,18 @@
         </button>
         }
       </mat-form-field>
-      <mat-form-field class="edit-form-field">
+      <!-- <mat-form-field class="edit-form-field">
         
         <mat-label>Mortgage Rate Type</mat-label>
         <input id="mortgageType" matInput type="text" [(ngModel)]="currentProperty.mortgageType" name="mortgageType"
           [readonly]="viewMode" />
-        @if (currentProperty.mortgageType && !viewMode) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.mortgageType = ''">
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
+          
+      </mat-form-field> -->
+      <mat-button-toggle-group appearance="legacy"  class="edit-form-field" id="mortgageType"  [disabled]="viewMode"  [(ngModel)]="currentProperty.mortgageType" name="mortgageType">
+        <label style="margin-right: 2px;">Mortgage <br>Rate Type</label>
+        <mat-button-toggle 	 value="V">Variable</mat-button-toggle>
+        <mat-button-toggle 	 value="F">Fixed</mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
 
     <div class="form-group">
