@@ -50,3 +50,12 @@ span label {
 .example-disabled {
   display: inline-block;
 }
+
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 0 1px 0 1px !important;
+}
+
+.mat-mdc-cell {
+  text-align: right !important;
+  border: 1px solid hsl(76, 49%, 68%) !important;
+}

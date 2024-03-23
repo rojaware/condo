@@ -8,23 +8,20 @@ import {
 import { Property } from '../models/property.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../base/base.component';
-import { FormControl } from '@angular/forms';
+
 import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MomentDateAdapter,
   provideMomentDateAdapter,
 } from '@angular/material-moment-adapter';
 import { MatDatepicker } from '@angular/material/datepicker';
-
-// Depending on whether rollup is used, moment needs to be imported differently.
-// Since Moment.js doesn't have a default export, we normally need to import using the `* as`
-// syntax. However, rollup creates a synthetic default module and we thus need to import it using
-// the `default as` syntax.
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { default as _rollupMoment, Moment } from 'moment';
 import { ExpenseService } from '../services/expense.service';
 import { Expense } from '../models/expense.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
 
 const moment = _rollupMoment || _moment;
 
@@ -68,6 +65,13 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   year: number;
   month: number;
 
+  displayedColumns: string[] 
+    = ['month', 'income', 'travel', 'maintenance', 
+       'commission', 'insurance', 'legal', 'managementFee',
+       'mortgageInterest', 'repairs', 'supplies', 'tax',
+       'utilities']; //, 'depreciation'  ];
+  public dataSource: MatTableDataSource<Expense>;
+
   constructor(
     protected router: Router,
     private expenseService: ExpenseService,
@@ -87,13 +91,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   ) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
-    
-    
     ctrlValue.year(normalizedMonthAndYear.year());
-    this.date.setValue(ctrlValue);
-    
-    // retrieve expenses by year and month
-    
+    this.date.setValue(ctrlValue);    
   }
 
   setMonthAndYear(
@@ -106,8 +105,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
-    datepicker.close();
-   
+    datepicker.close();   
   }
 
   getByYear(): void {
@@ -115,12 +113,13 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.expenseService
       .getByYearMonth(propertyName, this.year, null)
       .subscribe({
-        next: (data) => {
+        next: (data: Expense[]) => {
           this.expenses = data;
           this.config.user.property.expenses = data;
+          this.dataSource = new MatTableDataSource<Expense>(this.expenses);          
           console.log(data);
         },
-        error: (e) => console.error(e),
+        error: (e: any) => console.error(e),
       });
   }
 
@@ -129,13 +128,13 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.expenseService
       .getByYearMonth(propertyName, this.year, this.month)
       .subscribe({
-        next: (data) => {
+        next: (data: Expense[]) => {
           this.expenses = data;
           this.config.user.property.expenses = data;
           this.currentExpense = data[0];
           console.log(data);
         },
-        error: (e) => console.error(e),
+        error: (e: any) => console.error(e),
       });
   }
 /**
@@ -158,28 +157,32 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     "income": 3000
   },
  */
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   update(): void {
     this.message = '';
 
     this.expenseService.update(this.currentExpense).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         console.log(res);
         this.message = res.message
           ? res.message
           : 'This tenant was updated successfully!';
       },
-      error: (e) => console.error(e),
+      error: (e: any) => console.error(e),
     });
   }
 
   delete(): void {
     this.expenseService.delete(this.currentExpense.propertyName).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         console.log(res);
         this.router.navigate(['/properties']);
       },
-      error: (e) => console.error(e),
+      error: (e: any) => console.error(e),
     });
   }
 }
