@@ -3,6 +3,7 @@
 }
 .form-group {
   display: flex;
+  margin-top: 1rem;
 }
 .edit-form-field {
   width: -webkit-fill-available;

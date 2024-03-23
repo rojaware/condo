@@ -1,10 +1,5 @@
-
-@if (!tenant || !tenant.primaryName) {
-  <p>Cannot access this Tenant...</p>
-} @else {
-     
   <div class="edit-form">
-    <div style="display: flex">
+    <div class="form-group">
       <h4 class="button-space">{{ tenant.primaryName | uppercase }}</h4>
       @if (viewMode) {
         <button class="badge badge-warning " (click)="viewMode = false">
@@ -80,4 +75,9 @@
   </form>
     <p>{{ message }}</p>
   </div>
-  } 
+
+
+
+TODO <br>
+1. File upload/download <br>
+2. more...

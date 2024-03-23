@@ -4,7 +4,10 @@ export class Expense {
   month: number;
   year: number;
 
-  // accounting fields
+  // credit field
+  income: number;  
+
+  // accounting debit fields as expense
   travel: number;
   maintenance: number;
   commission: number;
@@ -14,10 +17,9 @@ export class Expense {
   managementFee: number;
   mortgageInterest: number;
   repairs: number;
-  
+
   supplies: number;
   tax: number;
   utilities: number;
   depreciation: number;
-  income: number;  
 }

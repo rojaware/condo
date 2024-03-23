@@ -28,8 +28,8 @@
       Add
     </button>
   </div>
-  <!-- #docregion slow-animation-duration -->
-  <div class="col-md-10">
+  <!--  tab menus ... #docregion slow-animation-duration -->
+  <div class="col-md-10" *ngIf = "config.user.property">
     <mat-tab-group animationDuration="2000ms" >
       <!-- #enddocregion slow-animation-duration -->
       <mat-tab label="Property">

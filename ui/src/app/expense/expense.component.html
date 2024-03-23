@@ -1,25 +1,23 @@
-<mat-form-field>
-  <mat-label>Month and Year</mat-label>
-  <input matInput [matDatepicker]="dp" [formControl]="date">
-  <mat-hint>MM/YYYY</mat-hint>
-  <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-  <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)"
-    panelClass="example-month-picker">
-  </mat-datepicker>
-</mat-form-field>
-
-@if (!config.user.property) {
-Select a property to start with...
-} @else {
-@if (expenses.length == 0 || currentExpense.propertyName !== config.user.property.name) {
-<p> <strong> Select year and month for {{ config.user.property.name }} ...</strong></p>
-} @else {
-<p> <strong> You selected <span>{{ month | monthname }}</span>  {{ year }}  </strong></p>
+<div class="form-group">
+  <mat-form-field>
+    <mat-label>Month and Year</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date">
+    <mat-hint>MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)"
+      panelClass="example-month-picker">
+    </mat-datepicker>
+  </mat-form-field>  
+</div>
+  @if (expenses.length == 0 || currentExpense.propertyName !== config.user.property.name) {
+  <p> <strong> Select year and month for {{ config.user.property.name }} ...</strong></p>
+  } @else {
+  
 
 
 <div class="edit-form">
   <div style="display: flex">
-    <h4 class="button-space">{{ currentExpense.propertyName | uppercase }}</h4>
+    <h4 class="button-space">{{ currentExpense.propertyName | uppercase }} <span>{{ month | monthname }}</span>  {{ year }} </h4>
     @if (viewMode) {
     <button class="badge badge-warning " (click)="viewMode = false">
       <mat-icon>edit</mat-icon>
@@ -123,7 +121,9 @@ Select a property to start with...
   <p>{{ message }}</p>
 </div>
 }
-}
+
+
+<p></p>
 TODO <br>
 1. Viewer for annual Viewer <br>
 2. Download/Upload csv mat-form-field

@@ -37,3 +37,7 @@ div.demo span {
 span label {
   font-weight: bold;
 }
+.form-group {
+  display: flex;
+  margin-top: 1rem;
+}
