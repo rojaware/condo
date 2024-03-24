@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Property } from '../../models/property.model';
-import { PropertyService } from '../../services/property.service';
+import { Property } from '../models/property.model';
+import { PropertyService } from '../services/property.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TenantService } from '../../services/tenant.service';
-import { Tenant } from '../../models/tenant.model';
-import { BaseComponent } from '../../base/base.component';
-import { User } from '../../models/user.model';
-import { TenantComponent } from '../../tenant/tenant.component';
+import { TenantService } from '../services/tenant.service';
+import { Tenant } from '../models/tenant.model';
+import { BaseComponent } from '../base/base.component';
+import { User } from '../models/user.model';
+import { TenantComponent } from '../tenant/tenant.component';
 
 @Component({
   selector: 'app-property-list',

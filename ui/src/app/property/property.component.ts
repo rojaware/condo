@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PropertyService } from '../../services/property.service';
-import { Property } from '../../models/property.model';
-import { BaseComponent } from '../../base/base.component';
+import { PropertyService } from '../services/property.service';
+import { Property } from '../models/property.model';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-property',

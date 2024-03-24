@@ -5,8 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PropertyComponent } from './components/property/property.component';
-import { PropertyListComponent } from './components/property-list/property-list.component';
+import { PropertyComponent } from './property/property.component';
+import { PropertyListComponent } from './property-list/property-list.component';
 
 import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +15,8 @@ import { ExpenseComponent } from './expense/expense.component';
 import { BaseComponent } from './base/base.component';
 import { ConfigService } from './services/config.service';
 import { MonthNamePipe } from './shared/month-name.pipe';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { DocumentComponent } from './tenant/document/document.component';
 
 export const initConfig = (configService: ConfigService): any => () => configService.load();
 
@@ -27,6 +29,8 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     ExpenseComponent,
     BaseComponent,
     MonthNamePipe,
+    DocumentComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     HttpClientModule,

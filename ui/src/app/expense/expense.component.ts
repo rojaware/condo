@@ -58,7 +58,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   expenses: Expense[] = [];
   currentExpense: Expense;
-  dateToday: number = Date.now();
+  
   message = '';
 
   date = new FormControl(moment());  
@@ -69,7 +69,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     = ['month', 'income', 'travel', 'maintenance', 
        'commission', 'insurance', 'legal', 'managementFee',
        'mortgageInterest', 'repairs', 'supplies', 'tax',
-       'utilities']; //, 'depreciation'  ];
+       'utilities', 'totalExpense', 'netIncome'  ];
   public dataSource: MatTableDataSource<Expense>;
 
   constructor(
@@ -83,6 +83,11 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     if (!this.viewMode) {
       this.message = '';
     }
+    const today = new Date();
+
+// Get the year from the date object
+    this.year = today.getFullYear();
+    this.month = today.getMonth();
   }
   
   setYear(
@@ -114,13 +119,33 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       .getByYearMonth(propertyName, this.year, null)
       .subscribe({
         next: (data: Expense[]) => {
-          this.expenses = data;
-          this.config.user.property.expenses = data;
+          this.expenses = this.appendTotals(data);
+          this.config.user.property.expenses = this.expenses;
           this.dataSource = new MatTableDataSource<Expense>(this.expenses);          
           console.log(data);
         },
         error: (e: any) => console.error(e),
       });
+  }
+
+  private appendTotals(data: Expense[]): Expense[] {
+    data.forEach(item => this.calculateTotal(item));
+    return data;
+  }
+
+  private calculateTotal(expense: Expense): Expense {
+    expense.totalExpense = expense.travel + expense.maintenance +
+                     expense.commission + expense.insurance +  
+                     expense.legal +
+                     expense.managementFee +
+                     expense.mortgageInterest +
+                     expense.repairs +  
+                     expense.supplies +
+                     expense.tax +
+                     expense.utilities +
+                     expense.depreciation;
+    expense.netIncome = expense.income - expense.totalExpense;
+    return expense;
   }
 
   getByMonth(): void {
@@ -137,31 +162,12 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         error: (e: any) => console.error(e),
       });
   }
-/**
- *  {
-    "propertyName": "abell     ",
-    "month": 3,
-    "year": 2024,
-    "travel": 200.22,
-    "maintenance": 100,
-    "commission": 0,
-    "insurance": 20,
-    "legal": 0,
-    "managementFee": 231.22,
-    "mortgageInterest": 450,
-    "repairs": 9.33,
-    "supplies": 3.45,
-    "tax": 233.11,
-    "utilities": 78.05,
-    "depreciation": 0,
-    "income": 3000
-  },
- */
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
+  
   update(): void {
     this.message = '';
 

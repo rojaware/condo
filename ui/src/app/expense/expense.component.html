@@ -58,7 +58,7 @@
           [readonly]="viewMode" />
       </mat-form-field>
       <mat-form-field class="edit-form-field">
-        <mat-label>Commission</mat-label>
+        <mat-label>Commissioni</mat-label>
         <input id="commission" matInput [(ngModel)]="currentExpense.commission" name="commission"
           [readonly]="viewMode" />
       </mat-form-field>
@@ -138,7 +138,7 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
   </mat-form-field>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
 
     <!-- Month Column -->
     <ng-container matColumnDef="month">
@@ -160,13 +160,13 @@
 
     <!-- maintenance Column -->
     <ng-container matColumnDef="maintenance">
-      <th mat-header-cell *matHeaderCellDef> Maint. </th>
+      <th mat-header-cell *matHeaderCellDef matTooltip="Maintenance fee"> Maint. </th>
       <td mat-cell *matCellDef="let element"> {{element.maintenance | currency }} </td>
     </ng-container>
 
     <!-- commission Column -->
     <ng-container matColumnDef="commission">
-      <th mat-header-cell *matHeaderCellDef> Commission </th>
+      <th mat-header-cell *matHeaderCellDef matTooltip="Commission paid agent"> Comm </th>
       <td mat-cell *matCellDef="let element"> {{element.commission | currency }} </td>
     </ng-container>
 
@@ -177,20 +177,20 @@
     </ng-container>
 
     <!-- legal Column -->
-    <ng-container matColumnDef="legal">
+    <ng-container matColumnDef="legal" matTooltip="Legal fee">
       <th mat-header-cell *matHeaderCellDef> Legal </th>
       <td mat-cell *matCellDef="let element"> {{element.legal | currency }} </td>
     </ng-container>
 
     <!-- managementFee Column -->
     <ng-container matColumnDef="managementFee">
-      <th mat-header-cell *matHeaderCellDef> Management <br>Fee </th>
+      <th mat-header-cell *matHeaderCellDef matTooltip="Condo Management Fee"> Mgt Fee </th>
       <td mat-cell *matCellDef="let element"> {{element.managementFee | currency }} </td>
     </ng-container>
 
     <!-- mortgageInterest Column -->
     <ng-container matColumnDef="mortgageInterest">
-      <th mat-header-cell *matHeaderCellDef> Mortgage <br>Interest </th>
+      <th mat-header-cell *matHeaderCellDef matTooltip="Mortgage Interest Paid"> Mortgage <br>Interest </th>
       <td mat-cell *matCellDef="let element"> {{element.mortgageInterest | currency }} </td>
     </ng-container>
 
@@ -207,20 +207,26 @@
 
     <!-- tax Column -->
     <ng-container matColumnDef="tax">
-      <th mat-header-cell *matHeaderCellDef> Tax </th>
+      <th mat-header-cell *matHeaderCellDef matTooltip="Property Tax"> Tax </th>
       <td mat-cell *matCellDef="let element"> {{element.tax | currency }} </td>
     </ng-container>
 
     <!-- utilities Column -->
     <ng-container matColumnDef="utilities">
-      <th mat-header-cell *matHeaderCellDef> Utilities </th>
+      <th mat-header-cell *matHeaderCellDef matTooltip="Utilities such as Hydro, Water, Gas"> Utilities</th>
       <td mat-cell *matCellDef="let element"> {{element.utilities | currency }} </td>
     </ng-container>
 
-    <!-- depreciation Column -->
-    <ng-container matColumnDef="depreciation">
-      <th mat-header-cell *matHeaderCellDef> Depreciation </th>
-      <td mat-cell *matCellDef="let element"> {{element.depreciation | currency }} </td>
+    <!-- totalExpense Column -->
+    <ng-container matColumnDef="totalExpense">
+      <th mat-header-cell *matHeaderCellDef> Total <br> Expense </th>
+      <td mat-cell *matCellDef="let element"> {{element.totalExpense | currency }} </td>
+    </ng-container>
+
+    <!-- netIncome Column -->
+    <ng-container matColumnDef="netIncome">
+      <th mat-header-cell *matHeaderCellDef> Net <br> Income </th>
+      <td mat-cell *matCellDef="let element"> {{element.netIncome | currency }} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

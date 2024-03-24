@@ -22,4 +22,8 @@ export class Expense {
   tax: number;
   utilities: number;
   depreciation: number;
+
+  // total
+  totalExpense: number;
+  netIncome: number;
 }

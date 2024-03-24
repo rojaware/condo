@@ -38,7 +38,6 @@ const material = [
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
-  MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
   MatListModule,

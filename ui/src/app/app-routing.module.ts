@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PropertyListComponent } from './components/property-list/property-list.component';
-import { PropertyComponent } from './components/property/property.component';
+import { PropertyListComponent } from './property-list/property-list.component';
+import { PropertyComponent } from './property/property.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { TenantComponent } from './tenant/tenant.component';
+import { DocumentComponent } from './tenant/document/document.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'properties', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'tenants/:propertyName', component: TenantComponent },
   { path: 'expenses', component: ExpenseComponent },
   { path: 'expenses/:propertyName/:year', component: ExpenseComponent },
+  { path: 'documents', component: DocumentComponent },
 ];
 
 @NgModule({

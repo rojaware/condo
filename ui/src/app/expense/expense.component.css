@@ -27,7 +27,7 @@ div.demo {
 }
 div.demo span {
     display: table-cell;
-    text-align: left;
+    
 }
 .right_header {
   color: #461212;
@@ -51,11 +51,41 @@ span label {
   display: inline-block;
 }
 
-.mdc-data-table__cell, .mdc-data-table__header-cell {
-  padding: 0 1px 0 1px !important;
-}
-
-.mat-mdc-cell {
+.mdc-data-table__cell {  
   text-align: right !important;
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 0 1px 0 1px !important;  
+}
+.mat-mdc-cell {
   border: 1px solid hsl(76, 49%, 68%) !important;
 }
+.demo-table {
+  width: 100%;
+}
+.mat-column-month {
+  width: 32px;
+  border-right: 1px solid  hsl(76, 49%, 68%) ;
+  font-style: italic;
+  text-align: center;
+}
+.mat-column-income {
+  
+  font-weight: bold;
+  text-align: right;
+}
+.mat-column-totalExpense {  
+  font-weight: bold;
+  text-align: right;
+  color:#461212;
+  font-style: italic;
+}
+.mat-column-netIncome {  
+  font-weight: bold;
+  text-align: right;
+  font-style: italic;
+}
+.container {
+  max-width: 1540px !important;
+}
+
