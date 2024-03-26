@@ -132,7 +132,7 @@
 </div>
 
 <!-- show yearly expense table -->
-<div *ngIf="expenses && expenses.length > 0">
+<div id="annual-expense" *ngIf="expenses && expenses.length > 0">
   <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>

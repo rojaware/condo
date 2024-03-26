@@ -1,9 +1,10 @@
-import { Component, DefaultIterableDiffer, Input, OnInit } from '@angular/core'
+import { Component, DefaultIterableDiffer, Input, OnInit, ViewChild } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
-import { MatTableDataSource } from '@angular/material/table'
-import { Document, DocumentColumns } from '../../models/document.model'
+import { MatTable, MatTableDataSource } from '@angular/material/table'
+import { Document } from '../../models/document.model'
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component'
 import { DocumentService } from '../../services/document.service'
+import { SelectionModel } from '@angular/cdk/collections'
 
 @Component({
   selector: 'app-document',
@@ -14,9 +15,11 @@ export class DocumentComponent {
   @Input() propertyName?: string;
   @Input() tenantName?: string;
 
-  displayedColumns: string[] = DocumentColumns.map((col) => col.key)
-  columnsSchema: any = DocumentColumns;
+  displayedColumns: string[] = ['select', 'name', 'data'];
+  
   dataSource = new MatTableDataSource<Document>();
+  selection = new SelectionModel<Document>(true, []);
+  documents: Document[] = [];
   valid: any = {};
 
   constructor(public dialog: MatDialog, private DocumentService: DocumentService) {}
@@ -24,12 +27,39 @@ export class DocumentComponent {
   ngOnInit() {
     const name = this.propertyName || this.tenantName;
     if (name) {
-      this.DocumentService.getByPropertyOrTenant(name).subscribe((res: any) => {
-        this.dataSource.data = res
+      this.DocumentService.getByPropertyOrTenant(name).subscribe((data: Document[]) => {
+        
+        this.dataSource = new MatTableDataSource<Document>(data);
+        console.log(data);   
       })
     }
   }
 
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
+  
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    toggleAllRows() {
+      if (this.isAllSelected()) {
+        this.selection.clear();
+        return;
+      }
+  
+      this.selection.select(...this.dataSource.data);
+    }
+  
+    /** The label for the checkbox on the passed row */
+    checkboxLabel(row?: Document): string {
+      if (!row) {
+        return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+      }
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row `;
+    }
+    
   editRow(row: Document) {
     if (row.id === 0) {
       this.DocumentService.create(row).subscribe((newDocument: Document) => {
@@ -41,45 +71,33 @@ export class DocumentComponent {
     }
   }
 
-  addRow() {
-    const newRow: Document = {
-      id: 0,
-      parentName: '',
-      name: '',
-      data: {} as any,
-      isEdit: true,
-      isSelected: false,
-    }
-    this.dataSource.data = [newRow, ...this.dataSource.data]
+  addData() {
+    const randomElementIndex = Math.floor(Math.random() * this.documents.length);
+    const parentName = this.propertyName? this.propertyName: this.tenantName;
+    let newDocument: Document = {      
+      id : 0,
+      parentName : parentName,
+      name : '',
+      data : undefined,
+      isEdit : false  
+    };
+    this.documents.push(newDocument);
+    this.dataSource = new MatTableDataSource<Document>(this.documents);    
+    
   }
 
-  removeRow(id: number) {
-    this.DocumentService.deleteById(id).subscribe(() => {
-      this.dataSource.data = this.dataSource.data.filter(
-        (u: Document) => u.id !== id,
-      )
-    })
+  removeData() {
+    // TBA
   }
 
-  removeSelectedRows() {
-    const documents = this.dataSource.data.filter((doc: Document) => doc.isSelected)
-    this.dialog
-      .open(ConfirmDialogComponent)
-      .afterClosed()
-      .subscribe((confirm) => {
-        if (confirm) {
-          const idList = this.getIdList(documents);
-          this.DocumentService.deleteByIdList(idList).subscribe(() => {
-            this.dataSource.data = this.dataSource.data.filter(
-              (u: Document) => !u.isSelected,
-            )
-          })
-        }
-      })
-  }
+
   private getIdList(documents: Document[]): string {
-    let idList: number[] = [];
-    documents.forEach(item => idList.push(item.id));
+    let idList: number[] = [];    
+    documents.forEach(item => {
+      if (item.id) {
+        idList.push(item.id )
+      }
+    });
 
     throw idList.toString();
   }
@@ -98,18 +116,4 @@ export class DocumentComponent {
     return false
   }
 
-  isAllSelected() {
-    return this.dataSource.data.every((item) => item.isSelected)
-  }
-
-  isAnySelected() {
-    return this.dataSource.data.some((item) => item.isSelected)
-  }
-
-  selectAll(event: any) {
-    this.dataSource.data = this.dataSource.data.map((item) => ({
-      ...item,
-      isSelected: event.checked,
-    }))
-  }
 }
