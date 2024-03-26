@@ -1,6 +1,7 @@
 const propertyController = require('./controllers/property-controller');
 const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
+const documentsController = require('./controllers/document-controller');
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -270,6 +271,128 @@ router.route('/expenses').put((request, response) => {
         }
     })
 })
+
+//############### Documents API ########################
+
+router.route('/documents').get((request, response) => {
+    documentsController.getDocs().then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404)
+            response.send('no data')
+        } else {
+            response.json(result[0]);
+        }
+    })
+})
+
+router.route('/documentsByPropertyOrTenant/:name').get((request, response) => {
+    documentsController.getDocsByPropertyOrTenant(request.params.name).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+
+router.route('/documentsByName/:name').get((request, response) => {
+    documentsController.getDocByName(request.params.name).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+
+router.route('/documents').post((request, response) => {
+    let tenant = { ...request.body }
+    documentsController.addDoc(tenant).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+
+/**
+ * Delete documents by tenant name or property name. 
+ * @param {*} name 
+ * @returns 
+ */
+router.route('/documentsByPropertyOrTenant/:propertyNameOrTenantName').delete((request, response) => {
+    const params = request.params;
+    documentsController.deleteDocsByName(params.propertyNameOrTenantName).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+
+/**
+ * delete a doc by id
+ */
+router.route('/documents/:id').delete((request, response) => {
+    const params = request.params;
+    documentsController.deleteDoc(params.id).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+/**
+ * delete docs by id list
+ */
+router.route('/documents/:idList').delete((request, response) => {
+    const params = request.params;
+    documentsController.deleteDocByIdList(params.idList).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+router.route('/documents').delete((request, response) => {    
+    documentsController.deleteAllDocs().then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+
+
+router.route('/documents').put((request, response) => {
+
+    let tenant = { ...request.body }
+
+    documentsController.updateDoc(tenant).then(result => {
+        if (!result) {
+            console.log("no data...");
+            response.status(404).send('no data')
+        } else {
+            response.status(201).json(result[0]);
+        }
+    })
+})
+
+
+
 
 var port = process.env.PORT || 8090;
 app.listen(port);

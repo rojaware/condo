@@ -3,6 +3,6 @@ export class Tenant {
   secondaryName: string;
   phone: string;
   email: string;
-  documents: any;
   propertyName: string;
+  documents: Document[];  
 }

@@ -1,49 +1,32 @@
-export class Document {
+export interface Document {
+
+  isSelected: boolean;
 
   // composite primary keys
   id: number;
-  page: string;
+  parentName: string;
   name: string;
-  file: Blob;
-}
-export interface User {
-  isSelected: boolean;
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  birthDate: string;
-  isEdit: boolean;
+  data: Blob;
+  isEdit: boolean;  
 }
 
-export const UserColumns = [
+export const DocumentColumns = [
   {
     key: 'isSelected',
     type: 'isSelected',
-    label: '',
+    label: 'Select',
   },
   {
-    key: 'firstName',
+    key: 'id',
     type: 'text',
-    label: 'First Name',
+    label: 'ID',
     required: true,
   },
   {
-    key: 'lastName',
-    type: 'text',
-    label: 'Last Name',
-  },
-  {
-    key: 'email',
-    type: 'email',
-    label: 'Email',
-    required: true,
-    pattern: '.+@.+',
-  },
-  {
-    key: 'birthDate',
-    type: 'date',
-    label: 'Date of Birth',
+    key: 'data',
+    type: 'Blob',
+    label: 'File',
+    required: true,    
   },
   {
     key: 'isEdit',

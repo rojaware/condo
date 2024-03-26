@@ -1,42 +1,56 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
-
 import { map } from 'rxjs/operators';
-import { User } from '../models/document.model';
+import { Document } from '../models/document.model';
+
+const baseUrl = 'http://localhost:8090/api/documents';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentService {
 
-  private serviceUrl = 'https://dummyjson.com/users';
-
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
-    return this.http
-      .get(this.serviceUrl)
-      .pipe<User[]>(map((data: any) => data.users));
+  getAll(): Observable<Document[]> {
+    return this.http.get<Document[]>(baseUrl);
   }
 
-  updateUser(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.serviceUrl}/${user.id}`, user);
+  getByPropertyOrTenant(name: string): Observable<Document[]> {
+    return this.http.get<Document[]>(`${baseUrl}ByPropertyOrTenant/${name}`);
   }
 
-  addUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.serviceUrl}/add`, user);
+  getByName(name: string): Observable<Document> {
+    return this.http.get<Document>(`${baseUrl}ByName/${name}`);
+  }
+  
+  create(data: any): Observable<any> {
+    return this.http.post(baseUrl, data);
   }
 
-  deleteUser(id: number): Observable<User> {
-    return this.http.delete<User>(`${this.serviceUrl}/${id}`);
+  deleteByPropertyOrTenantName(propertyOrTenantName?: string): Observable<any> {
+    return this.http.delete(`${baseUrl}ByPropertyOrTenant/${propertyOrTenantName}`);
   }
 
-  deleteUsers(users: User[]): Observable<User[]> {
-    return forkJoin(
-      users.map((user) =>
-        this.http.delete<User>(`${this.serviceUrl}/${user.id}`)
-      )
-    );
+  deleteById(id: number): Observable<any> {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+  
+  /**
+   * 1,2,3,4
+   * @param idArray 
+   * @returns 
+   */
+  deleteByIdList(idArray: string): Observable<any> {
+    return this.http.delete(`${baseUrl}ByIdList/${idArray}`);
+  }
+
+  deleteAll(id: number): Observable<any> {
+    return this.http.delete(`${baseUrl}`);
+  }
+
+  update(data: any): Observable<any> {    
+    return this.http.put(`${baseUrl}`, data);
   }
 }

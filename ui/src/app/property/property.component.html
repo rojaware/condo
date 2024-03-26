@@ -234,7 +234,7 @@
     <!-- Documents -->
     editable document table will be here....
     
-    <app-document></app-document>
+    <app-document [propertyName]="currentProperty.name"></app-document>
     
     <div *ngIf="!viewMode" class=" form-group">
       <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
@@ -257,9 +257,10 @@
   
 </div>
 
-<p></p>
+<div>
 TODO <br>
 1. Button enhancement <br>
 2. Auto format for currency $1,400 <br>
 3. Radio button for Mortgage Rate Type, V and F <br>
 4. Prefix for %
+</div>

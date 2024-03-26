@@ -45,14 +45,12 @@ async function addTenant(body) {
         ,[secondaryName]
         ,[phone]
         ,[email]
-        ,[documents]
         ,[propertyName])
     VALUES
         (@primaryName
         ,@secondaryName
         ,@phone
         ,@email
-        ,@documents
         ,@propertyName);
          SELECT @primaryName as primaryName, @secondaryName as secondaryName;`;
     try {
@@ -61,8 +59,7 @@ async function addTenant(body) {
             .input('primaryName', sql.NVarChar, body.primaryName)
             .input('secondaryName', sql.NVarChar, body.secondaryName)
             .input('phone', sql.NVarChar, body.phone)
-            .input('email', sql.NVarChar, body.email)
-            .input('documents', sql.VarBinary, body.documents)            
+            .input('email', sql.NVarChar, body.email)     
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
         return item.recordset;
@@ -122,7 +119,6 @@ async function updateTenant(body) {
        ,[secondaryName] = @secondaryName
        ,[phone] = @phone
        ,[email] = @email
-       ,[documents] = @documents
        ,[propertyName] = @propertyName
   WHERE propertyName = @propertyName;
              SELECT @propertyName as propertyName;`;
@@ -133,7 +129,6 @@ async function updateTenant(body) {
             .input('secondaryName', sql.NVarChar, body.secondaryName)
             .input('phone', sql.NVarChar, body.phone)
             .input('email', sql.NVarChar, body.email)
-            .input('documents', sql.VarBinary, body.documents)
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
         return item.recordset;

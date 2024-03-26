@@ -23,4 +23,5 @@ export class Property {
   comment: string;
   tenant: Tenant;
   expenses: Expense[];
+  documents: Document[];
 }

@@ -1,24 +1,10 @@
 var config = require('../dbconfig');
 const sql = require('mssql');
 
-/**
- * 1. get docs
- * 2. get docs by property
- * 3. get docs by tenant
- * 4. create doc
- * 5. update doc
- * 6. delete docs by property
- * 7. delete docs by tenant
- * 8. delete all property docs
- * 9. delete all tenant docs
- * 10. purge all docs
- * 
- * @returns 
- */
-async function getTenants() {
+async function getDocs() {
     try {
         let pool = await sql.connect(config);
-        let items = await pool.request().query("SELECT * from TENANTS");
+        let items = await pool.request().query("SELECT * from DOCUMENTS");
         return items.recordsets;
     }
     catch (error) {
@@ -26,12 +12,25 @@ async function getTenants() {
     }
 }
 
-async function getTenantByProperty(name) {
+async function getDocsByPropertyOrTenant(name) {
+    try {
+        let pool = await sql.connect(config);
+        let item = await pool.request()
+            .input('name', sql.VarChar, name)
+            .query("SELECT * from DOCUMENTS where propertyName = @name OR tenantName = @name");
+        return item.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getDocByName(name) {
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
             .input('input_parameter', sql.VarChar, name)
-            .query("SELECT * from TENANTS where propertyName = @input_parameter");
+            .query("SELECT * from DOCUMENTS where name = @input_parameter");
         return item.recordset;
     }
     catch (error) {
@@ -39,44 +38,21 @@ async function getTenantByProperty(name) {
     }
 }
 
-async function getTenantByName(name) {
-    try {
-        let pool = await sql.connect(config);
-        let item = await pool.request()
-            .input('input_parameter', sql.VarChar, name)
-            .query("SELECT * from TENANTS where primaryName = @input_parameter OR secondaryName = @input_parameter");
-        return item.recordset;
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
-
-async function addTenant(body) {
+async function addDoc(body) {
     const query = `
-    INSERT INTO [dbo].[tenants]
-        ([primaryName]
-        ,[secondaryName]
-        ,[phone]
-        ,[email]
-        ,[documents]
-        ,[propertyName])
-    VALUES
-        (@primaryName
-        ,@secondaryName
-        ,@phone
-        ,@email
-        ,@documents
-        ,@propertyName);
-         SELECT @primaryName as primaryName, @secondaryName as secondaryName;`;
+    INSERT INTO [dbo].[documents]
+        ([name]
+            ,[data]
+            ,[tenantName]
+            ,[propertyName])
+    VALUES (@name, @data, @tenantName, @propertyName);
+    SELECT id from documents;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('primaryName', sql.NVarChar, body.primaryName)
-            .input('secondaryName', sql.NVarChar, body.secondaryName)
-            .input('phone', sql.NVarChar, body.phone)
-            .input('email', sql.NVarChar, body.email)
-            .input('documents', sql.VarBinary, body.documents)            
+            .input('name', sql.NVarChar, body.name)
+            .input('data', sql.VarBinary, body.data)
+            .input('tenantName', sql.NVarChar, body.tenantName)
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
         return item.recordset;
@@ -85,15 +61,18 @@ async function addTenant(body) {
         console.log(err);
     }
 }
-
-async function deleteTenant(primaryName, propertyName) {
-    const query = `DELETE FROM [dbo].[tenants] WHERE primaryName = @primaryName; SELECT @primaryName as primaryName, @propertyName as propertyName`;
+/**
+ * Delete a document by id
+ * @param {*} id 
+ * @returns 
+ */
+async function deleteDoc(id) {
+    const query = `DELETE FROM [dbo].[documents] WHERE id = @id; SELECT @id as id`;
 
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('primaryName', sql.NVarChar, primaryName)            
-            .input('propertyName', sql.NVarChar, propertyName)   
+            .input('id', sql.Int, id)             
             .query(query);
         return item.rowsAffected;
     }
@@ -102,13 +81,38 @@ async function deleteTenant(primaryName, propertyName) {
     }
 }
 
-async function purgeTenants(name) {
-    const query = `DELETE FROM [dbo].[tenants] WHERE propertyName = @name; SELECT @name as propertyName`;
+/**
+ * Delete documents by id list
+ * @param {*} idList
+ * @returns 
+ */
+async function deleteDocByIdList(idList) {
+    const query = `DELETE FROM [dbo].[documents] WHERE id in (${idList}); `;
 
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('name', sql.NVarChar, name)            
+            .query(query);
+        return item.rowsAffected;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+/**
+ * Delete documents by tenant name or property name. 
+ * @param {*} name 
+ * @returns 
+ */
+async function deleteDocsByName(name) {
+    const query = `DELETE FROM [dbo].[documents] WHERE propertyName = @name
+        OR tenantName = @name; `;
+
+    try {
+        let pool = await sql.connect(config);
+        let item = await pool.request()
+            .input('propertyName', sql.NVarChar, name)            
+            .input('tenantName', sql.NVarChar, name)            
             .query(query);
         return item.rowsAffected;
     }
@@ -117,12 +121,14 @@ async function purgeTenants(name) {
     }
 }
 
-async function deleteAllTenants() {
-    const query = `DELETE FROM [dbo].[tenants]; SELECT count(*) as total from tenants`;
+
+async function deleteAllDocs() {
+    const query = `DELETE FROM [dbo].[documents] `;
+
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-                .query(query);
+            .query(query);
         return item.rowsAffected;
     }
     catch (err) {
@@ -130,25 +136,19 @@ async function deleteAllTenants() {
     }
 }
 
-async function updateTenant(body) {
-    const query = `UPDATE [dbo].[tenants]
+async function updateDoc(body) {
+    const query = `UPDATE [dbo].[documents]
     SET [primaryName] = @primaryName
-       ,[secondaryName] = @secondaryName
-       ,[phone] = @phone
-       ,[email] = @email
-       ,[documents] = @documents
-       ,[propertyName] = @propertyName
-  WHERE propertyName = @propertyName;
-             SELECT @propertyName as propertyName;`;
+       ,[tenantName] = @tenantName
+       ,[data] = @data
+    WHERE id = @id;  SELECT @id as id;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
+            .input('id', sql.Int, body.id)
             .input('primaryName', sql.NVarChar, body.primaryName)
-            .input('secondaryName', sql.NVarChar, body.secondaryName)
-            .input('phone', sql.NVarChar, body.phone)
-            .input('email', sql.NVarChar, body.email)
-            .input('documents', sql.VarBinary, body.documents)
-            .input('propertyName', sql.NVarChar, body.propertyName)
+            .input('tenantName', sql.NVarChar, body.tenantName)
+            .input('data', sql.NVarChar, body.data)
             .query(query);
         return item.recordset;
     }
@@ -158,12 +158,13 @@ async function updateTenant(body) {
 }
 
 module.exports = {
-    getTenants: getTenants,
-    getTenantByProperty : getTenantByProperty,
-    getTenantByName : getTenantByName,
-    addTenant : addTenant,
-    deleteTenant : deleteTenant,
-    purgeTenants : purgeTenants,
-    deleteAllTenants: deleteAllTenants,
-    updateTenant : updateTenant
+    getDocs: getDocs,
+    getDocsByPropertyOrTenant : getDocsByPropertyOrTenant,
+    getDocByName : getDocByName,
+    addDoc : addDoc,
+    deleteDoc : deleteDoc,
+    deleteDocsByName: deleteDocsByName,
+    deleteAllDocs: deleteAllDocs,
+    deleteDocByIdList: deleteDocByIdList,
+    updateDoc : updateDoc
 }

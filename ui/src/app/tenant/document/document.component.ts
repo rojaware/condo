@@ -1,7 +1,7 @@
 import { Component, DefaultIterableDiffer, Input, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
-import { User, UserColumns } from '../../models/document.model'
+import { Document, DocumentColumns } from '../../models/document.model'
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component'
 import { DocumentService } from '../../services/document.service'
 
@@ -14,37 +14,39 @@ export class DocumentComponent {
   @Input() propertyName?: string;
   @Input() tenantName?: string;
 
-  displayedColumns: string[] = UserColumns.map((col) => col.key)
-  columnsSchema: any = UserColumns
-  dataSource = new MatTableDataSource<User>()
-  valid: any = {}
+  displayedColumns: string[] = DocumentColumns.map((col) => col.key)
+  columnsSchema: any = DocumentColumns;
+  dataSource = new MatTableDataSource<Document>();
+  valid: any = {};
 
   constructor(public dialog: MatDialog, private DocumentService: DocumentService) {}
 
   ngOnInit() {
-    this.DocumentService.getUsers().subscribe((res: any) => {
-      this.dataSource.data = res
-    })
+    const name = this.propertyName || this.tenantName;
+    if (name) {
+      this.DocumentService.getByPropertyOrTenant(name).subscribe((res: any) => {
+        this.dataSource.data = res
+      })
+    }
   }
 
-  editRow(row: User) {
+  editRow(row: Document) {
     if (row.id === 0) {
-      this.DocumentService.addUser(row).subscribe((newUser: User) => {
-        row.id = newUser.id
+      this.DocumentService.create(row).subscribe((newDocument: Document) => {
+        row.id = newDocument.id
         row.isEdit = false
       })
     } else {
-      this.DocumentService.updateUser(row).subscribe(() => (row.isEdit = false))
+      this.DocumentService.update(row).subscribe(() => (row.isEdit = false))
     }
   }
 
   addRow() {
-    const newRow: User = {
+    const newRow: Document = {
       id: 0,
-      firstName: '',
-      lastName: '',
-      email: '',
-      birthDate: '',
+      parentName: '',
+      name: '',
+      data: {} as any,
       isEdit: true,
       isSelected: false,
     }
@@ -52,27 +54,34 @@ export class DocumentComponent {
   }
 
   removeRow(id: number) {
-    this.DocumentService.deleteUser(id).subscribe(() => {
+    this.DocumentService.deleteById(id).subscribe(() => {
       this.dataSource.data = this.dataSource.data.filter(
-        (u: User) => u.id !== id,
+        (u: Document) => u.id !== id,
       )
     })
   }
 
   removeSelectedRows() {
-    const users = this.dataSource.data.filter((u: User) => u.isSelected)
+    const documents = this.dataSource.data.filter((doc: Document) => doc.isSelected)
     this.dialog
       .open(ConfirmDialogComponent)
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.DocumentService.deleteUsers(users).subscribe(() => {
+          const idList = this.getIdList(documents);
+          this.DocumentService.deleteByIdList(idList).subscribe(() => {
             this.dataSource.data = this.dataSource.data.filter(
-              (u: User) => !u.isSelected,
+              (u: Document) => !u.isSelected,
             )
           })
         }
       })
+  }
+  private getIdList(documents: Document[]): string {
+    let idList: number[] = [];
+    documents.forEach(item => idList.push(item.id));
+
+    throw idList.toString();
   }
 
   inputHandler(e: any, id: number, key: string) {

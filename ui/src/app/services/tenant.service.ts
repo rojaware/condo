@@ -23,6 +23,10 @@ export class TenantService {
     return this.http.get<Tenant>(`${baseUrl}ByName/${primaryName}`);
   }  
   
+  create(data: any): Observable<any> {
+    return this.http.post(baseUrl, data);
+  }
+  
   delete(primaryName?: string, propertyName?: string): Observable<any> {
     return this.http.delete(`${baseUrl}/${primaryName}/${propertyName}`);
   }
@@ -33,10 +37,6 @@ export class TenantService {
   
   deleteAll(): Observable<any> {
     return this.http.delete(baseUrl);
-  }
-
-  create(data: any): Observable<any> {
-    return this.http.post(baseUrl, data);
   }
 
   update(data: any): Observable<any> {
