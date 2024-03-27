@@ -38,7 +38,8 @@ async function getDocByName(name) {
     }
 }
 
-async function addDoc(body) {
+
+async function addDoc(body, fileData) {
     const query = `
     INSERT INTO [dbo].[documents]
         ([name]
@@ -51,7 +52,7 @@ async function addDoc(body) {
         let pool = await sql.connect(config);
         let item = await pool.request()
             .input('name', sql.NVarChar, body.name)
-            .input('data', sql.VarBinary, body.data)
+            .input('data', sql.VarBinary, fileData)
             .input('tenantName', sql.NVarChar, body.tenantName)
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);

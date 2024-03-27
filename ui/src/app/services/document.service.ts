@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Document } from '../models/document.model';
@@ -17,16 +17,39 @@ export class DocumentService {
     return this.http.get<Document[]>(baseUrl);
   }
 
-  getByPropertyOrTenant(name: string): Observable<Document[]> {
+  getByPropertyOrTenant(name?: string): Observable<Document[]> {
     return this.http.get<Document[]>(`${baseUrl}ByPropertyOrTenant/${name}`);
   }
 
   getByName(name: string): Observable<Document> {
     return this.http.get<Document>(`${baseUrl}ByName/${name}`);
   }
-  
-  create(data: any): Observable<any> {
-    return this.http.post(baseUrl, data);
+
+  create(data: any, file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    return this.http.post(baseUrl, formData);
+  }
+  /**
+   * New method to upload file on doc controller
+   * @param file 
+   * @returns 
+   */
+  upload(file: File): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    formData.append('name', file.name);
+    formData.append('propertyName', 'abell');
+
+    const req = new HttpRequest('POST', `${baseUrl}`, formData, {
+      responseType: 'json',
+    });
+
+    return this.http.request(req);
+  }
+
+  getFiles(): Observable<any> {
+    return this.http.get(`${baseUrl}/documents`);
   }
 
   deleteByPropertyOrTenantName(propertyOrTenantName?: string): Observable<any> {

@@ -13,6 +13,7 @@ export class BaseComponent implements OnInit {
   loading = false;
   submitted = false;
   errMessage: string;
+  message: string;
 
   constructor(protected router: Router) {}
 

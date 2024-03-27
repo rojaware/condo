@@ -3,7 +3,9 @@ const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
 const documentsController = require('./controllers/document-controller');
 
+const multer = require('multer');
 var express = require('express');
+const fs = require('fs');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
@@ -20,7 +22,6 @@ router.use((request, response, next) => {
 })
 
 router.route('/properties').get((request, response) => {
-
     propertyController.getProperties().then(result => {
         if (!result) {
             console.log("no data...");
@@ -308,16 +309,36 @@ router.route('/documentsByName/:name').get((request, response) => {
     })
 })
 
-router.route('/documents').post((request, response) => {
-    let tenant = { ...request.body }
-    documentsController.addDoc(tenant).then(result => {
-        if (!result) {
-            console.log("no data...");
-            response.status(404).send('no data')
-        } else {
-            response.status(201).json(result[0]);
-        }
-    })
+// Configure Multer for file uploads
+// Set up Multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, __basedir + "/resources/static/assets/uploads/");
+      },    
+    filename: (req, file, cb) => {
+      cb(null, file.originalname); // Use the original file name
+    },
+  });
+const upload = multer({ storage });  
+
+router.route('/documents', upload.single('file')).post((request, response) => {
+    try {
+        let document = { ...request.body }
+        const fileData = fs.readFileSync(request.file.path);
+        document.name = request.file.filename;
+        documentsController.addDoc(document, fileData).then(result => {
+            if (!result) {
+                console.log("no data...");
+                response.status(404).send('no data')
+            } else {
+                response.status(200).send('File uploaded successfully!');
+            }
+        })
+    } catch (error) {
+
+        console.error('Error uploading file:', error);
+        response.status(500).send('Error uploading file.');
+    }
 })
 
 /**
@@ -365,7 +386,7 @@ router.route('/documents/:idList').delete((request, response) => {
         }
     })
 })
-router.route('/documents').delete((request, response) => {    
+router.route('/documents').delete((request, response) => {
     documentsController.deleteAllDocs().then(result => {
         if (!result) {
             console.log("no data...");
