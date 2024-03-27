@@ -42,8 +42,7 @@ export class DocumentComponent extends BaseComponent {
     private route: ActivatedRoute,    
     public dialog: MatDialog,
     private documentService: DocumentService, 
-    private uploadService: FileUploadService
-  ) {
+    private uploadService: FileUploadService ) {
     super(router);
     this.message = '';
   }
@@ -148,25 +147,18 @@ export class DocumentComponent extends BaseComponent {
   }
    upload(): void {
     if (this.currentFile) {
-      this.documentService.upload(this.currentFile).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.message = event.body.message;
-            // this.fileInfos = this.uploadService.getFiles();
-          }
+      this.documentService.upload(this.currentFile)
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          // this.message = res.message
+          //   ? res.message
+          //   : 'This property was updated successfully!';
         },
-        error: (err: any) => {
-          console.log(err);
-
-          if (err.error && err.error.message) {
-            this.message = err.error.message;
-          } else {
-            this.message = 'Could not upload the file!';
-          }
-        },
-        complete: () => {
-          this.currentFile = undefined;
-        },
+        error: (e) => {
+          this.message = e.message;
+          console.error(e)
+        }
       });
     }
   }

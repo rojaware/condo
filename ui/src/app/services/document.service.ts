@@ -40,6 +40,8 @@ export class DocumentService {
     formData.append('file', file);
     formData.append('name', file.name);
     formData.append('propertyName', 'abell');
+    console.log('sending form data')
+    console.log(formData)
 
     const req = new HttpRequest('POST', `${baseUrl}`, formData, {
       responseType: 'json',

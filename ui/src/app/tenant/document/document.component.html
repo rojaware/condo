@@ -44,12 +44,12 @@
     <td mat-cell *matCellDef="let element"> {{element.data}} </td>
   </ng-container>
 
-
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"
       (click)="selection.toggle(row)">
   </tr>
 </table>
+
 <div class="row">
   <div class="col-8">
     <label class="btn btn-default p-0">

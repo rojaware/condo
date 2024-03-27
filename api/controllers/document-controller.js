@@ -47,7 +47,7 @@ async function addDoc(body, fileData) {
             ,[tenantName]
             ,[propertyName])
     VALUES (@name, @data, @tenantName, @propertyName);
-    SELECT id from documents;`;
+    SELECT  IDENT_CURRENT('documents') as id `;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()

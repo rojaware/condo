@@ -187,11 +187,19 @@
           [readonly]="viewMode" />
           
       </mat-form-field> -->
-      <mat-button-toggle-group appearance="legacy"  class="edit-form-field" id="mortgageType"  [disabled]="viewMode"  [(ngModel)]="currentProperty.mortgageType" name="mortgageType">
-        <label style="margin-right: 2px;">Mortgage <br>Rate Type</label>
-        <mat-button-toggle 	 value="V">Variable</mat-button-toggle>
-        <mat-button-toggle 	 value="F">Fixed</mat-button-toggle>
-      </mat-button-toggle-group>
+      
+      <div class="edit-form-field" style="display: flex;">
+        <label style="padding: 0 16px; font-size: smaller;">Mortgage Rate Type</label>
+        <mat-button-toggle-group appearance="legacy"  
+                                 class="edit-form-field" 
+                                 id="mortgageType"
+                                 [disabled]="viewMode"
+                                 [(ngModel)]="currentProperty.mortgageType" 
+                                 name="mortgageType">          
+          <mat-button-toggle  value="V">Variable</mat-button-toggle>
+          <mat-button-toggle  value="F">Fixed</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
     </div>
 
     <div class="form-group">

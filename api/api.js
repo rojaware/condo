@@ -310,28 +310,22 @@ router.route('/documentsByName/:name').get((request, response) => {
 })
 
 // Configure Multer for file uploads
-// Set up Multer storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, __basedir + "/resources/static/assets/uploads/");
-      },    
-    filename: (req, file, cb) => {
-      cb(null, file.originalname); // Use the original file name
-    },
-  });
-const upload = multer({ storage });  
+// Set up Multer with memory storage to hook up buffer into table...
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-router.route('/documents', upload.single('file')).post((request, response) => {
+router.route('/documents').post(upload.single('file'), (request, response) => {
     try {
-        let document = { ...request.body }
-        const fileData = fs.readFileSync(request.file.path);
-        document.name = request.file.filename;
-        documentsController.addDoc(document, fileData).then(result => {
+        let document = request.body;
+         // Access the uploaded file buffer
+        const fileBuffer = request.file.buffer;
+        document.name = request.file.originalname;
+        documentsController.addDoc(document, fileBuffer).then(result => {
             if (!result) {
                 console.log("no data...");
                 response.status(404).send('no data')
             } else {
-                response.status(200).send('File uploaded successfully!');
+                response.status(201).json(result[0]);                
             }
         })
     } catch (error) {
