@@ -288,9 +288,10 @@ router.route('/documents').get((request, response) => {
 })
 
 router.route('/documentsByPropertyOrTenant/:name').get((request, response) => {
+    console.log(' request.params.name => ' + request.params.name)
     documentsController.getDocsByPropertyOrTenant(request.params.name).then(result => {
         if (!result) {
-            console.log("no data...");
+            console.log("documentsByPropertyOrTenant > no data...");
             response.status(404).send('no data')
         } else {
             response.status(201).json(result[0]);

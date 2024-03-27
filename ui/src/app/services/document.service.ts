@@ -18,7 +18,11 @@ export class DocumentService {
   }
 
   getByPropertyOrTenant(name?: string): Observable<Document[]> {
-    return this.http.get<Document[]>(`${baseUrl}ByPropertyOrTenant/${name}`);
+    console.log('service.getByPropertyOrTenant:: name => ' + name)
+    if (name) {
+      return this.http.get<Document[]>(`${baseUrl}ByPropertyOrTenant/${name}`);
+    }
+    return new Observable<Document[]>;    
   }
 
   getByName(name: string): Observable<Document> {

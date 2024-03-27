@@ -41,10 +41,17 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
 
   retrievePropertyList(): void {
     this.propertyService.getAll().subscribe({
-      next: (data) => {
-        this.properties = data;
+      next: (data) => {        
         // retrieve all tenants by property
-        this.properties?.forEach (prop => this.appendTenantToProperty(prop));
+        if (data) {
+          data.forEach (async prop => {
+            await this.appendTenantToProperty(prop);
+          });
+          this.properties = data;
+        } else {
+          this.properties = data;
+        }
+        
         console.log(data);
       },
       error: (e) => console.error(e),

@@ -24,9 +24,9 @@ import { FileUploadService } from '../../services/file-upload.service';
 })
 export class DocumentComponent extends BaseComponent {
   @Input() propertyName?: string = '';
-  @Input() tenantName?: string;
+  @Input() tenantName?: string ='';
 
-  displayedColumns: string[] = ['select', 'name', 'data'];
+  displayedColumns: string[] = ['select', 'name'];
 
   dataSource = new MatTableDataSource<Document>();
   selection = new SelectionModel<Document>(true, []);
@@ -105,7 +105,6 @@ export class DocumentComponent extends BaseComponent {
       id: 0,
       parentName: parentName,
       name: '',
-      data: undefined,
       isEdit: false,
     };
     this.documents.push(newDocument);
