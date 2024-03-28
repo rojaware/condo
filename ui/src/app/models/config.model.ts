@@ -5,3 +5,4 @@ export class Config {
   apiEndpoint: string;
   user: User;
 }
+

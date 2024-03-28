@@ -370,7 +370,7 @@ router.route('/documents/:id').delete((request, response) => {
 /**
  * delete docs by id list
  */
-router.route('/documents/:idList').delete((request, response) => {
+router.route('/documentsByIdList/:idList').delete((request, response) => {
     const params = request.params;
     documentsController.deleteDocByIdList(params.idList).then(result => {
         if (!result) {

@@ -3,6 +3,7 @@ import {
   DefaultIterableDiffer,
   Input,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,9 +25,9 @@ import { FileUploadService } from '../../services/file-upload.service';
 })
 export class DocumentComponent extends BaseComponent {
   @Input() propertyName?: string = '';
-  @Input() tenantName?: string ='';
+  @Input() tenantName?: string = '';
 
-  displayedColumns: string[] = ['select', 'name'];
+  displayedColumns: string[] = ['select', 'id', 'name'];
 
   dataSource = new MatTableDataSource<Document>();
   selection = new SelectionModel<Document>(true, []);
@@ -34,32 +35,39 @@ export class DocumentComponent extends BaseComponent {
   valid: any = {};
   currentFile?: File;
 
-  fileInfos?: Observable<any>;
-  
-  
   constructor(
     protected router: Router,
-    private route: ActivatedRoute,    
+    private route: ActivatedRoute,
     public dialog: MatDialog,
-    private documentService: DocumentService, 
+    private documentService: DocumentService,
     private uploadService: FileUploadService ) {
     super(router);
     this.message = '';
   }
 
   ngOnInit() {
-    const name = this.propertyName || this.tenantName;
-    if (name) {
-      this.documentService.getByPropertyOrTenant(name).subscribe(
-        (data: Document[]) => {
-          this.dataSource = new MatTableDataSource<Document>(data);
-          console.log(data);
-        }
-      );
-    }
-    this.fileInfos = this.documentService.getByPropertyOrTenant(this.propertyName);
+    const name = this.propertyName? this.propertyName: this.tenantName;
+    this.reload(name);
   }
 
+  reload(name?: string): void {
+    if (name) {
+      this.documentService
+        .getByPropertyOrTenant(name)
+        .subscribe((data: Document[]) => {
+          this.dataSource = new MatTableDataSource<Document>(data);
+          console.log(data);
+        });
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    let propertyName = changes['propertyName'];
+    if (propertyName && propertyName.previousValue && propertyName.currentValue !== propertyName.previousValue) {
+      this.reload(propertyName.currentValue);
+      console.log('===>' +changes['propertyName'].currentValue);
+    }
+  }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -73,7 +81,6 @@ export class DocumentComponent extends BaseComponent {
       this.selection.clear();
       return;
     }
-
     this.selection.select(...this.dataSource.data);
   }
 
@@ -96,23 +103,25 @@ export class DocumentComponent extends BaseComponent {
     }
   }
 
-  addData() {
-    const randomElementIndex = Math.floor(
-      Math.random() * this.documents.length
-    );
-    const parentName = this.propertyName ? this.propertyName : this.tenantName;
-    let newDocument: Document = {
-      id: 0,
-      parentName: parentName,
-      name: '',
-      isEdit: false,
-    };
-    this.documents.push(newDocument);
-    this.dataSource = new MatTableDataSource<Document>(this.documents);
-  }
-
   removeData() {
-    // TBA
+    if (this.selection.selected.length > 0) {
+      const idArray = this.getIdList(this.selection.selected);
+      this.documentService.deleteByIdList(idArray).subscribe({
+        next: (res) => {
+          console.log(res);
+          const name = this.propertyName? this.propertyName: this.tenantName;
+          this.reload(name);
+          this.message = 'The selected files were removed successfully!';
+        },
+        error: (e) => {
+          this.message = e.message;
+          this.errMessage = 'Could not remove the selected files'
+          console.error(e);
+        },
+      });
+    } else {
+      this.errMessage = "Please select a file to be removed";
+    }
   }
 
   private getIdList(documents: Document[]): string {
@@ -123,7 +132,7 @@ export class DocumentComponent extends BaseComponent {
       }
     });
 
-    throw idList.toString();
+    return idList.toString();
   }
 
   inputHandler(e: any, id: number, key: string) {
@@ -144,46 +153,28 @@ export class DocumentComponent extends BaseComponent {
   selectFile(event: any): void {
     this.currentFile = event.target.files.item(0);
   }
-   upload(): void {
+
+  upload(): void {
     if (this.currentFile) {
-      this.documentService.upload(this.currentFile)
-      .subscribe({
+      const page = this.propertyName? "property": "tenant";
+      const payload = {
+        file: this.currentFile,
+        page: page,
+        parentName: (page === 'property')? this.propertyName: this.tenantName
+      }
+
+      this.documentService.upload(payload).subscribe({
         next: (res) => {
           console.log(res);
-          // this.message = res.message
-          //   ? res.message
-          //   : 'This property was updated successfully!';
+          this.ngOnInit();
+          this.message = 'This property was updated successfully!';
         },
         error: (e) => {
           this.message = e.message;
-          console.error(e)
-        }
+          console.error(e);
+        },
       });
     }
   }
-  _upload(): void {
-    if (this.currentFile) {
-      this.uploadService.upload(this.currentFile).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.message = event.body.message;
-            this.fileInfos = this.uploadService.getFiles();
-          }
-        },
-        error: (err: any) => {
-          console.log(err);
 
-          if (err.error && err.error.message) {
-            this.message = err.error.message;
-          } else {
-            this.message = 'Could not upload the file!';
-          }
-        },
-        complete: () => {
-          this.currentFile = undefined;
-        },
-      });
-    }
-  }
 }
-

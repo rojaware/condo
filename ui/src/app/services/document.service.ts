@@ -39,13 +39,17 @@ export class DocumentService {
    * @param file 
    * @returns 
    */
-  upload(file: File): Observable<HttpEvent<any>> {
+  upload(payload: any): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
-    formData.append('file', file);
-    formData.append('name', file.name);
-    formData.append('propertyName', 'abell');
+    formData.append('file', payload.file);
+    formData.append('name', payload.file.name);
+    if (payload.page === 'property') {
+      formData.append('propertyName', payload.parentName);
+    } else {
+      formData.append('tenantName', payload.parentName);
+    }
+      
     console.log('sending form data')
-    console.log(formData)
 
     const req = new HttpRequest('POST', `${baseUrl}`, formData, {
       responseType: 'json',

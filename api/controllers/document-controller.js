@@ -94,6 +94,7 @@ async function deleteDocByIdList(idList) {
         let pool = await sql.connect(config);
         let item = await pool.request()
             .query(query);
+        console.log('deleted result is ' + item.rowsAffected)    
         return item.rowsAffected;
     }
     catch (err) {
