@@ -29,26 +29,36 @@
     </button>
   </div>
   <!--  tab menus ... #docregion slow-animation-duration -->
-  <div class="col-md-10" *ngIf = "config.user.property">
-    <mat-tab-group animationDuration="2000ms" >
-      <!-- #enddocregion slow-animation-duration -->
-      <mat-tab label="Property">
-        <div class="col-md-12">
-          <app-property [viewMode]="true" [currentProperty]="currentProperty"></app-property>
-        </div>
-      </mat-tab>
-      <mat-tab label="Tenant">
-        <div class="col-md-12">          
-          <app-tenant [viewMode]="true" [tenant]="currentTenant" ></app-tenant>          
-        </div>
-      </mat-tab>
-      <mat-tab label="Expense">
-        <div class="col-md-12">
-          <app-expense [viewMode]="true"></app-expense>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </div>
+  @if (config.user.property){
+
+    <div class="col-md-10" >
+      <mat-tab-group animationDuration="2000ms" >
+        <!-- #enddocregion slow-animation-duration -->
+        <mat-tab label="Property">
+          <div class="col-md-12">
+            <app-property [viewMode]="true" [currentProperty]="currentProperty"></app-property>
+          </div>
+        </mat-tab>
+        <mat-tab label="Tenant">
+          <div class="col-md-12">          
+            <app-tenant [viewMode]="true" [tenant]="currentTenant" ></app-tenant>          
+          </div>
+        </mat-tab>
+        <mat-tab label="Expense">
+          <div class="col-md-12">
+            <app-expense [viewMode]="true"></app-expense>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  
+  } @else {
+
+    <div class="col-md-10" >
+      <app-carousel></app-carousel>
+    </div>
+  
+  }
 
 
 

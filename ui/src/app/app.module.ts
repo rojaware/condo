@@ -18,6 +18,7 @@ import { MonthNamePipe } from './shared/month-name.pipe';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { DocumentComponent } from './tenant/document/document.component';
 import { NgxCurrencyDirective } from 'ngx-currency';
+import { CarouselHolderComponent } from './carousel-holder/carousel-holder.component';
 
 export const initConfig = (configService: ConfigService): any => () => configService.load();
 
@@ -32,6 +33,7 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     MonthNamePipe,
     DocumentComponent,
     ConfirmDialogComponent,
+    CarouselHolderComponent,
   ],
   imports: [
     HttpClientModule,

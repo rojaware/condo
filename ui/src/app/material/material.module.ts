@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 
 import { MatRadioModule } from '@angular/material/radio';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
 const material = [
   MatTabsModule,
@@ -58,7 +59,7 @@ const material = [
   MatTableModule,
   MatTabsModule,
   // MatToolbarModule,
-
+  CarouselModule,
 ];
 
 @NgModule({
