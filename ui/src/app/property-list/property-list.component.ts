@@ -126,4 +126,10 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       error: (e) => console.error(e),
     });
   }
+
+  handlePropertyChange(selectedProperty: Property) {
+    console.log(`Item changed to: ${selectedProperty.name}`);
+    // Handle the updated item value here
+    this.setActiveProperty(selectedProperty, selectedProperty.index);
+  }
 }

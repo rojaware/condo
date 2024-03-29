@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { BaseComponent } from '../base/base.component';
@@ -62,6 +62,7 @@ const SLIDE_LIST = [
 })
 export class CarouselHolderComponent extends BaseComponent implements OnInit {
   @Input() properties?: Property[] ;
+  @Output() selectedProperty = new EventEmitter<Property>();
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -91,12 +92,16 @@ export class CarouselHolderComponent extends BaseComponent implements OnInit {
     // this.slides = SLIDE_LIST;
     
   }
-  
-}
 
-// export interface Slide {
-//   id: string,
-//   src: string,
-//   alt: string,
-//   title: string
-// }
+  onPropertySelected(slide: Property, index: number): void {
+    console.log(slide)
+    // find the active property from config
+    // update
+    let currentProperty = this.properties?.find(item => item.name === slide.name)
+
+    if (currentProperty) {
+      currentProperty.index = index;
+      this.selectedProperty.emit(currentProperty);
+    }    
+  }
+}

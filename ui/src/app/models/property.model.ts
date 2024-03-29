@@ -26,4 +26,5 @@ export class Property {
   documents: Document[];
   imageUrl: string;
   tscc: string;
+  index?: number;
 }

@@ -1,10 +1,12 @@
 <div>Select a property to start</div>
 
 <owl-carousel-o [options]="customOptions">
-  <ng-container *ngFor="let slide of properties">
+  <ng-container *ngFor="let slide of properties; index as i">
     <label>slide.name</label>
     <ng-template carouselSlide id="{{ slide.name }} ">
-      <img [src]="slide.imageUrl" [alt]="slide.address" [title]="slide.name">
+      <a (click)="onPropertySelected(slide, i)" style="cursor: pointer;">
+        <img [src]="slide.imageUrl" [alt]="slide.address" [title]="slide.name">
+      </a>
     </ng-template>
   </ng-container>
 </owl-carousel-o>
