@@ -19,6 +19,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { DocumentComponent } from './tenant/document/document.component';
 import { NgxCurrencyDirective } from 'ngx-currency';
 import { CarouselHolderComponent } from './carousel-holder/carousel-holder.component';
+import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 export const initConfig = (configService: ConfigService): any => () => configService.load();
 
@@ -44,7 +45,8 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     MaterialModule,
     BrowserAnimationsModule,    
     ReactiveFormsModule,
-    NgxCurrencyDirective
+    NgxCurrencyDirective,
+    NgxCsvParserModule 
   ],
   providers: [
     {

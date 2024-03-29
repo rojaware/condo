@@ -10,8 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../base/base.component';
 
 import {
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MomentDateAdapter,
   provideMomentDateAdapter,
 } from '@angular/material-moment-adapter';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -22,6 +20,7 @@ import { ExpenseService } from '../services/expense.service';
 import { Expense } from '../models/expense.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
+import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 
 const moment = _rollupMoment || _moment;
 
@@ -55,6 +54,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
   @Input() currentProperty: Property = {} as Property;
   @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
+  @ViewChild('fileImportInput') fileImportInput: any;
 
   expenses: Expense[] = [];
   currentExpense: Expense;
@@ -75,7 +75,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   constructor(
     protected router: Router,
     private expenseService: ExpenseService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, 
+    private ngxCsvParser: NgxCsvParser) {
       super(router);
   }
 
@@ -85,25 +86,20 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     }
     const today = new Date();
 
-// Get the year from the date object
+    // Get the year from the date object
     this.year = today.getFullYear();
     this.month = today.getMonth();
   }
   
-  setYear(
-    normalizedMonthAndYear: Moment,
-    datepicker: MatDatepicker<Moment>
-  ) {
+  setYear(normalizedMonthAndYear: Moment,) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);    
   }
 
-  setMonthAndYear(
-    normalizedMonthAndYear: Moment,
-    datepicker: MatDatepicker<Moment>
-  ) {
+  setMonthAndYear(normalizedMonthAndYear: Moment,
+                  datepicker: MatDatepicker<Moment>) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
     this.month = normalizedMonthAndYear.month();
@@ -191,4 +187,33 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       error: (e: any) => console.error(e),
     });
   }
+
+  /** CSV Example... */
+  fileChangeListener($event: any): void {
+    const files = $event.srcElement.files;
+    
+    this.ngxCsvParser
+        .parse(files[0], {
+            header: true, //this.header,
+            delimiter: ',',
+            encoding: 'utf8'
+        })
+        .pipe()
+        .subscribe(
+            (result:  any): void => {
+                console.log('Result', result);
+                
+                this.expenses = result;
+                this.dataSource = new MatTableDataSource<Expense>(result);
+                this.message = 'CSV has been imported successfully'          
+            },
+            (error: NgxCSVParserError) => {
+                console.log('Error', error);
+                this.errMessage = 'CSV import failed'
+            }
+        );
+  }
+  
+
+
 }
