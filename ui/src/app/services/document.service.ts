@@ -25,8 +25,13 @@ export class DocumentService {
     return new Observable<Document[]>;    
   }
 
-  getByName(name: string): Observable<Document> {
-    return this.http.get<Document>(`${baseUrl}ByName/${name}`);
+  openFile(id: number, name: string): Observable<any> {
+    return this.http.get(`${baseUrl}ById/${id}`,
+     { responseType: 'blob' });
+  }
+
+  getById(id: number): Observable<Document> {
+    return this.http.get<Document>(`${baseUrl}ById/${id}`);
   }
 
   create(data: any, file: File): Observable<any> {

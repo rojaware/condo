@@ -1,10 +1,8 @@
 import {
   Component,
-  DefaultIterableDiffer,
   Input,
   OnInit,
   SimpleChanges,
-  ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -12,18 +10,16 @@ import { Document } from '../../models/document.model';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DocumentService } from '../../services/document.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Observable } from 'rxjs';
 import { BaseComponent } from '../../base/base.component';
-import { HttpResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FileUploadService } from '../../services/file-upload.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-document',
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss'],
 })
-export class DocumentComponent extends BaseComponent {
+export class DocumentComponent extends BaseComponent implements OnInit {
   @Input() propertyName?: string = '';
   @Input() tenantName?: string = '';
 
@@ -32,15 +28,13 @@ export class DocumentComponent extends BaseComponent {
   dataSource = new MatTableDataSource<Document>();
   selection = new SelectionModel<Document>(true, []);
   documents: Document[] = [];
-  valid: any = {};
   currentFile?: File;
 
   constructor(
     protected router: Router,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private documentService: DocumentService,
-    private uploadService: FileUploadService ) {
+    private documentService: DocumentService) {
     super(router);
     this.message = '';
   }
@@ -50,7 +44,38 @@ export class DocumentComponent extends BaseComponent {
     this.reload(name);
   }
 
-  reload(name?: string): void {
+  /** On property change, reload document list by the selected property name... */
+  ngOnChanges(changes: SimpleChanges) {
+    let propertyName = changes['propertyName'];
+    if (propertyName && propertyName.previousValue && propertyName.currentValue !== propertyName.previousValue) {
+      this.reload(propertyName.currentValue);
+      console.log('===>' +changes['propertyName'].currentValue);
+    }
+  }
+
+  openFile(event: any, element: any) {
+    event.preventDefault();
+    this.documentService.openFile(element.id, element.name)
+      .subscribe( data => {
+        
+        const blob = new Blob([data], { type: 'application/pdf' });
+        let url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        // below to download file without new tab ...
+        // let a = document.createElement('a');
+        // document.body.appendChild(a);
+        // a.setAttribute('style', 'display: none');
+        // a.href = url;
+        // a.download = element.name;
+        // a.click();
+        // window.URL.revokeObjectURL(url);
+        // a.remove();
+    });
+  }
+
+
+  
+  private reload(name?: string): void {
     if (name) {
       this.documentService
         .getByPropertyOrTenant(name)
@@ -61,13 +86,6 @@ export class DocumentComponent extends BaseComponent {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    let propertyName = changes['propertyName'];
-    if (propertyName && propertyName.previousValue && propertyName.currentValue !== propertyName.previousValue) {
-      this.reload(propertyName.currentValue);
-      console.log('===>' +changes['propertyName'].currentValue);
-    }
-  }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -90,17 +108,6 @@ export class DocumentComponent extends BaseComponent {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row `;
-  }
-
-  editRow(row: Document) {
-    if (row.id === 0) {
-      this.documentService.update(row).subscribe((newDocument: Document) => {
-        row.id = newDocument.id;
-        row.isEdit = false;
-      });
-    } else {
-      this.documentService.update(row).subscribe(() => (row.isEdit = false));
-    }
   }
 
   removeData() {
@@ -135,19 +142,6 @@ export class DocumentComponent extends BaseComponent {
     return idList.toString();
   }
 
-  inputHandler(e: any, id: number, key: string) {
-    if (!this.valid[id]) {
-      this.valid[id] = {};
-    }
-    this.valid[id][key] = e.target.validity.valid;
-  }
-
-  disableSubmit(id: number) {
-    if (this.valid[id]) {
-      return Object.values(this.valid[id]).some((item) => item === false);
-    }
-    return false;
-  }
 
   /** File Upload Service... */
   selectFile(event: any): void {

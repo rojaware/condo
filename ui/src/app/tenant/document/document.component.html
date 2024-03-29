@@ -1,6 +1,6 @@
 <div class="demo-button-container">
   
-  <!-- File Upload -->
+  <!-- File Upload Button -->
   <div class="row">
     <div class="col-4">
       <label class="btn btn-default p-0">
@@ -14,7 +14,7 @@
       </button>
     </div>
 
-    <!-- Remove File -->
+    <!-- Remove File Button -->
     <button mat-raised-button color="warn"
             [disabled]="!dataSource.data.length"
             (click)="removeData()"
@@ -24,6 +24,7 @@
   </div>
 </div>
 
+<!-- File List Table -->
 <table id="documents" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
   <!-- Checkbox Column -->
@@ -32,14 +33,14 @@
       <mat-checkbox (change)="$event ? toggleAllRows() : null"
                     [checked]="selection.hasValue() && isAllSelected()"
                     [indeterminate]="selection.hasValue() && !isAllSelected()"
-                    [aria-label]="checkboxLabel()">
+                    >
       </mat-checkbox>
     </th>
     <td mat-cell *matCellDef="let row">
       <mat-checkbox (click)="$event.stopPropagation()"
                     (change)="$event ? selection.toggle(row) : null"
                     [checked]="selection.isSelected(row)"
-                    [aria-label]="checkboxLabel(row)">
+                    >
       </mat-checkbox>
     </td>
   </ng-container>
@@ -52,7 +53,9 @@
   <!-- Name Column and opening on new tab on click-->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <td mat-cell *matCellDef="let element">
+      <a href="javascript:void(0)" (click)="openFile($event, element)">{{element.name}}</a>
+</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -60,7 +63,6 @@
       (click)="selection.toggle(row)">
   </tr>
 </table>
-debug selected :: <pre>{{ selection.selected | json }}</pre>
 
 @if (message) {
 <div class="alert alert-secondary" role="alert">{{ message }}</div>
