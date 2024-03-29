@@ -42,5 +42,9 @@ export class ExpenseService {
   update(data: any): Observable<any> {
     return this.http.put(`${baseUrl}`, data);
   }
+  
+  updateBulk(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}Bulk`, data);
+  }
 
 }

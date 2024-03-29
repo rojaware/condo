@@ -181,6 +181,56 @@ async function updateExpense(body) {
     }
 }
 
+
+async function upsertBulk(body) {
+    const query = `
+    INSERT INTO [dbo].[expenses]
+        ([propertyName]
+        ,[month]
+        ,[year]
+        ,[travel]
+        ,[maintenance]
+        ,[commission]
+        ,[insurance]
+        ,[legal]
+        ,[managementFee]
+        ,[mortgageInterest]
+        ,[repairs]
+        ,[supplies]
+        ,[tax]
+        ,[utilities]
+        ,[depreciation]
+        ,[income])
+    VALUES
+        (@propertyName ,@month ,@year ,@travel,@maintenance,@commission,@insurance,@legal,@managementFee,@mortgageInterest,@repairs,@supplies,@tax,@utilities,@depreciation,@income);
+         SELECT @propertyName as propertyName, @year as year, @month as month;`;
+    try {
+        let pool = await sql.connect(config);
+        let item = await pool.request()
+            .input('propertyName', sql.NVarChar, body.propertyName)
+            .input('month', sql.Int, body.month)
+            .input('year', sql.Int, body.year)
+            .input('travel', sql.Money, body.travel)
+            .input('maintenance', sql.Money, body.maintenance)            
+            .input('commission', sql.Money, body.commission)
+            .input('insurance', sql.Money, body.insurance)
+            .input('legal', sql.Money, body.legal)
+            .input('managementFee', sql.Money, body.managementFee)
+            .input('mortgageInterest', sql.Money, body.mortgageInterest)
+            .input('repairs', sql.Money, body.repairs)            
+            .input('supplies', sql.Money, body.supplies)
+            .input('tax', sql.Money, body.tax)
+            .input('utilities', sql.Money, body.utilities)
+            .input('depreciation', sql.Money, body.depreciation)
+            .input('income', sql.Money, body.income)
+            .query(query);
+        return item.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     getExpenses: getExpenses,
     getExpensesByProperty: getExpenseByProperty,
@@ -188,5 +238,6 @@ module.exports = {
     addExpense : addExpense,
     deleteExpense : deleteExpense,
     purgeExpense: purgeExpense,
-    updateExpense : updateExpense
+    updateExpense : updateExpense, 
+    upsertBulk: upsertBulk
 }

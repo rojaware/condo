@@ -261,6 +261,19 @@ router.route('/expenses').post((request, response) => {
   })
 })
 
+
+router.route('/expensesBulk').post((request, response) => {
+  let expenses = { ...request.body }
+  expenseController.upsertBulk(expenses).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
 router.route('/expenses').put((request, response) => {
   let expense = { ...request.body }
   expenseController.updateExpense(expense).then(result => {

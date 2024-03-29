@@ -172,7 +172,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This tenant was updated successfully!';
+          : 'This expense was updated successfully!';
       },
       error: (e: any) => console.error(e),
     });
@@ -205,7 +205,16 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
                 
                 this.expenses = result;
                 this.dataSource = new MatTableDataSource<Expense>(result);
-                this.message = 'CSV has been imported successfully'          
+                this.message = '';
+                this.expenseService.updateBulk(this.expenses).subscribe({
+                  next: (res: any) => {
+                    console.log(res);
+                    this.message = res.message
+                      ? res.message
+                      : 'This expense was updated successfully!';
+                  },
+                  error: (e: any) => console.error(e),
+                });        
             },
             (error: NgxCSVParserError) => {
                 console.log('Error', error);

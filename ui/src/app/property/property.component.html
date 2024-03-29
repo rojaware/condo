@@ -45,6 +45,17 @@
         </button>
         }
       </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Photo</mat-label>
+        <input id="imageUrl" matInput type="text" [(ngModel)]="currentProperty.imageUrl" name="imageUrl"
+          [readonly]="viewMode" />
+        @if (currentProperty.imageUrl && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.imageUrl = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>      
+      
     </div>
     <div class="form-group">
       <mat-form-field class="edit-form-field">
