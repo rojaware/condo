@@ -20,6 +20,8 @@ async function getProperties() {
                ,mortgageRate
                ,CONVERT(char(10), maturityDate ,126) as maturityDate
                ,comment
+               ,imageUrl
+               ,tscc
                ,[owner] from Properties`;               
     try {
         let pool = await sql.connect(config);
@@ -50,6 +52,7 @@ async function getProperty(name) {
                ,mortgageRate
                ,CONVERT(char(10), maturityDate ,126) as maturityDate
                ,comment
+               ,imageUrl, tscc
                ,[owner] from Properties where name = @name`;
     try {
         let pool = await sql.connect(config);
@@ -82,14 +85,14 @@ async function addProperty(property) {
                ,mortgageAccountNo
                ,mortgageType
                ,mortgageRate
-               ,maturityDatem, comment
+               ,maturityDatem, comment, imageUrl, tscc
                ,[owner])
          VALUES
                (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder, @closingDate, 
                 @occupancyDate, @startDate, @endDate, @rentFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
                 ,@mortgageRate
-                ,@maturityDate, @comment
+                ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@owner);
          SELECT @name as name;`;
     try {
@@ -113,6 +116,8 @@ async function addProperty(property) {
             .input('mortgageType', sql.NVarChar, property.mortgageType)
             .input('mortgageRate', sql.Decimal, property.mortgageRate)
             .input('maturityDate', sql.Date, property.maturityDate)
+            .input('imageUrl', sql.NVarChar, property.imageUrl)
+            .input('tscc', sql.NVarChar, property.tscc)
             .input('comment', sql.NVarChar, property.comment)
             .query(query);
         return item.recordsets;
@@ -158,6 +163,8 @@ async function updateProperty(property) {
        ,[mortgageType] = @mortgageType
        ,[mortgageRate] = @mortgageRate
        ,[maturityDate] = @maturityDate
+       ,[imageUrl] = @imageUrl
+       ,[tscc] = @tscc
        ,[comment] = @comment
     WHERE name = @name;
              SELECT @name as name;`;
@@ -182,6 +189,8 @@ async function updateProperty(property) {
             .input('mortgageType', sql.NVarChar, property.mortgageType)
             .input('mortgageRate', sql.Decimal, property.mortgageRate)
             .input('maturityDate', sql.Date, property.maturityDate)            
+            .input('imageUrl', sql.NVarChar, property.imageUrl)   
+            .input('tscc', sql.NVarChar, property.tscc) 
             .input('comment', sql.NVarChar, property.comment)    
             .query(query);
         return item.recordsets;

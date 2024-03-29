@@ -24,4 +24,6 @@ export class Property {
   tenant: Tenant;
   expenses: Expense[];
   documents: Document[];
+  imageUrl: string;
+  tscc: string;
 }

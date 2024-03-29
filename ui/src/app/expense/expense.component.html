@@ -16,7 +16,12 @@
     <button mat-raised-button color="primary" (click)="getByMonth()">Retrieve {{ month | monthname }}</button>
     <button mat-raised-button color="accent" (click)="getByYear()">Retrieve {{ year }}</button>
   </div>
+
 </div>
+
+
+<!-- Import csv -->
+
 
 <p *ngIf="!year || (currentExpense && currentExpense.propertyName !== config.user.property.name)">
   Select year and month for {{ config.user.property.name }} ...
@@ -38,6 +43,7 @@
     }
 
   </div>
+
   <form style="height: 300px;">
     <!-- Income -->
     <div class="form-group">
@@ -131,7 +137,7 @@
   <p>{{ message }}</p>
 </div>
 
-<!-- show yearly expense table -->
+<!-- show annual expense table -->
 <div id="annual-expense" *ngIf="expenses && expenses.length > 0">
   <mat-form-field>
     <mat-label>Filter</mat-label>
@@ -244,6 +250,7 @@
 
 <pre>
   TODO <br>
+  1. Read csv and save into database
   2. Download/Upload csv mat-form-field <br>
   3. Save/Update bulk rows (csv can be exempt)
 

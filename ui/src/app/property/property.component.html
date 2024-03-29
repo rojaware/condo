@@ -67,9 +67,6 @@
         </button>
         }
       </mat-form-field>
-    </div>
-
-    <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Mortgage Bank</mat-label>
         <input id="bank" matInput type="text" [(ngModel)]="currentProperty.bank" name="bank" [readonly]="viewMode" />
@@ -79,6 +76,9 @@
         </button>
         }
       </mat-form-field>
+    </div>
+    <!-- builder, tscc, size -->
+    <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Builder</mat-label>
         <input id="builder" matInput type="text" [(ngModel)]="currentProperty.builder" name="builder"
@@ -90,7 +90,17 @@
         }
       </mat-form-field>
       <mat-form-field class="edit-form-field">
+        <mat-label>TSCC</mat-label>
+        <input id="tscc" matInput type="text" [(ngModel)]="currentProperty.tscc" name="tscc" [readonly]="viewMode" />
+        @if (currentProperty.tscc && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.tscc = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>      
+      <mat-form-field class="edit-form-field">
         <mat-label>Size (sq)</mat-label>
+        <span matSuffix>sq ft</span>
         <input id="size" matInput type="text" [(ngModel)]="currentProperty.size" name="size" [readonly]="viewMode" />
         @if (currentProperty.size && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.size = 0">
@@ -249,18 +259,31 @@
     <!-- Documents -->    
     <app-document [propertyName]="currentProperty.name"></app-document>
     
-    <div *ngIf="!viewMode" class=" form-group">
-      <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
+    <div *ngIf="!viewMode" class=" form-group button-space">
+      <!-- <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
         <mat-icon>cancel</mat-icon>
-      </button>
-
-      <button class="badge badge-danger mr-2" (click)="deleteProperty()" matTooltip="Delete Property">
+      </button> -->
+      <div class="col-4">
+        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
+          Cancel
+        </button>           
+      </div>
+      <!-- <button class="badge badge-danger mr-2" (click)="deleteProperty()" matTooltip="Delete Property">
         <mat-icon>delete_forever</mat-icon>
-      </button>
-
-      <button type="submit" class="badge badge-success mb-2" (click)="updateProperty()" matTooltip="Update Property">
+      </button> -->
+      <div class="col-4">
+        <button class="btn btn-danger" (click)="deleteProperty()" matTooltip="Delete Property">
+          Delete
+        </button>     
+      </div>
+      <!-- <button type="submit" class="badge badge-success mb-2" (click)="updateProperty()" matTooltip="Update Property">
         <mat-icon>save</mat-icon>
-      </button>
+      </button> -->
+      <div class="col-4">
+        <button type="submit" class="btn btn-success" (click)="updateProperty()" matTooltip="Update Property">
+          Save Change
+        </button>      
+      </div>
     </div>
     
     <div class="form-group">
@@ -272,6 +295,6 @@
 
 <div>
 TODO <br>
-1. Button enhancement <br>
+1. Add photo image for condo <br>
 
 </div>
