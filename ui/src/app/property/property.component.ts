@@ -20,7 +20,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   constructor(
     protected router: Router,
     private propertyService: PropertyService,
-    private route: ActivatedRoute,    
+    private route: ActivatedRoute,  
   ) {
     super(router);
   }
@@ -31,7 +31,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       this.getProperty(this.route.snapshot.params['name']);
     }
   }
-
+  
   getProperty(name: string): void {
     this.propertyService.get(name).subscribe({
       next: (data) => {

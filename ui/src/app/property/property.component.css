@@ -1,44 +1,55 @@
 .edit-form {
   margin: inherit;
 }
+
 .form-group {
   display: flex;
   margin-top: 1rem;
 }
+
 .edit-form-field {
   width: -webkit-fill-available;
   margin-bottom: -2em;
   padding-right: 10px;
 }
+
 .button-space {
   padding-right: 10px;
 }
+
 div.demo {
-    display: table;
-    width: 100%;
-    table-layout: fixed;    /* For cells of equal size */
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  /* For cells of equal size */
 }
+
 div.demo span {
-    display: table-cell;
-    text-align: left;
+  display: table-cell;
+  text-align: left;
 }
+
 .right_header {
   color: #461212;
   position: absolute;
   right: 310px;
 }
+
 span label {
   font-weight: bold;
 }
+
 mat-button-toggle {
-  border: 1px solid hsl(76, 49%, 68%) !important;  
+  border: 1px solid hsl(76, 49%, 68%) !important;
   margin-right: 10px;
   margin-top: 7px;
 }
+
 mat-button-toggle-group {
   height: max-content;
   box-shadow: none !important;
 }
+
 mat-button-toggle-button {
   padding: 0 16px;
 }

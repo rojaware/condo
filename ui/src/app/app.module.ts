@@ -17,6 +17,7 @@ import { ConfigService } from './services/config.service';
 import { MonthNamePipe } from './shared/month-name.pipe';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { DocumentComponent } from './tenant/document/document.component';
+import { NgxCurrencyDirective } from 'ngx-currency';
 
 export const initConfig = (configService: ConfigService): any => () => configService.load();
 
@@ -41,6 +42,7 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     MaterialModule,
     BrowserAnimationsModule,    
     ReactiveFormsModule,
+    NgxCurrencyDirective
   ],
   providers: [
     {

@@ -147,10 +147,15 @@
     </div>
 
     <div class="form-group">
-      <mat-form-field class="edit-form-field">
-        <mat-label>Rent Fee</mat-label>
-        <input id="rentFee" matInput type="text" [(ngModel)]="currentProperty.rentFee" name="rentFee"
-          [readonly]="viewMode" />
+      <mat-form-field class="edit-form-field" appearance="fill">
+        <mat-label>Rent Fee</mat-label>        
+        <input id="rentFee" 
+               matInput 
+               type="text" 
+               [(ngModel)]="currentProperty.rentFee" 
+               name="rentFee"
+               [readonly]="viewMode" 
+               currencyMask />
         @if (currentProperty.rentFee && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.rentFee = 0">
           <mat-icon>close</mat-icon>
@@ -159,8 +164,13 @@
       </mat-form-field>
       <mat-form-field class="edit-form-field">
         <mat-label>Purchase Price</mat-label>
-        <input id="purchasePrice" matInput type="text" [(ngModel)]="currentProperty.purchasePrice" name="purchasePrice"
-          [readonly]="viewMode" />
+        <input id="purchasePrice" 
+               matInput 
+               type="text" 
+               [(ngModel)]="currentProperty.purchasePrice" 
+               name="purchasePrice"
+               [readonly]="viewMode" 
+               currencyMask />
         @if (currentProperty.purchasePrice && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.purchasePrice = 0">
           <mat-icon>close</mat-icon>
@@ -180,13 +190,6 @@
         </button>
         }
       </mat-form-field>
-      <!-- <mat-form-field class="edit-form-field">
-        
-        <mat-label>Mortgage Rate Type</mat-label>
-        <input id="mortgageType" matInput type="text" [(ngModel)]="currentProperty.mortgageType" name="mortgageType"
-          [readonly]="viewMode" />
-          
-      </mat-form-field> -->
       
       <div class="edit-form-field" style="display: flex;">
         <label style="padding: 0 16px; font-size: smaller;">Mortgage Rate Type</label>
@@ -204,9 +207,13 @@
 
     <div class="form-group">
       <mat-form-field class="edit-form-field">
-        <mat-label>Mortgage Rate(%)</mat-label>
-        <input id="mortgageRate" matInput type="text" [(ngModel)]="currentProperty.mortgageRate" name="mortgageRate"
-          [readonly]="viewMode" />
+        <mat-label>Mortgage Rate</mat-label>
+        <input id="mortgageRate"
+               matInput type="text" 
+               [(ngModel)]="currentProperty.mortgageRate" 
+               name="mortgageRate"
+               [readonly]="viewMode" />
+               <span matSuffix>%</span>
         @if (currentProperty.mortgageRate && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.mortgageRate = 0">
           <mat-icon>close</mat-icon>
@@ -239,9 +246,7 @@
       </mat-form-field>
     </div>
 
-    <!-- Documents -->
-    editable document table will be here....
-    
+    <!-- Documents -->    
     <app-document [propertyName]="currentProperty.name"></app-document>
     
     <div *ngIf="!viewMode" class=" form-group">
@@ -269,6 +274,6 @@
 TODO <br>
 1. Button enhancement <br>
 2. Auto format for currency $1,400 <br>
-3. Radio button for Mortgage Rate Type, V and F <br>
+
 4. Prefix for %
 </div>
