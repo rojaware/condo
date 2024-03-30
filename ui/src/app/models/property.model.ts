@@ -2,6 +2,7 @@ import { Expense } from "./expense.model";
 import { Tenant } from "./tenant.model";
 
 export class Property {
+  id: number;
   name: string;
   address: string;
   rollNo: string;

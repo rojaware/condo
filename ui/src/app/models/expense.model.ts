@@ -1,4 +1,5 @@
 export class Expense {
+  id: number;
   // composite primary keys
   propertyName: string;
   month: number;
@@ -27,3 +28,26 @@ export class Expense {
   totalExpense: number;
   netIncome: number;
 }
+/** @deprecated test only use MY_FORMAT */
+export const DB_DATE_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};

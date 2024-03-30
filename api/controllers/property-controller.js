@@ -1,8 +1,9 @@
 var config = require('../dbconfig');
 const sql = require('mssql');
+var util = require('../shared/util');
 
 async function getProperties() {
-    const query = `SELECT [name]
+    const query = `SELECT [name], [id]
                ,[address]
                ,[rollNo]
                ,[propertyCustomerNo]
@@ -33,8 +34,8 @@ async function getProperties() {
     }
 }
 
-async function getProperty(name) {
-    const query = `SELECT [name]
+async function getProperty(id) {
+    const query = `SELECT [name], [id]
                ,[address]
                ,[rollNo]
                ,[propertyCustomerNo]
@@ -53,7 +54,7 @@ async function getProperty(name) {
                ,CONVERT(char(10), maturityDate ,126) as maturityDate
                ,comment
                ,imageUrl, tscc
-               ,[owner] from Properties where name = @name`;
+               ,[owner] from Properties where id = @id`;
     try {
         let pool = await sql.connect(config);
         let property = await pool.request()
@@ -65,7 +66,11 @@ async function getProperty(name) {
         console.log(error);
     }
 }
-
+/**
+ * 
+ * @param {*} property 
+ * @returns 
+ */
 async function addProperty(property) {
     const query = `
         INSERT INTO [dbo].[properties]
@@ -85,16 +90,21 @@ async function addProperty(property) {
                ,mortgageAccountNo
                ,mortgageType
                ,mortgageRate
-               ,maturityDatem, comment, imageUrl, tscc
+               ,maturityDate, comment, imageUrl, tscc
                ,[owner])
          VALUES
-               (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder, @closingDate, 
-                @occupancyDate, @startDate, @endDate, @rentFee, @purchasePrice, @mortgageAccountNo
+               (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder,
+                @closingDate, 
+                @occupancyDate, 
+                @startDate, 
+                @endDate, 
+                 @rentFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
                 ,@mortgageRate
                 ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@owner);
          SELECT @name as name;`;
+         console.log('property.occupancyDate ==> ' + property.occupancyDate)
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
@@ -105,17 +115,17 @@ async function addProperty(property) {
             .input('propertyCustomerNo', sql.NVarChar, property.propertyCustomerNo)
             .input('bank', sql.NVarChar, property.bank)
             .input('size', sql.Int, property.size)
-            .input('builder', sql.NVarChar, property.builder)
-            .input('closingDate', sql.Date, property.closingDate)
-            .input('occupancyDate', sql.Date, property.occupancyDate)
-            .input('startDate', sql.Date, property.startDate)
-            .input('endDate', sql.Date, property.endDate)
+            .input('builder', sql.NVarChar, property.builder)            
+            .input('occupancyDate', sql.Date, util.toValue(property.occupancyDate))
+            .input('closingDate', sql.Date, util.toValue(property.closingDate))
+            .input('startDate', sql.Date, util.toValue(property.startDate))
+            .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
             .input('mortgageType', sql.NVarChar, property.mortgageType)
             .input('mortgageRate', sql.Decimal, property.mortgageRate)
-            .input('maturityDate', sql.Date, property.maturityDate)
+            .input('maturityDate', sql.Date, util.toValue(property.maturityDate))
             .input('imageUrl', sql.NVarChar, property.imageUrl)
             .input('tscc', sql.NVarChar, property.tscc)
             .input('comment', sql.NVarChar, property.comment)
@@ -127,21 +137,6 @@ async function addProperty(property) {
     }
 }
 
-async function deleteProperty(name) {
-
-    const query = `DELETE FROM [dbo].[properties] WHERE name = COALESCE(@name, name); SELECT @name as name`;
-
-    try {
-        let pool = await sql.connect(config);
-        let item = await pool.request()
-            .input('name', sql.NVarChar, name)            
-            .query(query);
-        return item.recordsets;
-    }
-    catch (err) {
-        console.log(err);
-    }
-}
 
 async function updateProperty(property) {
     const query = `UPDATE [properties]
@@ -153,7 +148,7 @@ async function updateProperty(property) {
        ,[bank] = @bank
        ,[size] = @size
        ,[builder] = @builder
-       ,[closingDate] = @closingDate
+       ,[closingDate] = COALESCE(@closingDate, closingDate) 
        ,[occupancyDate] = @occupancyDate
        ,[startDate] = @startDate
        ,[endDate] = @endDate
@@ -166,8 +161,8 @@ async function updateProperty(property) {
        ,[imageUrl] = @imageUrl
        ,[tscc] = @tscc
        ,[comment] = @comment
-    WHERE name = @name;
-             SELECT @name as name;`;
+    WHERE id = @id;
+             SELECT @id as id;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
@@ -177,21 +172,37 @@ async function updateProperty(property) {
             .input('propertyCustomerNo', sql.NVarChar, property.propertyCustomerNo)
             .input('owner', sql.NVarChar, property.owner)
             .input('bank', sql.NVarChar, property.bank)
+            .input('id', sql.Int, property.id)
             .input('size', sql.Int, property.size)
             .input('builder', sql.NVarChar, property.builder)
-            .input('closingDate', sql.Date, property.closingDate)
-            .input('occupancyDate', sql.Date, property.occupancyDate)
-            .input('startDate', sql.Date, property.startDate)
-            .input('endDate', sql.Date, property.endDate)
+            .input('closingDate', sql.Date, util.toValue(property.closingDate))
+            .input('occupancyDate', sql.Date, util.toValue(property.occupancyDate))
+            .input('startDate', sql.Date, util.toValue(property.startDate))
+            .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
             .input('mortgageType', sql.NVarChar, property.mortgageType)
             .input('mortgageRate', sql.Decimal, property.mortgageRate)
-            .input('maturityDate', sql.Date, property.maturityDate)            
+            .input('maturityDate', sql.Date, util.toValue(property.maturityDate))            
             .input('imageUrl', sql.NVarChar, property.imageUrl)   
             .input('tscc', sql.NVarChar, property.tscc) 
             .input('comment', sql.NVarChar, property.comment)    
+            .query(query);
+        return item.recordsets;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+async function deleteProperty(id) {
+
+    const query = `DELETE FROM [dbo].[properties] WHERE id = @id; `;
+
+    try {
+        let pool = await sql.connect(config);
+        let item = await pool.request()
+            .input('id', sql.Int, id)            
             .query(query);
         return item.recordsets;
     }
@@ -205,5 +216,6 @@ module.exports = {
     getProperty : getProperty,
     addProperty : addProperty,
     deleteProperty : deleteProperty,
-    updateProperty : updateProperty
+    updateProperty : updateProperty,
+    
 }

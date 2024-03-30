@@ -59,6 +59,9 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   private appendTenantToProperty(property: Property): void {
     this.tenantService.getByProperty(property.name).subscribe({
       next: (data: Tenant) => {
+        if (!data) {
+          data = this.createTenant();
+        }
         property.tenant = data;
         console.log(data);
       },
@@ -66,6 +69,19 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     });
   }
 
+  private createTenant(): Tenant {
+    let newTenant = new Tenant();
+    newTenant = {
+      
+      primaryName: '',
+      secondaryName: '',
+      phone: '',
+      email: '',
+      propertyName: this.config.user.property.name,
+      documents: []
+    };
+    return newTenant;    
+  }
   refreshList(): void {
     this.retrievePropertyList();
     this.currentProperty = {} as Property;

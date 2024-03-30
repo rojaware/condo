@@ -1,89 +1,87 @@
 <div class="edit-form">
-  <div class="form-group">
-    <h4 class="button-space">{{ tenant.primaryName | uppercase }}</h4>
-    <button *ngIf="viewMode" class="badge badge-warning " (click)="viewMode = false">
-      <mat-icon>edit</mat-icon>
-    </button>
-
-    <button *ngIf="!viewMode" class="badge badge-warning " (click)="viewMode = true">
-      <mat-icon>remove_red_eye</mat-icon>
-    </button>
-  </div>
-
-  <form style="height: 300px;">
+  
     <div class="form-group">
-      <!-- Primary Name -->
-      <mat-form-field class="edit-form-field">
-        <mat-label>Primary Name</mat-label>
-        <input id="primaryName" 
-               matInput 
-               type="text" 
-               [(ngModel)]="tenant.primaryName" 
-               name="primaryName"
-               [readonly]="viewMode" />        
-        <button *ngIf="tenant.primaryName && !viewMode"
-                matSuffix 
-                mat-icon-button                 
-                (click)="tenant.primaryName = ''">
-          <mat-icon>close</mat-icon>
-        </button>        
-      </mat-form-field>
-
-      <!-- Secondary Name -->
-      <mat-form-field class="edit-form-field">
-        <mat-label>Secondary Name</mat-label>
-        <input id="secondaryName" matInput type="text" [(ngModel)]="tenant.secondaryName" name="secondaryName"
-          [readonly]="viewMode" />
-        @if (tenant.secondaryName && !viewMode) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryName = ''">
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
-    </div>
-
-    <!-- Phone , Email -->
-    <div class="form-group">
-      <mat-form-field class="edit-form-field">
-        <mat-label>Phone</mat-label>
-        <input id="phone" matInput type="text" [(ngModel)]="tenant.phone" name="phone" [readonly]="viewMode" />
-        @if (tenant.phone && !viewMode) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.phone = ''">
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
-      <mat-form-field class="edit-form-field">
-        <mat-label>Email</mat-label>
-        <input id="email" matInput type="text" [(ngModel)]="tenant.email" name="email" [readonly]="viewMode" />
-        @if (tenant.email && !viewMode) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.email = ''">
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
-    </div>
-
-    <!-- Documents -->
-    editable document table will be here....
-    
-    <app-document [tenantName]="tenant.primaryName"></app-document>
-    
-    <!-- Button , Cancel, Delete, Save -->
-    <div *ngIf="!viewMode" class="form-group">
-      <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
-        <mat-icon>cancel</mat-icon>
+      <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | uppercase }}</h4>
+      <button *ngIf="viewMode" class="badge badge-warning " (click)="viewMode = false">
+        <mat-icon>edit</mat-icon>
       </button>
-
-      <button class="badge badge-danger mr-2" (click)="delete()" matTooltip="Delete Tenant">
-        <mat-icon>delete_forever</mat-icon>
-      </button>
-
-      <button type="submit" class="badge badge-success mb-2" (click)="update()" matTooltip="Update Tenant">
-        <mat-icon>save</mat-icon>
+  
+      <button *ngIf="!viewMode" class="badge badge-warning " (click)="viewMode = true">
+        <mat-icon>remove_red_eye</mat-icon>
       </button>
     </div>
-    
-  </form>
-  <p>{{ message }}</p>
+  
+    <form style="height: 300px;">
+      <div class="form-group">
+        <!-- Primary Name -->
+        <mat-form-field class="edit-form-field">
+          <mat-label>Primary Name</mat-label>
+          <input id="primaryName" 
+                 matInput 
+                 type="text" 
+                 [(ngModel)]="tenant.primaryName" 
+                 name="primaryName"
+                 [readonly]="viewMode" />        
+          <button *ngIf="tenant.primaryName && !viewMode"
+                  matSuffix 
+                  mat-icon-button                 
+                  (click)="tenant.primaryName = ''">
+            <mat-icon>close</mat-icon>
+          </button>        
+        </mat-form-field>
+  
+        <!-- Secondary Name -->
+        <mat-form-field class="edit-form-field">
+          <mat-label>Secondary Name</mat-label>
+          <input id="secondaryName" matInput type="text" [(ngModel)]="tenant.secondaryName" name="secondaryName"
+            [readonly]="viewMode" />
+          @if (tenant.secondaryName && !viewMode) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryName = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+      </div>
+  
+      <!-- Phone , Email -->
+      <div class="form-group">
+        <mat-form-field class="edit-form-field">
+          <mat-label>Phone</mat-label>
+          <input id="phone" matInput type="text" [(ngModel)]="tenant.phone" name="phone" [readonly]="viewMode" />
+          @if (tenant.phone && !viewMode) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.phone = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+        <mat-form-field class="edit-form-field">
+          <mat-label>Email</mat-label>
+          <input id="email" matInput type="email" [(ngModel)]="tenant.email" name="email" [readonly]="viewMode" />
+        </mat-form-field>
+      </div>
+  
+      <!-- Documents -->
+      editable document table will be here....
+      
+      <app-document [tenantName]="tenant.primaryName"></app-document>
+      
+      <!-- Button , Cancel, Delete, Save -->
+      <div *ngIf="!viewMode" class="form-group">
+        <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
+          <mat-icon>cancel</mat-icon>
+        </button>
+  
+        <button class="badge badge-danger mr-2" (click)="delete()" matTooltip="Delete Tenant">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+  
+        <button type="submit" class="badge badge-success mb-2" (click)="save()" matTooltip="Save Tenant">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+      
+    </form>
+    <p>{{ message }}</p>
+  
+
 </div>

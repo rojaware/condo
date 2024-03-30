@@ -33,9 +33,9 @@ router.route('/properties').get((request, response) => {
   })
 })
 
-router.route('/properties/:name').get((request, response) => {
+router.route('/properties/:id').get((request, response) => {
 
-  propertyController.getProperty(request.params.name).then(result => {
+  propertyController.getProperty(request.params.id).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -45,9 +45,9 @@ router.route('/properties/:name').get((request, response) => {
   })
 })
 
-router.route('/properties/:name').delete((request, response) => {
+router.route('/properties/:id').delete((request, response) => {
 
-  propertyController.deleteProperty(request.params.name).then(result => {
+  propertyController.deleteProperty(request.params.id).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -58,7 +58,7 @@ router.route('/properties/:name').delete((request, response) => {
 })
 
 
-router.route('/properties/:name?').delete((request, response) => {
+router.route('/propertiesByName/:name?').delete((request, response) => {
 
   propertyController.deleteProperty(request.params.name).then(result => {
     if (!result) {
@@ -125,9 +125,9 @@ router.route('/tenantsByProperty/:name').get((request, response) => {
   })
 })
 
-router.route('/tenantsByName/:name').get((request, response) => {
+router.route('/tenantsById/:id').get((request, response) => {
 
-  tenantController.getTenantByName(request.params.name).then(result => {
+  tenantController.getTenantById(request.params.id).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -137,9 +137,9 @@ router.route('/tenantsByName/:name').get((request, response) => {
   })
 })
 
-router.route('/tenants/:primaryName/:propertyName').delete((request, response) => {
+router.route('/tenants/:id').delete((request, response) => {
   const params = request.params;
-  tenantController.deleteTenant(params.primaryName, params.propertyName).then(result => {
+  tenantController.deleteTenantById(params.id).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -149,9 +149,9 @@ router.route('/tenants/:primaryName/:propertyName').delete((request, response) =
   })
 })
 
-router.route('/tenantsPurge/:propertyName').delete((request, response) => {
+router.route('/tenantsByProperty/:propertyName').delete((request, response) => {
   const params = request.params;
-  tenantController.purgeTenants(params.propertyName).then(result => {
+  tenantController.deleteTenantByProperty(params.propertyName).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -187,8 +187,7 @@ router.route('/tenants').post((request, response) => {
 
 router.route('/tenants').put((request, response) => {
 
-  let tenant = { ...request.body }
-
+  let tenant = { ...request.body };
   tenantController.updateTenant(tenant).then(result => {
     if (!result) {
       console.log("no data...");
@@ -213,7 +212,19 @@ router.route('/expenses').get((request, response) => {
   })
 })
 
-router.route('/expenses/:propertyName/:year/:month?').get((request, response) => {
+router.route('/expenses/:id').get((request, response) => {
+  const params = request.params;
+  expenseController.getExpenseById(params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/expensesByPropertyYearMonth/:propertyName/:year/:month?').get((request, response) => {
   const params = request.params;
   expenseController.getExpenseByYearMonth(params.propertyName, params.year, params.month).then(result => {
     if (!result) {
@@ -225,9 +236,9 @@ router.route('/expenses/:propertyName/:year/:month?').get((request, response) =>
   })
 })
 
-router.route('/expenses/:propertyName/:year?/:month?').delete((request, response) => {
+router.route('/expenses/:id').delete((request, response) => {
   const params = request.params;
-  expenseController.deleteExpense(params.propertyName, params.year, params.month).then(result => {
+  expenseController.deleteExpenseById(params.id).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -236,7 +247,17 @@ router.route('/expenses/:propertyName/:year?/:month?').delete((request, response
     }
   })
 })
-
+router.route('/expensesByPropertyYearMonth/:propertyName/:year?/:month?').delete((request, response) => {
+  const params = request.params;
+  expenseController.deleteExpenseByPropertyYearMonth(params.propertyName, params.year, params.month).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
 router.route('/expenses').delete((request, response) => {
   const params = request.params;
   expenseController.purge().then(result => {

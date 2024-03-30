@@ -20,8 +20,14 @@ import { DocumentComponent } from './tenant/document/document.component';
 import { NgxCurrencyDirective } from 'ngx-currency';
 import { CarouselHolderComponent } from './carousel-holder/carousel-holder.component';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MY_FORMATS } from './models/expense.model';
 
-export const initConfig = (configService: ConfigService): any => () => configService.load();
+export const initConfig =
+  (configService: ConfigService): any =>
+  () =>
+    configService.load();
 
 @NgModule({
   declarations: [
@@ -43,10 +49,10 @@ export const initConfig = (configService: ConfigService): any => () => configSer
     FormsModule,
     HttpClientModule,
     MaterialModule,
-    BrowserAnimationsModule,    
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxCurrencyDirective,
-    NgxCsvParserModule 
+    NgxCsvParserModule,
   ],
   providers: [
     {
@@ -57,6 +63,12 @@ export const initConfig = (configService: ConfigService): any => () => configSer
         return () => configService.load();
       },
     },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   bootstrap: [AppComponent],
 })

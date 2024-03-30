@@ -37,7 +37,18 @@ async function getTenantByName(name) {
         console.log(error);
     }
 }
-
+async function getTenantById(id) {
+    try {
+        let pool = await sql.connect(config);
+        let item = await pool.request()
+            .input('id', sql.Int, id)
+            .query("SELECT * from TENANTS where id = @id");
+        return item.recordset;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 async function addTenant(body) {
     const query = `
     INSERT INTO [dbo].[tenants]
@@ -66,17 +77,18 @@ async function addTenant(body) {
     }
     catch (err) {
         console.log(err);
+        throw new Error(err.message
+            )
     }
 }
 
-async function deleteTenant(primaryName, propertyName) {
-    const query = `DELETE FROM [dbo].[tenants] WHERE primaryName = @primaryName; SELECT @primaryName as primaryName, @propertyName as propertyName`;
+async function deleteTenantById(id) {
+    const query = `DELETE FROM [dbo].[tenants] WHERE id = @id;`;
 
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
-            .input('primaryName', sql.NVarChar, primaryName)            
-            .input('propertyName', sql.NVarChar, propertyName)   
+            .input('id', sql.Int, id)
             .query(query);
         return item.rowsAffected;
     }
@@ -85,7 +97,7 @@ async function deleteTenant(primaryName, propertyName) {
     }
 }
 
-async function purgeTenants(name) {
+async function deleteTenantByProperty(name) {
     const query = `DELETE FROM [dbo].[tenants] WHERE propertyName = @name; SELECT @name as propertyName`;
 
     try {
@@ -115,23 +127,23 @@ async function deleteAllTenants() {
 
 async function updateTenant(body) {
     const query = `UPDATE [dbo].[tenants]
-    SET [primaryName] = @primaryName
-       ,[secondaryName] = @secondaryName
-       ,[phone] = @phone
-       ,[email] = @email
-       ,[propertyName] = @propertyName
-  WHERE propertyName = @propertyName;
-             SELECT @propertyName as propertyName;`;
+        SET [primaryName] = @primaryName
+            ,[secondaryName] = @secondaryName
+            ,[phone] = @phone
+            ,[email] = @email
+            ,[propertyName] = @propertyName
+        WHERE id = @id;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
             .input('primaryName', sql.NVarChar, body.primaryName)
             .input('secondaryName', sql.NVarChar, body.secondaryName)
+            .input('id', sql.Int, body.id)
             .input('phone', sql.NVarChar, body.phone)
             .input('email', sql.NVarChar, body.email)
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
-        return item.recordset;
+        return item.rowsAffected;
     }
     catch (err) {
         console.log(err);
@@ -143,8 +155,9 @@ module.exports = {
     getTenantByProperty : getTenantByProperty,
     getTenantByName : getTenantByName,
     addTenant : addTenant,
-    deleteTenant : deleteTenant,
-    purgeTenants : purgeTenants,
+    deleteTenantById : deleteTenantById,
+    deleteTenantByProperty : deleteTenantByProperty,
     deleteAllTenants: deleteAllTenants,
-    updateTenant : updateTenant
+    updateTenant : updateTenant,
+    getTenantById: getTenantById,
 }

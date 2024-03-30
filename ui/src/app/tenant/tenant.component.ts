@@ -27,10 +27,25 @@ export class TenantComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.message = '';   
-    
-    // if (this.config?.user?.property) {
-    //   this.tenant = this.config.user.property.tenant;
-    // }
+    // if no tenant, then open new tenant form
+    if (!this.tenant) {
+      this.createTenant();
+    }
+
+  }
+  
+  createTenant(): void {
+    let newTenant = new Tenant();
+    newTenant = {
+      
+      primaryName: '',
+      secondaryName: '',
+      phone: '',
+      email: '',
+      propertyName: this.config.user.property.name,
+      documents: []
+    };
+    this.tenant = newTenant;    
   }
   
   get(propertyName: string): void {
@@ -38,6 +53,27 @@ export class TenantComponent extends BaseComponent implements OnInit {
       next: (data) => {
         this.tenant = data;
         console.log(data);
+      },
+      error: (e) => console.error(e),
+    });
+  }
+
+  save(): void {
+    if (this.tenant.id) {
+      this.update();
+    } else {
+      this.insert();
+    }
+  }
+  insert(): void {
+    this.message = '';
+
+    this.tenantService.create(this.tenant).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.message = res.message
+          ? res.message
+          : 'This tenant was inserted successfully!';
       },
       error: (e) => console.error(e),
     });

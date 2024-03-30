@@ -164,6 +164,27 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   
+  save(): void {
+    if (this.currentExpense.id) {
+      this.update();
+    } else {
+      this.create();
+    }
+  }
+  create(): void {
+    this.message = '';
+
+    this.expenseService.create(this.currentExpense).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.message = res.message
+          ? res.message
+          : 'This expense was updated successfully!';
+      },
+      error: (e: any) => console.error(e),
+    });
+  }
+
   update(): void {
     this.message = '';
 

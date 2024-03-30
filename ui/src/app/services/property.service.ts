@@ -27,8 +27,12 @@ export class PropertyService {
     return this.http.put(`${baseUrl}`, data);
   }
 
-  delete(name: any): Observable<any> {
-    return this.http.delete(`${baseUrl}/${name}`);
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
+  deleteByName(name: any): Observable<any> {
+    return this.http.delete(`${baseUrl}ByName/${name}`);
   }
 
   deleteAll(): Observable<any> {
