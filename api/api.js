@@ -292,7 +292,8 @@ router.route('/expensesBulk').post((request, response) => {
     } else {
       response.status(201).json(result[0]);
     }
-  })
+  }, 
+  err => response.status(404).send('Error' + err.message))
 })
 
 router.route('/expenses').put((request, response) => {

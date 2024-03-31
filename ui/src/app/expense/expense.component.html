@@ -145,9 +145,14 @@
                #fileImportInput 
                name="File Upload" 
                id="csvFileUpload" 
-               (change)="fileChangeListener($event)"
+               (change)="onFileSelected($event)"
                accept=".csv" />
       </div>      
+      <div class="file-upload">{{ fileName || 'No file uploaded yet.' }}</div>
+      <button mat-mini-fab color="primary" class="upload-btn" (click)="fileImportInput.click()">
+        <mat-icon>attach_file</mat-icon>
+      </button>
+
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-actions>
@@ -173,12 +178,25 @@
 
   <!-- Content -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef > ID </th>
+      <td mat-cell *matCellDef="let element" > {{element.id }} </td>      
+    </ng-container>
+    <ng-container matColumnDef="propertyName">
+      <th mat-header-cell *matHeaderCellDef > propertyName </th>
+      <td mat-cell *matCellDef="let element" > {{element.propertyName }} </td>      
+    </ng-container>
+    <ng-container matColumnDef="year">
+      <th mat-header-cell *matHeaderCellDef > year </th>
+      <td mat-cell *matCellDef="let element" > {{element.year  }} </td>
+      
+    </ng-container>
 
     <!-- Month Column -->
     <ng-container matColumnDef="month">
       <th mat-header-cell *matHeaderCellDef > Month </th>
       <td mat-cell *matCellDef="let element" > {{element.month | monthname }} </td>
-      <!-- <td mat-cell *matCellDef="let element" > {{element.month | monthname}} </td> -->
+      
     </ng-container>
 
     <!-- income Column -->

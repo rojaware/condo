@@ -3,6 +3,11 @@ const  config = {
     password:  '1', //sql user password
     server:  '127.0.0.1', // if it does not work try- localhost
     database:  'condo_db',
+    pool: {
+      max: 10,
+      min: 0,
+      idleTimeoutMillis: 30000
+    },
     options: {
       encrypt: false,
       trustedconnection:  true,

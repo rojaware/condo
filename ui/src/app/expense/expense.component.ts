@@ -64,9 +64,10 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   date = new FormControl(moment());  
   year: number;
   month: number;
+  fileName: string;
 
   displayedColumns: string[] 
-    = ['month', 'income', 'travel', 'maintenance', 
+    = ['id', 'propertyName', 'year', 'month', 'income', 'travel', 'maintenance', 
        'commission', 'insurance', 'legal', 'managementFee',
        'mortgageInterest', 'repairs', 'supplies', 'tax',
        'utilities', 'totalExpense', 'netIncome'  ];
@@ -210,38 +211,41 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   }
 
   /** CSV Example... */
-  fileChangeListener($event: any): void {
-    const files = $event.srcElement.files;
-    
-    this.ngxCsvParser
-        .parse(files[0], {
-            header: true, //this.header,
-            delimiter: ',',
-            encoding: 'utf8'
-        })
-        .pipe()
-        .subscribe(
-            (result:  any): void => {
-                console.log('Result', result);
-                
-                this.expenses = result;
-                this.dataSource = new MatTableDataSource<Expense>(result);
-                this.message = '';
-                this.expenseService.updateBulk(this.expenses).subscribe({
-                  next: (res: any) => {
-                    console.log(res);
-                    this.message = res.message
-                      ? res.message
-                      : 'This expense was updated successfully!';
-                  },
-                  error: (e: any) => console.error(e),
-                });        
-            },
-            (error: NgxCSVParserError) => {
-                console.log('Error', error);
-                this.errMessage = 'CSV import failed'
-            }
-        );
+  onFileSelected(event: any): void {
+    const file: File = event.srcElement.files[0];
+    if (file) {
+      this.fileName = file.name;
+      this.ngxCsvParser
+      .parse(file, {
+          header: true, //this.header,
+          delimiter: ',',
+          encoding: 'utf8'
+      })
+      .pipe()
+      .subscribe(
+          (result:  any): void => {
+              console.log('Result', result);
+              
+              this.expenses = result;
+              this.dataSource = new MatTableDataSource<Expense>(result);
+              this.message = '';
+              this.expenseService.updateBulk(this.expenses).subscribe({
+                next: (res: any) => {
+                  console.log(res);
+                  this.message = res.message
+                    ? res.message
+                    : 'This expense was updated successfully!';
+                },
+                error: (e: any) => console.error(e),
+              });        
+          },
+          (error: NgxCSVParserError) => {
+              console.log('Error', error);
+              this.errMessage = 'CSV import failed'
+          }
+      );
+    }
+
   }
   
 
