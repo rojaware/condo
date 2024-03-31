@@ -6,6 +6,7 @@ import { TenantService } from '../services/tenant.service';
 import { Tenant } from '../models/tenant.model';
 import { BaseComponent } from '../base/base.component';
 import { User } from '../models/user.model';
+import { Util } from '../shared/util';
 
 @Component({
   selector: 'app-property-list',
@@ -20,7 +21,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   currentIndex? = -1;
   name = '';
   search: String = '';
-
+  util =  Util;
   constructor(
     protected router: Router,
     private propertyService: PropertyService,

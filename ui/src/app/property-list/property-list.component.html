@@ -20,6 +20,7 @@
           [class.active]="i == currentIndex" 
           (click)="setActiveProperty(property, i)">
         {{ property.name }}
+        <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
       </li>
       }
     </ul>

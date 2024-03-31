@@ -8,3 +8,7 @@
 ::ng-deep .mat-mdc-tab-body-wrapper {
   display: grid !important;
 }
+li span {
+  font-style: italic;
+  color: crimson;
+}
