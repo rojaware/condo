@@ -60,24 +60,27 @@
         </mat-form-field>
       </div>
   
-      <!-- Documents -->
-      editable document table will be here....
-      
+  
+      <!-- Documents -->    
       <app-document [tenantName]="tenant.primaryName"></app-document>
       
       <!-- Button , Cancel, Delete, Save -->
-      <div *ngIf="!viewMode" class="form-group">
-        <button type="submit" class="badge badge-secondary mr-2" (click)="viewMode = true" matTooltip="Cancel Changes">
-          <mat-icon>cancel</mat-icon>
-        </button>
-  
-        <button class="badge badge-danger mr-2" (click)="delete()" matTooltip="Delete Tenant">
-          <mat-icon>delete_forever</mat-icon>
-        </button>
-  
-        <button type="submit" class="badge badge-success mb-2" (click)="save()" matTooltip="Save Tenant">
-          <mat-icon>save</mat-icon>
-        </button>
+      <div *ngIf="!viewMode" class=" form-group button-space">
+        <div class="col-4">
+          <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
+            Cancel
+          </button>           
+        </div>
+        <div class="col-4">
+          <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">
+            Delete
+          </button>     
+        </div>
+        <div class="col-4">
+          <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">
+            Save Change
+          </button>      
+        </div>
       </div>
       
     </form>
@@ -85,3 +88,9 @@
   
 
 </div>
+<pre>
+  TODO
+  1. After new property entry, tenant menu shows previous tenant with tenant is null on primaryName
+  2. Add 2nd email for 2nd tenant
+  3. Add 3rd email for 3rd tenant
+</pre>

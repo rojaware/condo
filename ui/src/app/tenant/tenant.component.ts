@@ -38,7 +38,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
     let newTenant = new Tenant();
     newTenant = {
       
-      primaryName: '',
+      primaryName: 'fill',
       secondaryName: '',
       phone: '',
       email: '',
@@ -67,7 +67,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
   }
   insert(): void {
     this.message = '';
-
+    this.tenant.propertyName = this.config.user.property.name;
     this.tenantService.create(this.tenant).subscribe({
       next: (res) => {
         console.log(res);
@@ -81,7 +81,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
 
   update(): void {
     this.message = '';
-
+    this.tenant.propertyName = this.config.user.property.name;
     this.tenantService.update(this.tenant).subscribe({
       next: (res) => {
         console.log(res);

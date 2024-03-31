@@ -71,13 +71,14 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
 
   private createTenant(): Tenant {
     let newTenant = new Tenant();
+    let propertyName = (!this.currentIndex || this.currentIndex < 0) ? '': this.config.user.property.name;
     newTenant = {
       
-      primaryName: '',
+      primaryName: 'new',
       secondaryName: '',
       phone: '',
       email: '',
-      propertyName: this.config.user.property.name,
+      propertyName: propertyName,
       documents: []
     };
     return newTenant;    
@@ -125,6 +126,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       rentFee: 0,
       purchasePrice: 0,
     } as Property;
+    newProperty.tenant = this.createTenant();
     this.properties?.push(newProperty);
     const index = this.properties?.length;
     this.setActiveProperty(newProperty, index);

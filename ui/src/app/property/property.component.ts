@@ -85,7 +85,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       });
   }
 
-  deleteProperty(): void {
+  delete(): void {
     this.propertyService.delete(this.currentProperty.id).subscribe({
       next: (res) => {
         console.log(res);
