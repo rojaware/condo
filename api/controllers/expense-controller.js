@@ -1,6 +1,7 @@
 var config = require('../dbconfig');
 const sql = require('mssql');
 const bulkExpense = require('./bulk-expense');
+const queries = require('./queries');
 
 async function getExpenses() {
   try {
@@ -46,28 +47,7 @@ async function getExpenseByYearMonth(propertyName, year, month) {
   }
 }
 
-async function addExpense(body) {
-  const query = `
-    INSERT INTO [dbo].[expenses]
-        ([propertyName]
-        ,[month]
-        ,[year]
-        ,[travel]
-        ,[maintenance]
-        ,[commission]
-        ,[insurance]
-        ,[legal]
-        ,[managementFee]
-        ,[mortgageInterest]
-        ,[repairs]
-        ,[supplies]
-        ,[tax]
-        ,[utilities]
-        ,[depreciation]
-        ,[income], updatedOn)
-    VALUES
-        (@propertyName ,@month ,@year ,@travel,@maintenance,@commission,@insurance,@legal,@managementFee,@mortgageInterest,@repairs,@supplies,@tax,@utilities,@depreciation,@income, CURRENT_TIMESTAMP);
-         SELECT @propertyName as propertyName, @year as year, @month as month;`;
+async function insertExpense(body) {
   try {
     let pool = await sql.connect(config);
     let item = await pool.request()
@@ -87,35 +67,43 @@ async function addExpense(body) {
       .input('utilities', sql.Money, body.utilities)
       .input('depreciation', sql.Money, body.depreciation)
       .input('income', sql.Money, body.income)
-      .query(query);
-    return item.recordsets;
+      .query(queries.insertExpense);
+    return item.rowsAffected;
   }
   catch (err) {
     console.log(err);
   }
 }
 
+async function upsertBulk(bodyList) {
+  
+  try {
+    const keys = Object.keys(bodyList);
+    const array = Object.values(bodyList);
+    console.log(keys);
 
+    let processed = 0;
+    for (const body of array) {
+      if (body.id) {
+        const result = await updateExpense(body);
+        if (result) {
+          processed++;
+        }
+      } else {
+        const result = await insertExpense(body);
+        if (result) {
+          processed++;
+        }
+      }
+    }    
+    console.log('total processed is ' + processed + ' out of ' + array.length)
+    return processed;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.message)
+  }
+}
 async function updateExpense(body) {
-  const query = `UPDATE [dbo].[expenses]
-            SET [propertyName] = @propertyName
-                ,[month] = @month
-                ,[year] = @year
-                ,[travel] = @travel
-                ,[maintenance] = @maintenance
-                ,[commission] = @commission
-                ,[insurance] = @insurance
-                ,[legal] = @legal
-                ,[managementFee] = @managementFee
-                ,[mortgageInterest] = @mortgageInterest
-                ,[repairs] = @repairs
-                ,[supplies] = @supplies
-                ,[tax] = @tax
-                ,[utilities] = @utilities
-                ,[depreciation] = @depreciation
-                ,[income] = @income
-                ,updatedOn = CURRENT_TIMESTAMP
-            WHERE  id = @id`;
   try {
     let pool = await sql.connect(config);
     let item = await pool.request()
@@ -136,8 +124,8 @@ async function updateExpense(body) {
       .input('utilities', sql.Money, body.utilities)
       .input('depreciation', sql.Money, body.depreciation)
       .input('income', sql.Money, body.income)
-      .query(query);
-    return item.recordsets;
+      .query(queries.updateExpense);
+    return item.rowsAffected;
   }
   catch (err) {
     console.log(err);
@@ -197,26 +185,12 @@ async function purgeExpense() {
   }
 }
 
-async function upsertBulk(body) {
-  const expenseTable = bulkExpense.composeTable(body);
-  try {
-    const request = new sql.Request();
-    request.bulk(expenseTable, (err, result) => {
-      // Handle errors or process results
-      return result;
-    });
-  }
-  catch (err) {
-    console.log(err);
-    throw new Error(err.message)
-  }
 
-}
 
 module.exports = {
   getExpenses: getExpenses,
   getExpenseByYearMonth: getExpenseByYearMonth,
-  addExpense: addExpense,
+  addExpense: insertExpense,
   deleteExpenseByPropertyYearMonth: deleteExpenseByPropertyYearMonth,
   purgeExpense: purgeExpense,
   updateExpense: updateExpense,

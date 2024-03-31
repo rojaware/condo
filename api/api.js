@@ -272,7 +272,7 @@ router.route('/expenses').delete((request, response) => {
 
 router.route('/expenses').post((request, response) => {
   let expense = { ...request.body }
-  expenseController.addExpense(expense).then(result => {
+  expenseController.insertExpense(expense).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')

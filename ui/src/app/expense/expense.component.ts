@@ -232,9 +232,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
               this.expenseService.updateBulk(this.expenses).subscribe({
                 next: (res: any) => {
                   console.log(res);
-                  this.message = res.message
-                    ? res.message
-                    : 'This expense was updated successfully!';
+                  this.message = 'This expense was updated successfully!';
                 },
                 error: (e: any) => console.error(e),
               });        
