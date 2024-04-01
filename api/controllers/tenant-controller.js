@@ -55,13 +55,19 @@ async function addTenant(body) {
         ([primaryName]
         ,[secondaryName]
         ,[phone]
+        ,[secondaryPhone]
         ,[email]
+        ,[secondaryEmail]
+        ,[comment]
         ,[propertyName])
     VALUES
         (@primaryName
         ,@secondaryName
         ,@phone
+        ,[secondaryPhone]
         ,@email
+        ,@secondaryEmail
+        ,@comment
         ,@propertyName);
          SELECT @primaryName as primaryName, @secondaryName as secondaryName;`;
     try {
@@ -70,7 +76,10 @@ async function addTenant(body) {
             .input('primaryName', sql.NVarChar, body.primaryName)
             .input('secondaryName', sql.NVarChar, body.secondaryName)
             .input('phone', sql.NVarChar, body.phone)
-            .input('email', sql.NVarChar, body.email)     
+            .input('secondaryPhone', sql.NVarChar, body.secondaryPhone)
+            .input('email', sql.NVarChar, body.email)
+            .input('secondaryEmail', sql.NVarChar, body.secondaryEmail)
+            .input('comment', sql.NVarChar, body.comment)          
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
         return item.recordset;
@@ -130,7 +139,10 @@ async function updateTenant(body) {
         SET [primaryName] = @primaryName
             ,[secondaryName] = @secondaryName
             ,[phone] = @phone
+            ,[secondaryPhone] = @secondaryPhone
             ,[email] = @email
+            ,[secondaryEmail] = @secondaryEmail
+            ,[comment] = @comment
             ,[propertyName] = @propertyName
         WHERE id = @id;`;
     try {
@@ -140,7 +152,10 @@ async function updateTenant(body) {
             .input('secondaryName', sql.NVarChar, body.secondaryName)
             .input('id', sql.Int, body.id)
             .input('phone', sql.NVarChar, body.phone)
+            .input('secondaryPhone', sql.NVarChar, body.secondaryPhone)
             .input('email', sql.NVarChar, body.email)
+            .input('secondaryEmail', sql.NVarChar, body.secondaryEmail)
+            .input('comment', sql.NVarChar, body.comment)
             .input('propertyName', sql.NVarChar, body.propertyName)
             .query(query);
         return item.rowsAffected;

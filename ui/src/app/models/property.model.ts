@@ -7,7 +7,7 @@ export class Property {
   address: string;
   rollNo: string;
   propertyCustomerNo: string;
-  owner: string;
+  owner?: string[];
   bank: string;
   size: number;
   builder: string;
@@ -28,4 +28,5 @@ export class Property {
   imageUrl: string;
   tscc: string;
   index?: number;
+  purchaseDate: string;
 }

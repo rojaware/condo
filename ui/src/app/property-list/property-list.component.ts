@@ -6,7 +6,8 @@ import { TenantService } from '../services/tenant.service';
 import { Tenant } from '../models/tenant.model';
 import { BaseComponent } from '../base/base.component';
 import { User } from '../models/user.model';
-import { Util } from '../shared/util';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+
 
 @Component({
   selector: 'app-property-list',
@@ -21,7 +22,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   currentIndex? = -1;
   name = '';
   search: String = '';
-  util =  Util;
+  
   constructor(
     protected router: Router,
     private propertyService: PropertyService,
@@ -73,12 +74,14 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   private createTenant(): Tenant {
     let newTenant = new Tenant();
     let propertyName = (!this.currentIndex || this.currentIndex < 0) ? '': this.config.user.property.name;
-    newTenant = {
-      
+    newTenant = {      
       primaryName: 'new',
       secondaryName: '',
       phone: '',
+      secondaryPhone: '',
       email: '',
+      secondaryEmail: '',
+      comment: '',
       propertyName: propertyName,
       documents: []
     };
@@ -116,7 +119,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       address: '',
       rollNo: '',
       propertyCustomerNo: '',
-      owner: '',
+      owner: [],
       bank: '',
       size: 0,
       builder: '',
@@ -126,7 +129,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       endDate: '',
       rentFee: 0,
       purchasePrice: 0,
-    } as Property;
+    } as unknown as Property;
     newProperty.tenant = this.createTenant();
     this.properties?.push(newProperty);
     const index = this.properties?.length;
@@ -150,5 +153,10 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     console.log(`Item changed to: ${selectedProperty.name}`);
     // Handle the updated item value here
     this.setActiveProperty(selectedProperty, selectedProperty.index);
+  }
+
+  tabChanged(tabChangeEvent: MatTabChangeEvent): void {
+    console.log('tabChangeEvent => ', tabChangeEvent);
+    console.log('index => ', tabChangeEvent.index);
   }
 }

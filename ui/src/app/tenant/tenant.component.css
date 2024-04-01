@@ -79,3 +79,9 @@ h2 {
 .form-input {
   padding-right: 5px;
 }
+
+div span {
+  font-style: italic;
+  color:mediumslateblue;
+  font-weight: 600;
+}

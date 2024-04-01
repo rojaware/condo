@@ -3,7 +3,10 @@ export class Tenant {
   primaryName: string;
   secondaryName: string;
   phone: string;
+  secondaryPhone: string;
   email: string;
+  secondaryEmail: string;
+  comment: string;
   propertyName: string;
   documents: Document[];  
 }

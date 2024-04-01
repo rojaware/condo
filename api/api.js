@@ -2,6 +2,7 @@ const propertyController = require('./controllers/property-controller');
 const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
 const documentsController = require('./controllers/document-controller');
+var util = require('./shared/util');
 
 const multer = require('multer');
 var express = require('express');
@@ -28,6 +29,7 @@ router.route('/properties').get((request, response) => {
       response.status(404)
       response.send('no data')
     } else {
+      result[0] = util.toManyArrayOfString(result[0], 'owner')
       response.json(result[0]);
     }
   })
@@ -40,6 +42,7 @@ router.route('/properties/:id').get((request, response) => {
       console.log("no data...");
       response.status(404).send('no data')
     } else {
+      result[0] = util.toArrayOfString(result[0], 'owner')
       response.status(201).json(result[0]);
     }
   })
@@ -65,6 +68,7 @@ router.route('/propertiesByName/:name?').delete((request, response) => {
       console.log("no data...");
       response.status(404).send('no data')
     } else {
+      result[0] = util.toArrayOfString(result[0], 'owner')
       response.status(201).json(result[0]);
     }
   })
@@ -72,7 +76,8 @@ router.route('/propertiesByName/:name?').delete((request, response) => {
 
 router.route('/properties').post((request, response) => {
 
-  let property = { ...request.body }
+  let property = { ...request.body };
+  property = util.toJoinedString(property);
 
   propertyController.addProperty(property).then(result => {
     if (!result) {
@@ -87,6 +92,7 @@ router.route('/properties').post((request, response) => {
 router.route('/properties').put((request, response) => {
 
   let property = { ...request.body }
+  property = util.toJoinedString(property, 'owner');
 
   propertyController.updateProperty(property).then(result => {
     if (!result) {

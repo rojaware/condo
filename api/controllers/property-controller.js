@@ -66,6 +66,8 @@ async function getProperty(id) {
         console.log(error);
     }
 }
+
+
 /**
  * 
  * @param {*} property 

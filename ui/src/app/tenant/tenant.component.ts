@@ -3,6 +3,7 @@ import { Tenant } from '../models/tenant.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '../services/tenant.service';
 import { BaseComponent } from '../base/base.component';
+import { Document   } from '../models/document.model';
 
 @Component({
   selector: 'app-tenant',
@@ -36,12 +37,14 @@ export class TenantComponent extends BaseComponent implements OnInit {
   
   createTenant(): void {
     let newTenant = new Tenant();
-    newTenant = {
-      
+    newTenant = {      
       primaryName: 'fill',
       secondaryName: '',
       phone: '',
+      secondaryPhone: '',
       email: '',
+      secondaryEmail: '',
+      comment: '',
       propertyName: this.config.user.property.name,
       documents: []
     };
@@ -73,7 +76,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This tenant was inserted successfully!';
+          : 'This tenant has been inserted successfully!';
       },
       error: (e) => console.error(e),
     });
@@ -87,7 +90,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This tenant was updated successfully!';
+          : 'This tenant has been updated successfully!';
       },
       error: (e) => console.error(e),
     });

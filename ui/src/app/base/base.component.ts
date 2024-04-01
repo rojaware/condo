@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../services/config.service';
 import { Router } from '@angular/router';
 import { Config } from '../models/config.model';
+import { Util } from '../shared/util';
 
 @Component({
   selector: 'app-base',
@@ -14,6 +15,7 @@ export class BaseComponent implements OnInit {
   submitted = false;
   errMessage: string;
   message: string;
+  util =  Util;
 
   constructor(protected router: Router) {}
 

@@ -13,6 +13,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { BaseComponent } from '../../base/base.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
+import { Tenant } from '../../models/tenant.model';
 
 @Component({
   selector: 'app-document',
@@ -21,13 +22,12 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class DocumentComponent extends BaseComponent implements OnInit {
   @Input() propertyName?: string = '';
-  @Input() tenantName?: string = '';
+  @Input() tenant?: Tenant;
 
   displayedColumns: string[] = ['select', 'id', 'name'];
 
   dataSource = new MatTableDataSource<Document>();
   selection = new SelectionModel<Document>(true, []);
-  documents: Document[] = [];
   currentFile?: File;
 
   constructor(
@@ -40,7 +40,8 @@ export class DocumentComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    const name = this.propertyName? this.propertyName: this.tenantName;
+    const name = this.propertyName? this.propertyName: this.tenant?.primaryName;
+    
     this.reload(name);
   }
 
@@ -49,6 +50,7 @@ export class DocumentComponent extends BaseComponent implements OnInit {
     let propertyName = changes['propertyName'];
     if (propertyName && propertyName.previousValue && propertyName.currentValue !== propertyName.previousValue) {
       this.reload(propertyName.currentValue);
+      
       console.log('===>' +changes['propertyName'].currentValue);
     }
   }
@@ -56,24 +58,14 @@ export class DocumentComponent extends BaseComponent implements OnInit {
   openFile(event: any, element: any) {
     event.preventDefault();
     this.documentService.openFile(element.id, element.name)
-      .subscribe( data => {
-        
+      .subscribe( data => {        
         const blob = new Blob([data], { type: 'application/pdf' });
         let url = window.URL.createObjectURL(blob);
         window.open(url, '_blank');
-        // below to download file without new tab ...
-        // let a = document.createElement('a');
-        // document.body.appendChild(a);
-        // a.setAttribute('style', 'display: none');
-        // a.href = url;
-        // a.download = element.name;
-        // a.click();
-        // window.URL.revokeObjectURL(url);
-        // a.remove();
     });
   }
 
-
+  
   
   private reload(name?: string): void {
     if (name) {
@@ -116,7 +108,7 @@ export class DocumentComponent extends BaseComponent implements OnInit {
       this.documentService.deleteByIdList(idArray).subscribe({
         next: (res) => {
           console.log(res);
-          const name = this.propertyName? this.propertyName: this.tenantName;
+          const name = this.propertyName? this.propertyName: this.tenant?.primaryName;
           this.reload(name);
           this.message = 'The selected files were removed successfully!';
         },
@@ -154,7 +146,7 @@ export class DocumentComponent extends BaseComponent implements OnInit {
       const payload = {
         file: this.currentFile,
         page: page,
-        parentName: (page === 'property')? this.propertyName: this.tenantName
+        parentName: (page === 'property')? this.propertyName: this.tenant?.primaryName
       }
 
       this.documentService.upload(payload).subscribe({

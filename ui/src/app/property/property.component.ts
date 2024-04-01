@@ -4,6 +4,7 @@ import { PropertyService } from '../services/property.service';
 import { Property } from '../models/property.model';
 import { BaseComponent } from '../base/base.component';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { BANKS, OWNERS } from '../models/user.model';
 
 @Component({
   selector: 'app-property',
@@ -18,9 +19,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   @ViewChild('closingDatePicker', { static: false }) private closingDatePicker: MatDatepicker<Date>;
   @ViewChild('startDatePicker', { static: false }) private startDatePicker: MatDatepicker<Date>;
   @ViewChild('endDatePicker', { static: false }) private endDatePicker: MatDatepicker<Date>;
+  @ViewChild('maturityDatePicker', { static: false }) private maturityDatePicker: MatDatepicker<Date>;
+  @ViewChild('purchaseDatePicker', { static: false }) private purchaseDatePicker: MatDatepicker<Date>;
   
   dateToday: number = Date.now();
   message = '';
+  banks = BANKS;
+  owners = OWNERS;
 
   constructor(
     protected router: Router,
@@ -93,5 +98,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       },
       error: (e) => console.error(e)
     });
+  }
+  onNgModelChange(event: any): void {
+
   }
 }

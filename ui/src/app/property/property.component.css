@@ -53,3 +53,8 @@ mat-button-toggle-group {
 mat-button-toggle-button {
   padding: 0 16px;
 }
+div span {
+  font-style: italic;
+  color:mediumslateblue;
+  font-weight: 600;
+}

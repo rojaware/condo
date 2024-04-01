@@ -12,6 +12,7 @@
     </div>
   
     <form style="height: 300px;">
+      <!-- Full Names -->
       <div class="form-group">
         <!-- Primary Name -->
         <mat-form-field class="edit-form-field">
@@ -43,7 +44,7 @@
         </mat-form-field>
       </div>
   
-      <!-- Phone , Email -->
+      <!-- Phone  -->
       <div class="form-group">
         <mat-form-field class="edit-form-field">
           <mat-label>Phone</mat-label>
@@ -55,42 +56,62 @@
           }
         </mat-form-field>
         <mat-form-field class="edit-form-field">
-          <mat-label>Email</mat-label>
-          <input id="email" matInput type="email" [(ngModel)]="tenant.email" name="email" [readonly]="viewMode" />
+          <mat-label>Secondary Phone</mat-label>
+          <input id="secondaryPhone" matInput type="text" [(ngModel)]="tenant.secondaryPhone" name="secondaryPhone" [readonly]="viewMode" />
+          @if (tenant.secondaryPhone && !viewMode) {
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryPhone = ''">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
         </mat-form-field>
       </div>
   
-  
-      <!-- Documents -->    
-      <app-document [tenantName]="tenant.primaryName"></app-document>
+  <!-- Phone , Email -->
+  <div class="form-group">
+        
+    <mat-form-field class="edit-form-field">
+      <mat-label>Email</mat-label>
+      <input id="email" matInput type="email" [(ngModel)]="tenant.email" name="email" [readonly]="viewMode" />
+    </mat-form-field>
+    <mat-form-field class="edit-form-field">
+      <mat-label>Secondary Email</mat-label>
+      <input id="secondaryEmail" matInput type="email" [(ngModel)]="tenant.secondaryEmail" name="secondaryEmail" [readonly]="viewMode" />
+    </mat-form-field>
+  </div>
+
       
       <!-- Button , Cancel, Delete, Save -->
       <div *ngIf="!viewMode" class=" form-group button-space">
-        <div class="col-4">
+        <div class="col-3">
           <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
             Cancel
           </button>           
         </div>
-        <div class="col-4">
+        <div class="col-3">
           <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">
             Delete
           </button>     
         </div>
-        <div class="col-4">
+        <div class="col-3">
           <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">
             Save Change
           </button>      
         </div>
-      </div>
-      
-    </form>
-    <p>{{ message }}</p>
-  
 
+        <div class="col-3">
+          ...<span>{{ message }}</span>
+        </div>        
+      </div>      
+    </form>
+
+<!-- Documents -->    
+<app-document [propertyName]="tenant.propertyName" [tenant]="tenant"></app-document>
+      <hr>    
+    <pre>
+      TODO
+      1. After new property entry, tenant menu shows previous tenant with tenant is null on primaryName
+      
+      3. Add 3rd email for 3rd tenant
+    </pre>
 </div>
-<pre>
-  TODO
-  1. After new property entry, tenant menu shows previous tenant with tenant is null on primaryName
-  2. Add 2nd email for 2nd tenant
-  3. Add 3rd email for 3rd tenant
-</pre>
+
