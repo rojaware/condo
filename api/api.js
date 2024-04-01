@@ -77,7 +77,7 @@ router.route('/propertiesByName/:name?').delete((request, response) => {
 router.route('/properties').post((request, response) => {
 
   let property = { ...request.body };
-  property = util.toJoinedString(property);
+  property = util.toJoinedString(property, 'owner');
 
   propertyController.addProperty(property).then(result => {
     if (!result) {

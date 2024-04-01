@@ -3,7 +3,7 @@ class Util {
     if (!str) {
       return true;
     } else {
-      return str.trim().length === 0
+      return str.toString().trim().length === 0
     }    
   }
   static toValue(str) {
@@ -11,9 +11,14 @@ class Util {
   }
   static toJoinedString(property, key) {
     let source = property[key];
-    const formatted = source.join(',');
-    property[key]=formatted;
-    return property;
+    let formatted = '';
+    if (this.isEmpty(source) ) {
+      return property;
+    } else {
+      formatted = source.join(',');
+      property[key]=formatted;
+      return property;
+    }    
   }
   static toArrayOfString(property, key) {
     let source = property[key];
