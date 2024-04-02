@@ -180,7 +180,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This expense was updated successfully!';
+          : 'This expense has been updated successfully!';
       },
       error: (e: any) => console.error(e),
     });
@@ -194,7 +194,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This expense was updated successfully!';
+          : 'This expense has been updated successfully!';
       },
       error: (e: any) => console.error(e),
     });

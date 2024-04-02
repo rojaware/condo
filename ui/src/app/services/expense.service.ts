@@ -14,16 +14,20 @@ export class ExpenseService {
   getAll(): Observable<Expense[]> {
     return this.http.get<Expense[]>(baseUrl);
   }
+  
+  get(id: number): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${baseUrl}/${id}`);
+  }
 
   getByProperty(propertyName: any): Observable<Expense[]> {
     return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
   }
   
-  getByYearMonth(propertyName: any, year: any, month?: any): Observable<Expense[]> {    
+  getByYearMonth(propertyName: string, year: number, month: number | null): Observable<Expense[]> {    
     if (month) {
-      return this.http.get<Expense[]>(`${baseUrl}/${propertyName}/${year}/${month}`);
+      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
     } else {
-      return this.http.get<Expense[]>(`${baseUrl}/${propertyName}/${year}`);      
+      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}`);      
     }    
   }
   

@@ -108,3 +108,9 @@ span label {
 table, th, td {
   border: 1px solid black;
 }
+
+.message {
+  font-style: italic;
+  color:mediumslateblue;
+  font-weight: 600;
+}
