@@ -1,108 +1,121 @@
 <div class="edit-form">
   
-    <div class="form-group">
-      <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | uppercase }}</h4>
-      <button *ngIf="viewMode" class="badge badge-warning " (click)="viewMode = false">
-        <mat-icon>edit</mat-icon>
-      </button>
-  
-      <button *ngIf="!viewMode" class="badge badge-warning " (click)="viewMode = true">
-        <mat-icon>remove_red_eye</mat-icon>
-      </button>
-    </div>
-  
-    <form style="height: 300px;">
-      <!-- Full Names -->
-      <div class="form-group">
-        <!-- Primary Name -->
-        <mat-form-field class="edit-form-field">
-          <mat-label>Primary Name</mat-label>
-          <input id="primaryName" 
-                 matInput 
-                 type="text" 
-                 [(ngModel)]="tenant.primaryName" 
-                 name="primaryName"
-                 [readonly]="viewMode" />        
-          <button *ngIf="tenant.primaryName && !viewMode"
-                  matSuffix 
-                  mat-icon-button                 
-                  (click)="tenant.primaryName = ''">
-            <mat-icon>close</mat-icon>
-          </button>        
-        </mat-form-field>
-  
-        <!-- Secondary Name -->
-        <mat-form-field class="edit-form-field">
-          <mat-label>Secondary Name</mat-label>
-          <input id="secondaryName" matInput type="text" [(ngModel)]="tenant.secondaryName" name="secondaryName"
-            [readonly]="viewMode" />
-          @if (tenant.secondaryName && !viewMode) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryName = ''">
-            <mat-icon>close</mat-icon>
-          </button>
-          }
-        </mat-form-field>
-      </div>
-  
-      <!-- Phone  -->
-      <div class="form-group">
-        <mat-form-field class="edit-form-field">
-          <mat-label>Phone</mat-label>
-          <input id="phone" matInput type="text" [(ngModel)]="tenant.phone" name="phone" [readonly]="viewMode" />
-          @if (tenant.phone && !viewMode) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.phone = ''">
-            <mat-icon>close</mat-icon>
-          </button>
-          }
-        </mat-form-field>
-        <mat-form-field class="edit-form-field">
-          <mat-label>Secondary Phone</mat-label>
-          <input id="secondaryPhone" matInput type="text" [(ngModel)]="tenant.secondaryPhone" name="secondaryPhone" [readonly]="viewMode" />
-          @if (tenant.secondaryPhone && !viewMode) {
-          <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryPhone = ''">
-            <mat-icon>close</mat-icon>
-          </button>
-          }
-        </mat-form-field>
-      </div>
-  
-  <!-- Phone , Email -->
+  <!-- title with edit / view buttons -->
   <div class="form-group">
-        
-    <mat-form-field class="edit-form-field">
-      <mat-label>Email</mat-label>
-      <input id="email" matInput type="email" [(ngModel)]="tenant.email" name="email" [readonly]="viewMode" />
-    </mat-form-field>
-    <mat-form-field class="edit-form-field">
-      <mat-label>Secondary Email</mat-label>
-      <input id="secondaryEmail" matInput type="email" [(ngModel)]="tenant.secondaryEmail" name="secondaryEmail" [readonly]="viewMode" />
-    </mat-form-field>
+    <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | uppercase }}</h4>
+    <button *ngIf="viewMode" class="badge badge-warning " (click)="viewMode = false">
+      <mat-icon>edit</mat-icon>
+    </button>
+
+    <button *ngIf="!viewMode" class="badge badge-warning " (click)="viewMode = true">
+      <mat-icon>remove_red_eye</mat-icon>
+    </button>
+
+    <!-- Button , Cancel, Delete, Save -->
+    <div *ngIf="!viewMode" class=" button-space" style="display: flex">
+      
+        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
+          Cancel
+        </button>           
+      
+        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">
+          Delete
+        </button>     
+     
+        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">
+          Save Change
+        </button>      
+    
+
+        ...<span>{{ message }}</span>
+  
+    </div>       
   </div>
 
-      
-      <!-- Button , Cancel, Delete, Save -->
-      <div *ngIf="!viewMode" class=" form-group button-space">
-        <div class="col-3">
-          <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
-            Cancel
-          </button>           
-        </div>
-        <div class="col-3">
-          <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">
-            Delete
-          </button>     
-        </div>
-        <div class="col-3">
-          <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">
-            Save Change
-          </button>      
-        </div>
+  <form style="height: 300px;">
+    <!-- Full Names -->
+    <div class="form-group">
+      <!-- Primary Name -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Primary Name</mat-label>
+        <input id="primaryName" 
+                matInput 
+                type="text" 
+                [(ngModel)]="tenant.primaryName" 
+                name="primaryName"
+                [readonly]="viewMode" />        
+        <button *ngIf="tenant.primaryName && !viewMode"
+                matSuffix 
+                mat-icon-button                 
+                (click)="tenant.primaryName = ''">
+          <mat-icon>close</mat-icon>
+        </button>        
+      </mat-form-field>
 
-        <div class="col-3">
-          ...<span>{{ message }}</span>
-        </div>        
-      </div>      
-    </form>
+      <!-- Secondary Name -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Secondary Name</mat-label>
+        <input id="secondaryName" matInput type="text" [(ngModel)]="tenant.secondaryName" name="secondaryName"
+          [readonly]="viewMode" />
+        @if (tenant.secondaryName && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryName = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Phone  -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Phone</mat-label>
+        <input id="phone" matInput type="text" [(ngModel)]="tenant.phone" name="phone" [readonly]="viewMode" />
+        @if (tenant.phone && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.phone = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Secondary Phone</mat-label>
+        <input id="secondaryPhone" matInput type="text" [(ngModel)]="tenant.secondaryPhone" name="secondaryPhone" [readonly]="viewMode" />
+        @if (tenant.secondaryPhone && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.secondaryPhone = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Phone , Email -->
+    <div class="form-group">
+          
+      <mat-form-field class="edit-form-field">
+        <mat-label>Email</mat-label>
+        <input id="email" matInput type="email" [(ngModel)]="tenant.email" name="email" [readonly]="viewMode" />
+      </mat-form-field>
+      <mat-form-field class="edit-form-field">
+        <mat-label>Secondary Email</mat-label>
+        <input id="secondaryEmail" matInput type="email" [(ngModel)]="tenant.secondaryEmail" name="secondaryEmail" [readonly]="viewMode" />
+      </mat-form-field>
+    </div>
+
+    <!-- comment -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Comment</mat-label>
+        <textarea id="comment" matInput [(ngModel)]="tenant.comment" name="comment"
+          [readonly]="viewMode"></textarea>
+        @if (tenant.comment && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.comment = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </div>  
+
+       
+  </form>
 
 <!-- Documents -->    
 <app-document [propertyName]="tenant.propertyName" [tenant]="tenant"></app-document>

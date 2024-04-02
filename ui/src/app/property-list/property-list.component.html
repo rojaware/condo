@@ -18,7 +18,8 @@
       @for (property of properties; track property.name; let i = $index) {
       <li class="list-group-item"
           [class.active]="i == currentIndex" 
-          (click)="setActiveProperty(property, i)" matTooltip="{{property.address}}">
+          (click)="setActiveProperty(property, i)" 
+          matTooltip="{{property.address}}">
         <mat-icon *ngIf="property.owner && property.owner.includes('angela')" 
                   matBadge="1" 
                   matBadgeColor="warn">gamepad
@@ -53,6 +54,11 @@
         <mat-tab label="Expense">
           <div class="col-md-12">
             <app-expense [viewMode]="true"></app-expense>
+          </div>
+        </mat-tab>
+        <mat-tab label="Settings">
+          <div class="col-md-12">Setting will be here...
+            <!-- <app-expense [viewMode]="true"></app-expense> -->
           </div>
         </mat-tab>
       </mat-tab-group>
