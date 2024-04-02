@@ -67,6 +67,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
     } else {
       this.insert();
     }
+    this.viewMode = true;
   }
   insert(): void {
     this.message = '';

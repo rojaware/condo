@@ -154,6 +154,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
           this.expenses = data;
           this.config.user.property.expenses = data;
           this.currentExpense = data[0];
+          if (this.currentExpense.income === 0 || this.currentExpense.income === undefined) {
+            this.currentExpense.income = this.config.user.property.rentFee;
+          }
           console.log(data);
         },
         error: (e: any) => console.error(e),
@@ -171,6 +174,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     } else {
       this.create();
     }
+    this.viewMode = true;
   }
   create(): void {
     this.message = '';

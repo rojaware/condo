@@ -6,20 +6,21 @@ class Util {
       return str.toString().trim().length === 0
     }    
   }
+  
   static toValue(str) {
     return this.isEmpty(str)? null: str;
   }
+
   static toJoinedString(property, key) {
     let source = property[key];
     let formatted = '';
-    if (this.isEmpty(source) ) {
-      return property;
-    } else {
+    if (!this.isEmpty(source) ) {
       formatted = source.join(',');
-      property[key]=formatted;
-      return property;
-    }    
+    } 
+    property[key]=formatted;
+    return property;        
   }
+
   static toArrayOfString(property, key) {
     let source = property[key];
     source = source? source.toString(): '';

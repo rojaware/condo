@@ -31,11 +31,6 @@
         <input id="id" matInput type="text" [(ngModel)]="currentProperty.id" name="id" [readonly]="true" />
       </mat-form-field>
 
-      <!-- Owner -->
-      <!-- <mat-form-field class="edit-form-field">
-        <mat-label>Owner</mat-label>
-        <input id="owner" matInput type="text" [(ngModel)]="currentProperty.owner" name="owner" [readonly]="viewMode" />
-      </mat-form-field> -->
       <mat-form-field class="edit-form-field">
         <mat-label>Owner</mat-label>
         <mat-select id="owner" [(ngModel)]="currentProperty.owner" name="owner" [disabled]="viewMode" multiple>
@@ -44,9 +39,9 @@
           }
         </mat-select>
       </mat-form-field>
-
     </div>
 
+    <!-- Address -->
     <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Address</mat-label>
@@ -336,7 +331,8 @@
     </div>
     
     <div class="form-group">
-      ...<span>{{ message }}</span>
+      ...<span *ngIf="message">{{ message }}</span>
+      ...<span *ngIf="errMessage">{{ errMessage }}</span>
     </div>
   </form>
   

@@ -22,8 +22,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   @ViewChild('maturityDatePicker', { static: false }) private maturityDatePicker: MatDatepicker<Date>;
   @ViewChild('purchaseDatePicker', { static: false }) private purchaseDatePicker: MatDatepicker<Date>;
   
-  dateToday: number = Date.now();
-  message = '';
+  dateToday: number = Date.now();  
   banks = BANKS;
   owners = OWNERS;
 
@@ -37,22 +36,30 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.viewMode ) {
-      this.message = '';
+      this.message = '';      
+      this.errMessage = '';
       this.getProperty(this.route.snapshot.params['name']);
     }
   }
   
   getProperty(name: string): void {
+    this.message = '';
+    this.errMessage = '';    
     this.propertyService.get(name).subscribe({
       next: (data) => {
         this.currentProperty = data;
         console.log(data);
       },
-      error: (e) => console.error(e)
+      error: (e) => {
+        console.error(e);
+        this.errMessage = 'Failed retrieving...' + e.message;
+      }
     });
   }
 
   save(): void {
+    this.message = '';
+    this.errMessage = '';    
     if(this.currentProperty.id) {
        this.updateProperty();
      } else {
@@ -60,8 +67,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
      }
   }
   updateProperty(): void {
-    this.message = '';
-
     this.propertyService
       .update(this.currentProperty)
       .subscribe({
@@ -69,14 +74,18 @@ export class PropertyComponent extends BaseComponent implements OnInit {
           console.log(res);
           this.message = res.message
             ? res.message
-            : 'This property was updated successfully!';
+            : 'This property has been updated successfully!';
         },
-        error: (e) => console.error(e)
+        error: (e) => {
+          console.error(e);
+          this.errMessage = 'Failed saving...' + e.message;
+        }
       });
   }
 
   createProperty(): void {
-    this.message = '';
+    this.message = '';    
+    this.errMessage = '';
     this.propertyService
       .create(this.currentProperty)
       .subscribe({
@@ -86,17 +95,25 @@ export class PropertyComponent extends BaseComponent implements OnInit {
             ? res.message
             : 'This property was updated successfully!';
         },
-        error: (e) => console.error(e)
+        error: (e) => {
+          console.error(e);
+          this.errMessage = 'Failed saving...' + e.message;
+        }
       });
   }
 
   delete(): void {
+    this.message = '';    
+    this.errMessage = '';    
     this.propertyService.delete(this.currentProperty.id).subscribe({
       next: (res) => {
         console.log(res);
         this.router.navigate(['/properties']);
       },
-      error: (e) => console.error(e)
+      error: (e) => {
+        console.error(e);
+        this.errMessage = 'Failed saving...' + e.message;
+      }
     });
   }
   onNgModelChange(event: any): void {
