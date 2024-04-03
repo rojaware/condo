@@ -7,6 +7,8 @@ import { Tenant } from '../models/tenant.model';
 import { BaseComponent } from '../base/base.component';
 import { User } from '../models/user.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { LABEL_TYPES } from '../models/label.model';
+import { SettingService } from '../services/settings.service';
 
 
 @Component({
@@ -27,12 +29,32 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     protected router: Router,
     private propertyService: PropertyService,
     private tenantService: TenantService,
+    private settingService: SettingService,
     private route: ActivatedRoute,    
   ) {
     super(router);
   }
   ngOnInit(): void {
     this.retrievePropertyList();
+    this.setupSettings();
+  }
+  setupSettings() {
+    this.settingService.getAll().subscribe({
+      next: (data) => {
+        console.log(data);
+        data.forEach(item => {
+          if (item.name === LABEL_TYPES.Bank) {
+            this.config.banks.push(item);
+          } else {
+            this.config.owners.push(item);
+          }
+        });          
+      },
+      error: (e) => {
+        console.error(e);
+        this.errMessage = 'Failed retrieving labels ...' + e.message;
+      }
+    });
   }
 
   ngAfterViewInit() {

@@ -37,7 +37,7 @@
             ,[income], updatedOn)
         VALUES
             (@propertyName ,@month ,@year ,@travel,@maintenance,@commission,@insurance,@legal,@managementFee,@mortgageInterest,@repairs,@supplies,@tax,@utilities,@depreciation,@income, CURRENT_TIMESTAMP);
-             SELECT @propertyName as propertyName, @year as year, @month as month;`;        
+            SELECT  IDENT_CURRENT('expenses') as id ;`;
 module.exports = {
   updateExpense: updateExpense,
   insertExpense: insertExpense,

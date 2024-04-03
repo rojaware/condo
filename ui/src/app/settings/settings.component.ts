@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { Router } from '@angular/router';
-import { SettingsService } from '../services/settings.service';
+import { SettingService } from '../services/settings.service';
+import { Label, LabelColumns } from '../models/label.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-settings',
@@ -9,13 +13,13 @@ import { SettingsService } from '../services/settings.service';
   styleUrl: './settings.component.css'
 })
 export class SettingsComponent extends BaseComponent implements OnInit {
-  displayedColumns: string[] = UserColumns.map((col) => col.key)
-  columnsSchema: any = UserColumns
-  dataSource = new MatTableDataSource<User>()
+  displayedColumns: string[] = LabelColumns.map((col) => col.key)
+  columnsSchema: any = LabelColumns
+  dataSource = new MatTableDataSource<Label>()
   valid: any = {}  
   constructor(
     protected router: Router,
-    private settingsService: SettingsService,
+    private settingService: SettingService,
     public dialog: MatDialog,
   ) {
     super(router);
@@ -25,29 +29,28 @@ export class SettingsComponent extends BaseComponent implements OnInit {
 
 
   ngOnInit() {
-    this.userService.getUsers().subscribe((res: any) => {
+    this.settingService.getAll().subscribe((res: any) => {
       this.dataSource.data = res
     })
   }
 
-  editRow(row: User) {
+  editRow(row: Label) {
     if (row.id === 0) {
-      this.userService.addUser(row).subscribe((newUser: User) => {
-        row.id = newUser.id
+      this.settingService.create(row).subscribe((newLabel: Label) => {
+        row.id = newLabel.id
         row.isEdit = false
       })
     } else {
-      this.userService.updateUser(row).subscribe(() => (row.isEdit = false))
+      this.settingService.update(row).subscribe(() => (row.isEdit = false))
     }
   }
 
   addRow() {
-    const newRow: User = {
+    const newRow: Label = {
       id: 0,
-      firstName: '',
-      lastName: '',
-      email: '',
-      birthDate: '',
+      name: '',
+      value: '',
+      viewValue: '',
       isEdit: true,
       isSelected: false,
     }
@@ -55,23 +58,23 @@ export class SettingsComponent extends BaseComponent implements OnInit {
   }
 
   removeRow(id: number) {
-    this.userService.deleteUser(id).subscribe(() => {
+    this.settingService.delete(id).subscribe(() => {
       this.dataSource.data = this.dataSource.data.filter(
-        (u: User) => u.id !== id,
+        (label: Label) => label.id !== id,
       )
     })
   }
 
   removeSelectedRows() {
-    const users = this.dataSource.data.filter((u: User) => u.isSelected)
+    const labels = this.dataSource.data.filter((label: Label) => label.isSelected)
     this.dialog
       .open(ConfirmDialogComponent)
       .afterClosed()
       .subscribe((confirm) => {
         if (confirm) {
-          this.userService.deleteUsers(users).subscribe(() => {
+          this.settingService.deleteByIdList(labels).subscribe(() => {
             this.dataSource.data = this.dataSource.data.filter(
-              (u: User) => !u.isSelected,
+              (label: Label) => !label.isSelected,
             )
           })
         }

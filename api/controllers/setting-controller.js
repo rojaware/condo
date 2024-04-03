@@ -48,7 +48,7 @@ async function addSetting(body) {
         (@name
         ,@value
         ,@viewValue);
-         SELECT @id as id;`;
+        SELECT  IDENT_CURRENT('labels') as id ;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
@@ -79,7 +79,21 @@ async function deleteSettingById(id) {
         throw new Error(err.message);
     }
 }
+async function deleteSettingByIdList(idList) {
+    const query = `DELETE FROM [dbo].[labels] WHERE id in (@idList);`;
 
+    try {
+        let pool = await sql.connect(config);
+        let item = await pool.request()
+            .input('id', sql.Int, id)
+            .query(query);
+        return item.rowsAffected;
+    }
+    catch (err) {
+        console.log(err);
+        throw new Error(err.message);
+    }
+}
 async function deleteSettingByName(name) {
     const query = `DELETE FROM [dbo].[labels] WHERE name = @name;`;
 
@@ -139,4 +153,5 @@ module.exports = {
     deleteAllSettings: deleteAllSettings,
     updateSetting : updateSetting,
     getSettingById: getSettingById,
+    deleteSettingByIdList: deleteSettingByIdList,
 }

@@ -58,7 +58,7 @@
       <mat-form-field class="edit-form-field">
         <mat-label>Owner</mat-label>
         <mat-select id="owner" [(ngModel)]="currentProperty.owner" name="owner" [disabled]="viewMode" multiple>
-          @for (owner of owners; track owner) {
+          @for (owner of config.owners; track owner) {
             <mat-option [value]="owner.value">{{owner.viewValue}}</mat-option>
           }
         </mat-select>
@@ -113,9 +113,9 @@
       </mat-form-field>    
 
       <mat-form-field class="edit-form-field">
-        <mat-label>Mortgage Bank</mat-label>
+        <mat-label>Mortgage Bank :: debug {{ config.banks | json}}</mat-label>
         <mat-select id="bank" [(ngModel)]="currentProperty.bank" name="bank" [disabled]="viewMode">
-          @for (bank of banks; track bank) {
+          @for (bank of config.banks; track bank) {
             <mat-option [value]="bank.value">{{bank.viewValue}}</mat-option>
           }
         </mat-select>

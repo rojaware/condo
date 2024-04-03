@@ -5,6 +5,7 @@ import { PropertyComponent } from './property/property.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { TenantComponent } from './tenant/tenant.component';
 import { DocumentComponent } from './tenant/document/document.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'properties', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'expenses', component: ExpenseComponent },
   { path: 'expenses/:propertyName/:year', component: ExpenseComponent },
   { path: 'documents', component: DocumentComponent },
+  { path: 'settings', component: SettingsComponent },
 ];
 
 @NgModule({

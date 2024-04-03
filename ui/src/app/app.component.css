@@ -2,3 +2,7 @@
   margin-left: inherit !important;
   margin-right: inherit !important;
 }
+
+.mr-auto {
+  position:  relative !important;
+}

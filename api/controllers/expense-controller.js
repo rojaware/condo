@@ -68,7 +68,7 @@ async function insertExpense(body) {
       .input('depreciation', sql.Money, body.depreciation)
       .input('income', sql.Money, body.income)
       .query(queries.insertExpense);
-    return item.rowsAffected;
+    return item.recordset;
   }
   catch (err) {
     console.log(err);

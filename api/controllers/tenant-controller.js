@@ -69,7 +69,7 @@ async function addTenant(body) {
         ,@secondaryEmail
         ,@comment
         ,@propertyName);
-         SELECT @primaryName as primaryName, @secondaryName as secondaryName;`;
+        SELECT  IDENT_CURRENT('tenants') as id ;`;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()

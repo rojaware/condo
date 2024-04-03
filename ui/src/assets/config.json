@@ -1,5 +1,7 @@
 {
   "version": "1.0.0",
   "apiEndpoint": "/api/", 
-  "user": ""
+  "user": "",
+  "banks": [], 
+  "owners": []
 }

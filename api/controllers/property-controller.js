@@ -105,7 +105,7 @@ async function addProperty(property) {
                 ,@mortgageRate
                 ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@owner);
-         SELECT @name as name;`;
+         SELECT  IDENT_CURRENT('properties') as id ;`;
          console.log('property.occupancyDate ==> ' + property.occupancyDate)
     try {
         let pool = await sql.connect(config);

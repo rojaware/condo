@@ -4,7 +4,8 @@ import { PropertyService } from '../services/property.service';
 import { Property } from '../models/property.model';
 import { BaseComponent } from '../base/base.component';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { BANKS, OWNERS } from '../models/user.model';
+import { Label } from '../models/label.model';
+
 
 @Component({
   selector: 'app-property',
@@ -14,7 +15,7 @@ import { BANKS, OWNERS } from '../models/user.model';
 })
 export class PropertyComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
-  @Input() currentProperty: Property = {} as Property;
+  @Input() currentProperty: Property = {} as Property;  
   @ViewChild('occupancyDatePicker', { static: false }) private occupancyDatePicker: MatDatepicker<Date>;
   @ViewChild('closingDatePicker', { static: false }) private closingDatePicker: MatDatepicker<Date>;
   @ViewChild('startDatePicker', { static: false }) private startDatePicker: MatDatepicker<Date>;
@@ -23,8 +24,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   @ViewChild('purchaseDatePicker', { static: false }) private purchaseDatePicker: MatDatepicker<Date>;
   
   dateToday: number = Date.now();  
-  banks = BANKS;
-  owners = OWNERS;
+  banks: Label[] ;
+  owners: Label[];
 
   constructor(
     protected router: Router,

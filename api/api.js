@@ -2,6 +2,7 @@ const propertyController = require('./controllers/property-controller');
 const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
 const documentsController = require('./controllers/document-controller');
+const settingController = require('./controllers/setting-controller');
 var util = require('./shared/util');
 
 const multer = require('multer');
@@ -433,8 +434,6 @@ router.route('/documents').delete((request, response) => {
     }
   })
 })
-
-
 router.route('/documents').put((request, response) => {
 
   let tenant = { ...request.body }
@@ -449,6 +448,118 @@ router.route('/documents').put((request, response) => {
   })
 })
 
+/******************** Settings Controller API *****************/
+
+router.route('/settings').get((request, response) => {
+
+  settingController.getSettings().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.json(result[0]);
+    }
+  })
+})
+
+router.route('/settingsByName/:name').get((request, response) => {
+
+  settingController.getSettingByName(request.params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/settingsById/:id').get((request, response) => {
+
+  settingController.getSettingById(request.params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/settings').post((request, response) => {
+  let setting = { ...request.body }
+  settingController.addSetting(setting).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/settings/:id').delete((request, response) => {
+  const params = request.params;
+  settingController.deleteSettingById(params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/settingsByIdList/:idList').delete((request, response) => {
+  const params = request.params;
+  settingController.deleteSettingByIdList(params.idList).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/settingsByName/:name').delete((request, response) => {
+  const params = request.params;
+  settingController.deleteSettingByName(params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/settings').delete((request, response) => {
+  const params = request.params;
+  settingController.deleteAllSettings(params.propertyName).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+
+router.route('/settings').put((request, response) => {
+
+  let setting = { ...request.body };
+  tenantController.updateSetting(setting).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+/***************** End of Settings API */
 
 
 
