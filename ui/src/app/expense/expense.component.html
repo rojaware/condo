@@ -26,7 +26,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Import CSV</mat-card-title>
-    <mat-card-subtitle>
+    <mat-card-subtitle style="display: flex;">
       <div class="csv-file-chooser-section">
         <input type="file" 
                #fileImportInput 
@@ -163,22 +163,20 @@
                 Save Change
               </button>      
             </div>
-
-            <div class="col-3">
-              ...<span class="message">{{ message }}</span>
-            </div>        
+ 
           </div>      
         </form>
-        <div>
-          <span class="message">{{ message }}</span>
+        <div class="form-group">
+    
+          ...<span *ngIf="message">{{ message }}</span>
+          ...<span *ngIf="errMessage">{{ errMessage }}</span>
+        
         </div>
         
       </div>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
   </mat-card-actions>
 </mat-card>
 <!-- Annual Expenses -->

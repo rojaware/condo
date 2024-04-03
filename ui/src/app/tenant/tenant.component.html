@@ -27,11 +27,14 @@
         </button>      
     
 
-        ...<span>{{ message }}</span>
-  
     </div>       
   </div>
-
+  <div class="form-group">
+    
+    ...<span *ngIf="message">{{ message }}</span>
+    ...<span *ngIf="errMessage">{{ errMessage }}</span>
+  
+  </div>
   <form style="height: 300px;">
     <!-- Full Names -->
     <div class="form-group">

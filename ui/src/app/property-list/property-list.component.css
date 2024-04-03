@@ -17,3 +17,8 @@ li {
   cursor: pointer;
 } 
 
+.mat-badge-content {
+  background: mediumslateblue !important;
+  color: white !important;
+}
+

@@ -19,12 +19,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatRadioModule } from '@angular/material/radio';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 
 const material = [
   MatTabsModule,
+  MatBadgeModule,
   MatInputModule,
   MatIconModule,
   MatFormFieldModule,

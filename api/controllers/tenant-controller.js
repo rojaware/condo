@@ -64,7 +64,7 @@ async function addTenant(body) {
         (@primaryName
         ,@secondaryName
         ,@phone
-        ,[secondaryPhone]
+        ,@secondaryPhone
         ,@email
         ,@secondaryEmail
         ,@comment

@@ -20,12 +20,17 @@
           [class.active]="i == currentIndex" 
           (click)="setActiveProperty(property, i)" 
           matTooltip="{{property.address}}">
-        <mat-icon *ngIf="property.owner && property.owner.includes('angela')" 
-                  matBadge="1" 
-                  matBadgeColor="warn">gamepad
-        </mat-icon>
-        {{ property.name }}
-        <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>        
+        @if (property.owner && property.owner.includes('angela')) {          
+          <div  matBadge="4" matBadgeOverlap="true" matBadgePosition="above after" matBadgeSize="small">
+            {{ property.name }} 
+            <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
+          </div>
+        } @else {
+          <div  matBadgeOverlap="true" >{{ property.name }} 
+            <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
+          </div>
+        } 
+                
         
       </li>
       }

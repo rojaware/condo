@@ -114,3 +114,8 @@ table, th, td {
   color:mediumslateblue;
   font-weight: 600;
 }
+div span {
+  font-style: italic;
+  color:mediumslateblue;
+  font-weight: 600;
+}

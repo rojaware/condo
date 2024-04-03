@@ -9,9 +9,33 @@
     <button class="badge badge-warning " (click)="viewMode = true">
       <mat-icon>remove_red_eye</mat-icon>
     </button>
+    <!-- Button , Cancel, Delete, Save -->
+    
+    <div *ngIf="!viewMode" class=" button-space"  style="display: flex">
+      
+        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
+          Cancel
+        </button>           
+      
+        
+        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Property">
+          Delete
+        </button>     
+        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property">
+          Save Change
+        </button>      
+      
+    </div>
+    
+    
     }
   </div>
+  <div class="form-group">
+    
+    ...<span *ngIf="message">{{ message }}</span>
+    ...<span *ngIf="errMessage">{{ errMessage }}</span>
   
+  </div>
   <form>
     <!-- Property Name, ID, Owner -->
     <div class="form-group">
@@ -310,30 +334,7 @@
     <!-- Documents -->    
     <app-document [propertyName]="currentProperty.name"></app-document>
     
-    <!-- Button , Cancel, Delete, Save -->
     
-    <div *ngIf="!viewMode" class=" form-group button-space">
-      <div class="col-4">
-        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
-          Cancel
-        </button>           
-      </div>
-      <div class="col-4">
-        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Property">
-          Delete
-        </button>     
-      </div>
-      <div class="col-4">
-        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property">
-          Save Change
-        </button>      
-      </div>
-    </div>
-    
-    <div class="form-group">
-      ...<span *ngIf="message">{{ message }}</span>
-      ...<span *ngIf="errMessage">{{ errMessage }}</span>
-    </div>
   </form>
   
 </div>

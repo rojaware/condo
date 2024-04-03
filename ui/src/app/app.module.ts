@@ -23,6 +23,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MY_FORMATS } from './models/expense.model';
+import { SettingsComponent } from './settings/settings.component';
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -41,6 +42,7 @@ export const initConfig =
     DocumentComponent,
     ConfirmDialogComponent,
     CarouselHolderComponent,
+    SettingsComponent,
   ],
   imports: [
     HttpClientModule,
