@@ -549,7 +549,7 @@ router.route('/settings').delete((request, response) => {
 router.route('/settings').put((request, response) => {
 
   let setting = { ...request.body };
-  tenantController.updateSetting(setting).then(result => {
+  settingController.updateSetting(setting).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')

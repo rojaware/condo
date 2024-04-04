@@ -136,11 +136,13 @@ async function updateSetting(body) {
                 .input('name', sql.NVarChar, body.name)
                 .input('value', sql.NVarChar, body.value)
                 .input('viewValue', sql.NVarChar, body.viewValue)
+                .input('id', sql.Int, body.id)
             .query(query);
         return item.rowsAffected;
     }
     catch (err) {
         console.log(err);
+        throw new Error(err.message);
     }
 }
 
