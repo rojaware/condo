@@ -1,7 +1,8 @@
-/**
- * @deprecated use server.js
- */
+var express = require("express");
+var router = express.Router();
+const multer = require('multer');
 
+// Require controller modules.
 const propertyController = require('./controllers/property-controller');
 const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
@@ -9,23 +10,20 @@ const documentsController = require('./controllers/document-controller');
 const settingController = require('./controllers/setting-controller');
 var util = require('./shared/util');
 
-const multer = require('multer');
-var express = require('express');
-const fs = require('fs');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var app = express();
-var router = express.Router();
+// Home page route.
+router.get("/", function (req, res) {
+  res.send("Condo Management API Server");
+});
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cors());
-app.use('/api', router);
-
+// // About page route.
+// router.get("/about", function (req, res) {
+//   res.send("About this Condo Management");
+// });
 router.use((request, response, next) => {
   console.log('ho ho...');
   next();
 })
+
 
 router.route('/properties').get((request, response) => {
   propertyController.getProperties().then(result => {
@@ -39,6 +37,7 @@ router.route('/properties').get((request, response) => {
     }
   })
 })
+
 
 router.route('/properties/:id').get((request, response) => {
 
@@ -567,6 +566,4 @@ router.route('/settings').put((request, response) => {
 
 
 
-var port = process.env.PORT || 8090;
-app.listen(port);
-console.log('property API is runnning at ' + port);
+module.exports = router;

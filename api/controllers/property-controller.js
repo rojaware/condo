@@ -27,6 +27,7 @@ async function getProperties() {
     try {
         let pool = await sql.connect(config);
         let properties = await pool.request().query(query);
+        console.log('successfule + ' + properties.rowsAffected)
         return properties.recordsets;
     }
     catch (error) {
