@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { Router } from '@angular/router';
 import { SettingService } from '../services/settings.service';
-import { Label, LabelColumns } from '../models/label.model';
+import { Label, LabelColumns, LabelTypeEnum } from '../models/label.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -17,16 +17,16 @@ export class SettingsComponent extends BaseComponent implements OnInit {
   columnsSchema: any = LabelColumns
   dataSource = new MatTableDataSource<Label>()
   valid: any = {}  
+  labelTypes = Object.values(LabelTypeEnum);
+
   constructor(
     protected router: Router,
     private settingService: SettingService,
-    public dialog: MatDialog,
-  ) {
+    public dialog: MatDialog, ) {
     super(router);
     this.message = '';
+    this.errMessage = '';
   }
-
-
 
   ngOnInit() {
     this.settingService.getAll().subscribe((res: any) => {

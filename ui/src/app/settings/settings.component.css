@@ -37,7 +37,7 @@
   }
   
   .button-remove {
-    color: red;
+    color: black;
   }
   
   ::ng-deep .mat-form-field-infix {
@@ -46,5 +46,13 @@
   
   .form-input {
     padding-right: 5px;
+  }
+  div i {
+    font-style: italic;
+    color:mediumslateblue;
+    font-weight: 600;
+  }
+  .mat-mdc-row {
+    height: auto !important;
   }
 }

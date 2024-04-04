@@ -7,7 +7,7 @@ import { Tenant } from '../models/tenant.model';
 import { BaseComponent } from '../base/base.component';
 import { User } from '../models/user.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { LABEL_TYPES } from '../models/label.model';
+import { LabelTypeEnum } from '../models/label.model';
 import { SettingService } from '../services/settings.service';
 
 
@@ -43,7 +43,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       next: (data) => {
         console.log(data);
         data.forEach(item => {
-          if (item.name === LABEL_TYPES.Bank) {
+          if (item.name === LabelTypeEnum.Bank) {
             this.config.banks.push(item);
           } else {
             this.config.owners.push(item);

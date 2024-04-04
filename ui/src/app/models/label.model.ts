@@ -20,7 +20,7 @@ export const LabelColumns = [
   },
   {
     key: 'name',
-    type: 'text',
+    type: 'dropdown',
     label: 'Category(BANKS|OWNERS)',
     required: true,
   },  
@@ -43,7 +43,7 @@ export const LabelColumns = [
     label: '',
   },
 ];
-export enum LABEL_TYPES {
+export enum LabelTypeEnum {
   Bank = "BANKS",
   Owner = "OWNERS",  
 }
