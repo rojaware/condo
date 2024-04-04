@@ -27,6 +27,7 @@ class MailService {
     };
 
     try {
+      console.log('sending mail ...')
       await this._transporter.sendMail(mailOptions);
       return { status: "SUCCESS" };
     } catch (err) {

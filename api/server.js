@@ -7,9 +7,8 @@ const express = require('express')
 const app = express();
 
 const bodyParser = require('body-parser');
-
 const eventRoute = require('./event.route');
-
+const emailScheduler = require('./shared/email-scheduler');
 
 app.use(cors());
 app.options('*', cors());
@@ -22,6 +21,9 @@ app.use('/api', eventRoute);
 app.use('/', function (req, res) {
   res.send('Future Home of Condo Management Service');
 });
+
+// email scheduler ...
+emailScheduler.startCron(); // start service..
 
 app.use((req, res) => {
   res.status(404);
