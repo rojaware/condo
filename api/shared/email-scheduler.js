@@ -12,6 +12,7 @@ const MailService = require("../controllers/mail-service");
   │    │    └─────────────── hour (0 - 23)
   │    └──────────────────── minute (0 - 59)
   └───────────────────────── second (0 - 59, OPTIONAL)
+  check database once in a day (12 am) and send email if due days is up
  */
 function startCron() {
   console.log('Run email job at 11:59 PM every day.');

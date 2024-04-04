@@ -18,6 +18,8 @@ export class SettingsComponent extends BaseComponent implements OnInit {
   dataSource = new MatTableDataSource<Label>()
   valid: any = {}  
   labelTypes = Object.values(LabelTypeEnum);
+  dueDays: number = 70;
+  emails: string = 'leesungki@gmail.com, iamrufina@gmail.com';
 
   constructor(
     protected router: Router,
