@@ -199,9 +199,7 @@ async function updateProperty(property) {
     }
 }
 async function deleteProperty(id) {
-
-    const query = `DELETE FROM [dbo].[properties] WHERE id = @id; `;
-
+   const query = `DELETE FROM [dbo].[properties] WHERE id = @id; `;
     try {
         let pool = await sql.connect(config);
         let item = await pool.request()
@@ -213,12 +211,34 @@ async function deleteProperty(id) {
         console.log(err);
     }
 }
-
+/**
+ * TODO find lease ending properties ... 
+ * @param {*} id 
+ * @returns 
+ */
+async function getLeaseEndingProperty(id) {
+    const query =
+     `SELECT name, 
+             endDate , 
+             DATEDIFF(day,convert(date, GetDate(), 0), endDate) as diff
+      FROM properties
+      WHERE endDate <= DateAdd(day, @days, convert(date, GetDate(), 0))`;
+     try {
+         let pool = await sql.connect(config);
+         let item = await pool.request()
+             .input('days', sql.Int, days)            
+             .query(query);
+         return item.recordsets;
+     }
+     catch (err) {
+         console.log(err);
+     }
+ }
 module.exports = {
     getProperties: getProperties,
     getProperty : getProperty,
     addProperty : addProperty,
     deleteProperty : deleteProperty,
     updateProperty : updateProperty,
-    
+    getLeaseEndingProperty: getLeaseEndingProperty,
 }

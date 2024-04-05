@@ -20,7 +20,7 @@ function startCron() {
   console.log('Reading config.json...')
     console.log(config)
   cron.schedule('59 23 * * *', () => {
-    // Send e-mail
+    // Send e-mail if today is 70 days away toward lease end date
     sendMail();
   });
 }
