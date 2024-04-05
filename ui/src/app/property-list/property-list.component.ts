@@ -42,10 +42,15 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       next: (data) => {
         console.log(data);
         data.forEach(item => {
-          if (item.name === LabelTypeEnum.Bank) {
-            this.config.banks.push(item);
-          } else {
-            this.config.owners.push(item);
+          switch (item.name) {
+            case LabelTypeEnum.Bank:
+              this.config.banks.push(item);
+              break;
+            case LabelTypeEnum.Owner:
+              this.config.owners.push(item);  
+              break;
+            default:
+              break;              
           }
         });          
       },
