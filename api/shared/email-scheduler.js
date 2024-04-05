@@ -26,7 +26,8 @@ function startCron() {
       console.log("no data...");    
     } else {
       console.log(`Run email job at ${alert.hour}:${alert.minute} every day.`); 
-      cron.schedule(`${alert.minute} ${alert.hour} * * *`, () => {
+      // cron.schedule(`* * * * *`, () => {
+      cron.schedule(`${alert.minute} ${alert.hour} * * *`, () => {  
         // Send e-mail if today is 70 days away toward lease end date
         sendMail(alert);
       });

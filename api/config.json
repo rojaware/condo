@@ -1,11 +1,11 @@
 {
   "alert": {
-    "host": "smtp.mail.yahoo.com",
-    "port": 465,
-    "service": "yahoo",
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "secure": false,
     "auth": {
-      "user": "rojaware@yahoo.com",
-      "pass": "qcnjlnuyiyqnqtqe"
+      "user": "leesungki@gmail.com",
+      "pass": "tkbhcwrsiqilwmwh"
     }    
   }
 }
