@@ -43,7 +43,7 @@ async function sendMail(alert) {
     } else {
       properties = result[0];
       properties.forEach(async property => {
-        if (!property.extendedEndDate && diff <= days) {
+        if (!property.extendedEndDate && property.diff <= alert.days) {
           // send email alert...
           const title = `Alert on Lease on ${property.name}`;
           const body = `Lease on ${property.name} will end ${property.diff} days on ${property.endDate} `
@@ -55,10 +55,10 @@ async function sendMail(alert) {
           );
         
           if (response.error) {
-            console.log("Something went wrong", response.error);
+            console.log("Alert Email :: Something went wrong", response.error);
             return;
           } else if (response.status === "SUCCESS") {
-            console.log("Message sent");
+            console.log("Alert Email Message sent");
           }          
         }
       });      
