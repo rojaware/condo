@@ -1,6 +1,8 @@
 let cron = require('node-cron');
 const MailService = require("../controllers/mail-service");
 const config = require('../config.json');
+const settingController = require('../controllers/setting-controller');
+const BATCH = 'BATCH';
 
 /** 
  * The cron format consists of:
@@ -16,13 +18,26 @@ const config = require('../config.json');
   check database once in a day (12 am) and send email if due days is up
  */
 function startCron() {
-  console.log('Run email job at 11:59 PM every day.');
-  console.log('Reading config.json...')
-    console.log(config)
-  cron.schedule('59 23 * * *', () => {
-    // Send e-mail if today is 70 days away toward lease end date
-    sendMail();
-  });
+  console.log('Run email job at 11:59 PM every day.');  
+  console.log(config);
+  settingController.getSettingByName(BATCH).then(result => {
+    if (!result) {
+      console.log("no data...");    
+    } else {
+      let hh = 23;
+      let mm = 59;
+      const alerts = result[0];
+      const item = alerts.find(element => (element.viewValue === 'Hour'));
+      hh = item.value;
+      const _item = alerts.find(element => (element.viewValue === 'Minute'));
+      mm = _item.value;
+      console.log('hh=>'+ hh + ' mm=>' + mm);
+      cron.schedule(`${mm} ${hh} * * *`, () => {
+        // Send e-mail if today is 70 days away toward lease end date
+        sendMail();
+      });
+    }
+  })
 }
 
 async function sendMail() {

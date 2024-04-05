@@ -39,5 +39,6 @@ class Util {
     }
     return property;
   }
+  
 }
 module.exports = Util

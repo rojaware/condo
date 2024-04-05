@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Property } from '../models/property.model';
-import { PropertyService } from '../services/property.service';
+import { Property } from '@app/models/property.model';
+import { PropertyService } from '@app/services/property.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TenantService } from '../services/tenant.service';
-import { Tenant } from '../models/tenant.model';
-import { BaseComponent } from '../base/base.component';
-import { User } from '../models/user.model';
+import { TenantService } from '@app/services/tenant.service';
+import { Tenant } from '@app/models/tenant.model';
+import { BaseComponent } from '@app/base/base.component';
+import { User } from '@app/models/user.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { LabelTypeEnum } from '../models/label.model';
-import { SettingService } from '../services/setting.service';
+import { LabelTypeEnum } from '@app/models/label.model';
+import { SettingService } from '@app/services/setting.service';
 
 
 @Component({
@@ -30,8 +30,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     private propertyService: PropertyService,
     private tenantService: TenantService,
     private settingService: SettingService,
-    private route: ActivatedRoute,    
-  ) {
+    private route: ActivatedRoute,      ) {
     super(router);
   }
   ngOnInit(): void {
@@ -80,7 +79,12 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     });
   }
 
+  /**
+   * Append tenants in this property
+   * @param property Property
+   */
   private appendTenantToProperty(property: Property): void {
+  
     this.tenantService.getByProperty(property.name).subscribe({
       next: (data: Tenant) => {
         if (!data) {
@@ -92,6 +96,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       error: (e) => console.error(e),
     });
   }
+  
 
   private createTenant(): Tenant {
     let newTenant = new Tenant();
@@ -149,6 +154,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       occupancyDate: '',
       startDate: '',
       endDate: '',
+      extendedEndDate: '',
       rentFee: 0,
       purchasePrice: 0,
     } as unknown as Property;

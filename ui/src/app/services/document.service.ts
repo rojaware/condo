@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Document } from '../models/document.model';
+import { Observable } from 'rxjs';
+import { Document } from '@app/models/document.model';
 
 const baseUrl = 'http://localhost:8090/api/documents';
 
@@ -17,8 +16,7 @@ export class DocumentService {
     return this.http.get<Document[]>(baseUrl);
   }
 
-  getByPropertyOrTenant(name?: string): Observable<Document[]> {
-    console.log('service.getByPropertyOrTenant:: name => ' + name)
+  getByPropertyOrTenant(name?: string): Observable<Document[]> {    
     if (name) {
       return this.http.get<Document[]>(`${baseUrl}ByPropertyOrTenant/${name}`);
     }

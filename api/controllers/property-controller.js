@@ -14,6 +14,7 @@ async function getProperties() {
                ,CONVERT(char(10), occupancyDate ,126) as occupancyDate
                ,CONVERT(char(10), startDate ,126) as startDate
                ,CONVERT(char(10), endDate ,126) as endDate
+               ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
                ,[rentFee]
                ,[purchasePrice]
                ,mortgageAccountNo
@@ -46,7 +47,7 @@ async function getProperty(id) {
                ,CONVERT(char(10), closingDate ,126) as closingDate
                ,CONVERT(char(10), occupancyDate ,126) as occupancyDate
                ,CONVERT(char(10), startDate ,126) as startDate
-               ,CONVERT(char(10), endDate ,126) as endDate
+               ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
                ,[rentFee]
                ,[purchasePrice]
                ,mortgageAccountNo
@@ -88,6 +89,7 @@ async function addProperty(property) {
                ,[occupancyDate]
                ,[startDate]
                ,[endDate]
+               ,[extendedEndDate]               
                ,[rentFee]
                ,[purchasePrice]
                ,mortgageAccountNo
@@ -100,8 +102,8 @@ async function addProperty(property) {
                 @closingDate, 
                 @occupancyDate, 
                 @startDate, 
-                @endDate, 
-                 @rentFee, @purchasePrice, @mortgageAccountNo
+                @endDate, @extendedEndDate,
+                @rentFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
                 ,@mortgageRate
                 ,@maturityDate, @comment, @imageUrl, @tscc
@@ -123,6 +125,7 @@ async function addProperty(property) {
             .input('closingDate', sql.Date, util.toValue(property.closingDate))
             .input('startDate', sql.Date, util.toValue(property.startDate))
             .input('endDate', sql.Date, util.toValue(property.endDate))
+            .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
@@ -155,6 +158,7 @@ async function updateProperty(property) {
        ,[occupancyDate] = @occupancyDate
        ,[startDate] = @startDate
        ,[endDate] = @endDate
+       ,[extendedEndDate] = @extendedEndDate
        ,[rentFee] = @rentFee
        ,[purchasePrice] = @purchasePrice
        ,[mortgageAccountNo] = @mortgageAccountNo
@@ -182,6 +186,7 @@ async function updateProperty(property) {
             .input('occupancyDate', sql.Date, util.toValue(property.occupancyDate))
             .input('startDate', sql.Date, util.toValue(property.startDate))
             .input('endDate', sql.Date, util.toValue(property.endDate))
+            .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
@@ -216,10 +221,12 @@ async function deleteProperty(id) {
  * @param {*} id 
  * @returns 
  */
-async function getLeaseEndingProperty(id) {
+async function getPropertyLeaseEnding(days) {
     const query =
      `SELECT name, 
-             endDate , 
+             id, 
+             endDate, 
+             extendedEndDate, 
              DATEDIFF(day,convert(date, GetDate(), 0), endDate) as diff
       FROM properties
       WHERE endDate <= DateAdd(day, @days, convert(date, GetDate(), 0))`;
@@ -240,5 +247,5 @@ module.exports = {
     addProperty : addProperty,
     deleteProperty : deleteProperty,
     updateProperty : updateProperty,
-    getLeaseEndingProperty: getLeaseEndingProperty,
+    getPropertyLeaseEnding: getPropertyLeaseEnding,
 }

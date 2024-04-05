@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PropertyService } from '../services/property.service';
-import { Property } from '../models/property.model';
-import { BaseComponent } from '../base/base.component';
+import { PropertyService } from '@app/services/property.service';
+import { Property } from '@app/models/property.model';
+import { BaseComponent } from '@app/base/base.component';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { Label } from '../models/label.model';
+import { Label } from '@app/models/label.model';
 
 
 @Component({
@@ -22,6 +22,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   @ViewChild('endDatePicker', { static: false }) private endDatePicker: MatDatepicker<Date>;
   @ViewChild('maturityDatePicker', { static: false }) private maturityDatePicker: MatDatepicker<Date>;
   @ViewChild('purchaseDatePicker', { static: false }) private purchaseDatePicker: MatDatepicker<Date>;
+  @ViewChild('extendedEndDatePicker', { static: false }) private extendedEndDatePicker: MatDatepicker<Date>;
+  
   
   dateToday: number = Date.now();  
   banks: Label[] ;
@@ -120,4 +122,31 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   onNgModelChange(event: any): void {
 
   }
+
+  onStartDateClose() {
+    if (this.util.isEmpty(this.currentProperty.endDate)) {
+      const endDate = this.util.calculateNextFiscalYearEndDate(this.currentProperty.startDate);
+      this.currentProperty.endDate = endDate;
+    }    
+  }
+
+  /**
+   * If the extended date is empty 
+   * AND end date is not same as extended date
+   * @param event 
+   */
+  onExtendedDateFocused(event: any) {
+    if (this.util.isEmpty(this.currentProperty.extendedEndDate)) {
+       if (!this.util.isEmpty(this.currentProperty.endDate)) {
+          const extendedEndDate = this.util.calculateNextFiscalYearEndDate(this.currentProperty.endDate);
+          this.currentProperty.extendedEndDate = extendedEndDate;
+       }
+    } else { // extendedEndDate exists...
+      if (!this.util.isEmpty(this.currentProperty.endDate)
+          && this.util.getDaysDifference(this.currentProperty.startDate, this.currentProperty.endDate) < 1 ) {
+          this.currentProperty.extendedEndDate = '';
+      }
+    }      
+  }
+
 }

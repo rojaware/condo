@@ -38,7 +38,6 @@ router.route('/properties').get((request, response) => {
   })
 })
 
-
 router.route('/properties/:id').get((request, response) => {
 
   propertyController.getProperty(request.params.id).then(result => {
@@ -47,6 +46,18 @@ router.route('/properties/:id').get((request, response) => {
       response.status(404).send('no data')
     } else {
       result[0] = util.toArrayOfString(result[0], 'owner')
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/propertiesLeaseEnding/:days').get((request, response) => {
+
+  propertyController.getPropertyLeaseEnding(request.params.days).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {      
       response.status(201).json(result[0]);
     }
   })
