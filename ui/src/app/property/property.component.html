@@ -11,20 +11,10 @@
     </button>
     <!-- Button , Cancel, Delete, Save -->
     
-    <div *ngIf="!viewMode" class=" button-space"  style="display: flex">
-      
-        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
-          Cancel
-        </button>           
-      
-        
-        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Property">
-          Delete
-        </button>     
-        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property">
-          Save Change
-        </button>      
-      
+    <div *ngIf="!viewMode" class=" button-space"  style="display: flex">      
+        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes"> Cancel </button>
+        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
+        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
     </div>
     
     

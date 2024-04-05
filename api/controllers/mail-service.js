@@ -1,16 +1,20 @@
 const nodeMailer = require("nodemailer");
+const config = require('../config.json');
 
-const EMAIL = "rojaware@yahoo.com";
-const THIRD_PARTY_APP_PASSWORD = "qcnjlnuyiyqnqtqe";
 
 class MailService {
   _transporter;
 
   constructor() {
+    console.log('Reading config.json...')
+    console.log(config)
+    
+    const EMAIL = config.auth.user;
+    const THIRD_PARTY_APP_PASSWORD = config.auth.pass;
     this._transporter = nodeMailer.createTransport({
-      host: "smtp.mail.yahoo.com",
-      port: 465,
-      service: "yahoo",
+      host: config.host,
+      port: config.port,
+      service: config.service,
       auth: {
         user: EMAIL,
         pass: THIRD_PARTY_APP_PASSWORD,

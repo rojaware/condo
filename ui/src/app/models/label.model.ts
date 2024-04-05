@@ -4,6 +4,7 @@ export interface Label {
   name: string;
   value: string;
   viewValue: string;
+  hint?: string;
   isEdit?: boolean;
 }
 
@@ -21,7 +22,7 @@ export const LabelColumns = [
   {
     key: 'name',
     type: 'dropdown',
-    label: 'Category(BANKS|OWNERS)',
+    label: 'Category',
     required: true,
   },  
   {
@@ -34,8 +35,13 @@ export const LabelColumns = [
     key: 'viewValue',
     type: 'text',
     label: 'Label',
-    required: true,
-    
+    required: true,    
+  },
+  {
+    key: 'hint',
+    type: 'text',
+    label: 'Hint',    
+    hidden: true,
   },
   {
     key: 'isEdit',
@@ -46,6 +52,7 @@ export const LabelColumns = [
 export enum LabelTypeEnum {
   Bank = "BANKS",
   Owner = "OWNERS",  
+  Batch = "BATCH",  
 }
 
 

@@ -2,7 +2,9 @@
 import { Injectable } from '@angular/core';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Config } from '../models/config.model';
-import { User } from '../models/user.model';
+import { SettingService } from './setting.service';
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +14,20 @@ export class ConfigService {
   env: string;
   private http: HttpClient;
 
-  constructor(private readonly httpHandler: HttpBackend) {
+  constructor(private readonly httpHandler: HttpBackend,
+    private settingService: SettingService) {
     this.http = new HttpClient(httpHandler);
+  }
+
+  _load(): void {
+    this.settingService.getConfig().subscribe ({
+      next: (data) => {
+        ConfigService.config = data;
+        console.log('config is filled by ... ');
+        console.log(data);
+      },
+      error: (e) => console.error(e),      
+    });
   }
 
   load(): Promise<void> {   

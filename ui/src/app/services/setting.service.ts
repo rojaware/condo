@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Label } from '../models/label.model';
+import { Config } from '../models/config.model';
 
 const baseUrl = 'http://localhost:8090/api/settings';
+const configUrl = 'http://localhost:8090/config';
 
 @Injectable({
   providedIn: 'root',
@@ -41,8 +43,7 @@ export class SettingService {
       const infos = labels.map((element: Label) => element.id);
       const idList = infos.join()
       return this.http.delete(`${baseUrl}ByIdList/${idList}`);
-    }
-    
+    }    
   }
   deleteAll(): Observable<any> {
     return this.http.delete(baseUrl);
@@ -51,5 +52,8 @@ export class SettingService {
   update(data: any): Observable<any> {
     return this.http.put(`${baseUrl}`, data);
   }
-
+  
+  getConfig(): Observable<Config> {
+    return this.http.get<Config>(configUrl);
+  }
 }

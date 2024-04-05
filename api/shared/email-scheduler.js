@@ -1,5 +1,6 @@
 let cron = require('node-cron');
 const MailService = require("../controllers/mail-service");
+const config = require('../config.json');
 
 /** 
  * The cron format consists of:
@@ -16,6 +17,8 @@ const MailService = require("../controllers/mail-service");
  */
 function startCron() {
   console.log('Run email job at 11:59 PM every day.');
+  console.log('Reading config.json...')
+    console.log(config)
   cron.schedule('59 23 * * *', () => {
     // Send e-mail
     sendMail();

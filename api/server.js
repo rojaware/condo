@@ -1,6 +1,6 @@
 "use strict";
 
-
+const fs = require('fs');
 const _ = require('lodash');
 const cors = require("cors");
 const express = require('express')
@@ -18,6 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
 app.use('/api', eventRoute);
+
+// app.use('/config', function (req, res) {
+//   try {
+//     const jsonData = fs.readFileSync('./config.json', 'utf8');
+//     const parsedData = JSON.parse(jsonData);
+//     console.log(parsedData); // Your JSON data as a JavaScript object
+//     res.send(parsedData);
+//   } catch (error) {
+//     console.error('Error reading JSON file:', error.message);
+//   }
+// });
 app.use('/', function (req, res) {
   res.send('Future Home of Condo Management Service');
 });

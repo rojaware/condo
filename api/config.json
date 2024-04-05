@@ -1,0 +1,11 @@
+{
+  "alert": {
+    "host": "smtp.mail.yahoo.com",
+    "port": 465,
+    "service": "yahoo",
+    "auth": {
+      "user": "rojaware@yahoo.com",
+      "pass": "qcnjlnuyiyqnqtqe"
+    }    
+  }
+}

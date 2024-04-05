@@ -43,11 +43,12 @@ async function addSetting(body) {
     INSERT INTO [dbo].[labels]
         ([name]
         ,[value]
-        ,[viewValue])
+        ,[viewValue]
+        ,[hint])
     VALUES
         (@name
         ,@value
-        ,@viewValue);
+        ,@viewValue, @hint);
         SELECT  IDENT_CURRENT('labels') as id ;`;
     try {
         let pool = await sql.connect(config);
@@ -55,6 +56,7 @@ async function addSetting(body) {
             .input('name', sql.NVarChar, body.name)
             .input('value', sql.NVarChar, body.value)
             .input('viewValue', sql.NVarChar, body.viewValue)
+            .input('hint', sql.NVarChar, body.hint)
             .query(query);
         return item.recordset;
     }
@@ -129,6 +131,7 @@ async function updateSetting(body) {
         SET [name] = @name
             ,[value] = @value
             ,[viewValue] = @viewValue
+            ,[hint] = @hint
         WHERE id = @id;`;
     try {
         let pool = await sql.connect(config);
@@ -137,6 +140,7 @@ async function updateSetting(body) {
                 .input('value', sql.NVarChar, body.value)
                 .input('viewValue', sql.NVarChar, body.viewValue)
                 .input('id', sql.Int, body.id)
+                .input('hint', sql.NVarChar, body.hint)
             .query(query);
         return item.rowsAffected;
     }

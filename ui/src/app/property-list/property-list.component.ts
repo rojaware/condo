@@ -8,7 +8,7 @@ import { BaseComponent } from '../base/base.component';
 import { User } from '../models/user.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LabelTypeEnum } from '../models/label.model';
-import { SettingService } from '../services/settings.service';
+import { SettingService } from '../services/setting.service';
 
 
 @Component({

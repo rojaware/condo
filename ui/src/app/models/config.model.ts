@@ -7,5 +7,19 @@ export class Config {
   user: User;
   banks: Label[];
   owners: Label[];
+  alert: Alert;
 }
+
+export class Alert {
+  host: string;
+  port: number;
+  service: string;
+  auth: Auth;
+}
+
+export class Auth {
+  user: string;
+  pass: string;
+}
+
 
