@@ -2,6 +2,7 @@ let cron = require('node-cron');
 const MailService = require("../controllers/mail-service");
 const config = require('../config.json');
 const settingController = require('../controllers/setting-controller');
+const propertyController = require('../controllers/property-controller');
 const BATCH = 'BATCH';
 
 /** 
@@ -18,44 +19,52 @@ const BATCH = 'BATCH';
   check database once in a day (12 am) and send email if due days is up
  */
 function startCron() {
-  console.log('Run email job at 11:59 PM every day.');  
+  
   console.log(config);
-  settingController.getSettingByName(BATCH).then(result => {
-    if (!result) {
+  settingController.getSettingForAlert().then(alert => {
+    if (!alert) {
       console.log("no data...");    
     } else {
-      let hh = 23;
-      let mm = 59;
-      const alerts = result[0];
-      const item = alerts.find(element => (element.viewValue === 'Hour'));
-      hh = item.value;
-      const _item = alerts.find(element => (element.viewValue === 'Minute'));
-      mm = _item.value;
-      console.log('hh=>'+ hh + ' mm=>' + mm);
-      cron.schedule(`${mm} ${hh} * * *`, () => {
+      console.log(`Run email job at ${alert.hour}:${alert.minute} every day.`); 
+      cron.schedule(`${alert.minute} ${alert.hour} * * *`, () => {
         // Send e-mail if today is 70 days away toward lease end date
-        sendMail();
+        sendMail(alert);
       });
     }
   })
 }
 
-async function sendMail() {
-  const service = new MailService();
-  const response = await service.sendMail(
-    "leesungki@gmail.com",
-    "My first email",
-    "This mail was sent from my cool NodeJs service"
-  );
-
-  if (response.error) {
-    console.log("Something went wrong", response.error);
-    return;
-  } else if (response.status === "SUCCESS") {
-    console.log("Message sent");
-  }
+async function sendMail(alert) {
+  // send mail if extended end date is blank, the diff days is less than input days (70 ie)
+  propertyController.getPropertyLeaseEnding(alert.days).then(result => {
+    if (!result) {
+      console.log("no data...");
+      throw new Error('404 not found');
+    } else {
+      properties = result[0];
+      properties.forEach(async property => {
+        if (!property.extendedEndDate && diff <= days) {
+          // send email alert...
+          const title = `Alert on Lease on ${property.name}`;
+          const body = `Lease on ${property.name} will end ${property.diff} days on ${property.endDate} `
+          const service = new MailService();
+          const response = await service.sendMail(
+            alert.subscriber,
+            title,
+            body
+          );
+        
+          if (response.error) {
+            console.log("Something went wrong", response.error);
+            return;
+          } else if (response.status === "SUCCESS") {
+            console.log("Message sent");
+          }          
+        }
+      });      
+    }
+  });
 };
-
 
 module.exports = {
   startCron: startCron

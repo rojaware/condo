@@ -573,6 +573,18 @@ router.route('/settings').put((request, response) => {
   })
 })
 
+router.route('/settingsAlert').get((request, response) => {
+
+  settingController.getSettingForAlert().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result);
+    }
+  })
+})
+
 /***************** End of Settings API */
 
 
