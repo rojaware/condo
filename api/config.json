@@ -4,8 +4,8 @@
     "port": 587,
     "secure": false,
     "auth": {
-      "user": "leesungki@gmail.com",
-      "pass": "tkbhcwrsiqilwmwh"
+      "user": "[your-email@test.com]",
+      "pass": "[your-password]"
     }    
   }
 }

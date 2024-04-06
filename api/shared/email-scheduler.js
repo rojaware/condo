@@ -1,4 +1,5 @@
 let cron = require('node-cron');
+const moment = require('moment')
 const MailService = require("../controllers/mail-service");
 const config = require('../config.json');
 const settingController = require('../controllers/setting-controller');
@@ -26,8 +27,8 @@ function startCron() {
       console.log("no data...");    
     } else {
       console.log(`Run email job at ${alert.hour}:${alert.minute} every day.`); 
-      // cron.schedule(`* * * * *`, () => { // run every minute..
-      cron.schedule(`${alert.minute} ${alert.hour} * * *`, () => {  
+      cron.schedule(`* * * * *`, () => { // run every minute..
+      // cron.schedule(`${alert.minute} ${alert.hour} * * *`, () => {  
         // Send e-mail if today is 70 days away toward lease end date
         sendMail(alert);
       });
@@ -49,7 +50,8 @@ async function sendMail(alert) {
           const title = `Alert on Lease on ${property.name}`;
           settingController.getLandlordEmail(property.owner).then( async ownerEmail => {
             const emails = ownerEmail? alert.subscriber + ',' + ownerEmail: alert.subscriber;
-            const body = `Lease on ${property.name} will end ${property.diff} days on ${property.endDate} `
+            const endDate = moment(property.endDate).format('YYYY-MM-DD');
+            const body = `Lease on ${property.name} will end ${property.diff} days on ${endDate} `
             const service = new MailService();
             const response = await service.sendMail(
               emails,
