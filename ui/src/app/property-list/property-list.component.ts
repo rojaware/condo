@@ -96,7 +96,6 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
           data = this.createTenant();
         }
         property.tenant = data;
-        console.log(data);
       },
       error: (e) => console.error(e),
     });
