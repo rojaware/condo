@@ -21,4 +21,8 @@ li {
   background: mediumslateblue !important;
   color: white !important;
 }
+.list-group-item.active {
+  color: #611b1b;
+  background-color: antiquewhite;
+}
 
