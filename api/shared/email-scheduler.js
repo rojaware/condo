@@ -47,20 +47,24 @@ async function sendMail(alert) {
         if (!property.extendedEndDate && property.diff <= alert.days) {
           // send email alert...
           const title = `Alert on Lease on ${property.name}`;
-          const body = `Lease on ${property.name} will end ${property.diff} days on ${property.endDate} `
-          const service = new MailService();
-          const response = await service.sendMail(
-            alert.subscriber,
-            title,
-            body
-          );
-        
-          if (response.error) {
-            console.log("Alert Email :: Something went wrong", response.error);
-            return;
-          } else if (response.status === "SUCCESS") {
-            console.log("Alert Email Message sent");
-          }          
+          settingController.getLandlordEmail(property.owner).then( async ownerEmail => {
+            const emails = ownerEmail? alert.subscriber + ',' + ownerEmail: alert.subscriber;
+            const body = `Lease on ${property.name} will end ${property.diff} days on ${property.endDate} `
+            const service = new MailService();
+            const response = await service.sendMail(
+              emails,
+              title,
+              body
+            );
+          
+            if (response.error) {
+              console.log("Alert Email :: Something went wrong", response.error);
+              return;
+            } else if (response.status === "SUCCESS") {
+              console.log("Alert Email Message sent");
+            }       
+          });
+   
         }
       });      
     }

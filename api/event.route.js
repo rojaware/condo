@@ -585,6 +585,16 @@ router.route('/settingsAlert').get((request, response) => {
   })
 })
 
+router.route('/settingsLandlord/:owner').get((request, response) => {
+  settingController.getLandlordContact(request.params.owner).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result);
+    }
+  })
+})
 /***************** End of Settings API */
 
 

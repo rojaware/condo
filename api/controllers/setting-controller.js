@@ -37,6 +37,48 @@ async function getSettingForAlert() {
   }
 }
 
+async function getLandlordContact(owner) {
+  const query = `
+      SELECT value, 
+             JSON_VALUE(hint, '$.email') AS 'email', 
+             JSON_VALUE(hint, '$.role') AS 'role' 
+      FROM labels 
+      WHERE name = 'owners' AND value = @owner`
+  try {
+    let pool = await sql.connect(config);
+    let item = await pool.request()
+      .input('owner', sql.NVarChar, owner)
+      .query(query);
+    return item.recordset;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+async function getLandlordEmail(owner) {
+  const query = `
+        SELECT value, 
+              JSON_VALUE(hint, '$.email') AS 'email', 
+              JSON_VALUE(hint, '$.role') AS 'role' 
+        FROM labels 
+        WHERE name = 'owners' AND value = @owner`
+  try {
+    let pool = await sql.connect(config);
+    let item = await pool.request()
+      .input('owner', sql.NVarChar, owner)
+      .query(query);
+    if (item.recordset[0]) {
+      return item.recordset[0].email;
+    } else {
+      return null
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
 function toAlertObject(recordsets) {
   let alert = {};
   
@@ -198,4 +240,6 @@ module.exports = {
   getSettingById: getSettingById,
   deleteSettingByIdList: deleteSettingByIdList,
   getSettingForAlert: getSettingForAlert,
+  getLandlordContact: getLandlordContact,
+  getLandlordEmail: getLandlordEmail,
 }

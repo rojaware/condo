@@ -123,11 +123,14 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   }
 
-  onStartDateClose() {
-    if (this.util.isEmpty(this.currentProperty.endDate)) {
-      const endDate = this.util.calculateNextFiscalYearEndDate(this.currentProperty.startDate);
-      this.currentProperty.endDate = endDate;
-    }    
+  /**
+   * 1. set fiscal year date to end date, overwrite
+   * 2. make the extended end date empty
+   */
+  onStartDateClose() {    
+    const endDate = this.util.calculateNextFiscalYearEndDate(this.currentProperty.startDate);
+    this.currentProperty.endDate = endDate;
+    this.currentProperty.extendedEndDate = '';    
   }
 
   /**

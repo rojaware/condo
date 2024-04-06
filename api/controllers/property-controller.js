@@ -28,7 +28,7 @@ async function getProperties() {
     try {
         let pool = await sql.connect(config);
         let properties = await pool.request().query(query);
-        console.log('successfule + ' + properties.rowsAffected)
+        console.log('successful, Returning total ' + properties.rowsAffected + ' records')
         return properties.recordsets;
     }
     catch (error) {
@@ -60,7 +60,7 @@ async function getProperty(id) {
     try {
         let pool = await sql.connect(config);
         let property = await pool.request()
-            .input('name', sql.VarChar, name)
+            .input('id', sql.VarChar, id)
             .query(query);
         return property.recordsets;
     }
@@ -224,6 +224,7 @@ async function deleteProperty(id) {
 async function getPropertyLeaseEnding(days) {
     const query =
      `SELECT name, 
+             owner,
              id, 
              endDate, 
              extendedEndDate, 
