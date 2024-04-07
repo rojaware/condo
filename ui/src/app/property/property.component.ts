@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '@app/services/property.service';
 import { Property } from '@app/models/property.model';
@@ -16,6 +16,7 @@ import { Label } from '@app/models/label.model';
 export class PropertyComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
   @Input() currentProperty: Property = {} as Property;  
+  @Output() isPropertyDeleted = new EventEmitter<boolean>();
   @ViewChild('occupancyDatePicker', { static: false }) private occupancyDatePicker: MatDatepicker<Date>;
   @ViewChild('closingDatePicker', { static: false }) private closingDatePicker: MatDatepicker<Date>;
   @ViewChild('startDatePicker', { static: false }) private startDatePicker: MatDatepicker<Date>;
@@ -78,6 +79,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
           this.message = res.message
             ? res.message
             : 'This property has been updated successfully!';
+          this.viewMode = true;  
         },
         error: (e) => {
           console.error(e);
@@ -87,16 +89,16 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   }
 
   createProperty(): void {
-    this.message = '';    
-    this.errMessage = '';
     this.propertyService
       .create(this.currentProperty)
       .subscribe({
         next: (res) => {
-          console.log(res);
+          console.log(res);          
+          this.currentProperty.id = res.id;
           this.message = res.message
             ? res.message
             : 'This property was updated successfully!';
+          this.viewMode = true;  
         },
         error: (e) => {
           console.error(e);
@@ -111,7 +113,11 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.propertyService.delete(this.currentProperty.id).subscribe({
       next: (res) => {
         console.log(res);
-        this.router.navigate(['/properties']);
+        this.message = 'Deleted property (' + this.currentProperty.name + ') successfully'
+        this.currentProperty = {} as Property;
+        this.isPropertyDeleted.emit(true);
+        this.viewMode = true;
+        this.router.navigateByUrl('/properties');
       },
       error: (e) => {
         console.error(e);
@@ -119,9 +125,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       }
     });
   }
-  onNgModelChange(event: any): void {
 
-  }
+  onNgModelChange(event: any): void { }
 
   /**
    * 1. set fiscal year date to end date, overwrite

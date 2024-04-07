@@ -4,7 +4,7 @@ import { PropertyListComponent } from './property-list/property-list.component';
 import { PropertyComponent } from './property/property.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { TenantComponent } from './tenant/tenant.component';
-import { DocumentComponent } from './tenant/document/document.component';
+import { DocumentComponent } from './document/document.component';
 import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [

@@ -5,6 +5,7 @@
     <button class="badge badge-warning " (click)="viewMode = false">
       <mat-icon>edit</mat-icon>
     </button>
+    <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
     } @else {
     <button class="badge badge-warning " (click)="viewMode = true">
       <mat-icon>remove_red_eye</mat-icon>
@@ -13,7 +14,7 @@
     
     <div *ngIf="!viewMode" class=" button-space"  style="display: flex">      
         <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes"> Cancel </button>
-        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
+        <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
         <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
     </div>
     
@@ -23,7 +24,7 @@
   <div class="form-group">
     
     ...<span *ngIf="message">{{ message }}</span>
-    ...<span *ngIf="errMessage">{{ errMessage }}</span>
+    ...<span *ngIf="errMessage" class="error">{{ errMessage }}</span>
   
   </div>
   <form>
@@ -335,7 +336,7 @@
     </div>
 
     <!-- Documents -->    
-    <app-document [propertyName]="currentProperty.name"></app-document>
+    <app-document *ngIf="currentProperty.id" [propertyName]="currentProperty.name"></app-document>
   </form>
 </div>
 

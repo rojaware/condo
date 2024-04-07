@@ -3,39 +3,35 @@
   <!-- title with edit / view buttons -->
   <div class="form-group">
     <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | uppercase }}</h4>
-    <button *ngIf="viewMode" class="badge badge-warning " (click)="viewMode = false">
-      <mat-icon>edit</mat-icon>
-    </button>
-
-    <button *ngIf="!viewMode" class="badge badge-warning " (click)="viewMode = true">
-      <mat-icon>remove_red_eye</mat-icon>
-    </button>
+    @if (viewMode) {
+      <button class="badge badge-warning " (click)="viewMode = false">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button *ngIf="tenant.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">Delete</button>     
+    } @else {
+      <button class="badge badge-warning " (click)="viewMode = true"><mat-icon>remove_red_eye</mat-icon></button>
+    }
 
     <!-- Button , Cancel, Delete, Save -->
     <div *ngIf="!viewMode" class=" button-space" style="display: flex">
-      
-        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">
-          Cancel
-        </button>           
-      
-        <button class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">
-          Delete
-        </button>     
-     
-        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">
-          Save Change
-        </button>      
-    
-
+      <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">Cancel</button>           
+      <button *ngIf="tenant.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">Delete</button>     
+      <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">Save Change</button>
     </div>       
   </div>
-  <div class="form-group">
-    
-    ...<span *ngIf="message">{{ message }}</span>
-    ...<span *ngIf="errMessage">{{ errMessage }}</span>
-  
+  <div class="form-group">    
+    <span *ngIf="message">{{ message }}</span>
+    <span *ngIf="errMessage" class="error">{{ errMessage }}</span>  
   </div>
+
   <form style="height: 300px;">
+    <div class="form-group">
+      <!-- ID -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>ID</mat-label>
+        <input id="id" matInput type="text" [(ngModel)]="tenant.id" name="id" [readonly]="true" />
+      </mat-form-field>
+    </div>
     <!-- Full Names -->
     <div class="form-group">
       <!-- Primary Name -->
@@ -116,13 +112,17 @@
         }
       </mat-form-field>
     </div>  
-
-       
   </form>
+  <hr>    
 
-<!-- Documents -->    
-<app-document [propertyName]="tenant.propertyName" [tenant]="tenant"></app-document>
-      <hr>    
+  <!-- Documents -->    
+  <mat-card>
+    <mat-card-content>
+      <app-document *ngIf="tenant.id" [propertyName]="tenant.propertyName" [tenant]="tenant"></app-document>
+    </mat-card-content>
+  </mat-card>
+
+  <hr>    
     <pre>
       TODO
       

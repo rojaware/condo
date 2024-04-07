@@ -4,7 +4,7 @@
       <div class="form-outline">
         <mat-form-field class="example-full-width">
           <mat-label>Search by property</mat-label>
-          <input type="search" matInput placeholder="abell" />
+          <input type="search" matInput placeholder="ex. abell" />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
@@ -48,7 +48,7 @@
         <!-- #enddocregion slow-animation-duration -->
         <mat-tab label="Property">
           <div class="col-md-12">
-            <app-property [viewMode]="true" [currentProperty]="currentProperty"></app-property>
+            <app-property [viewMode]="true" [currentProperty]="currentProperty" (isPropertyDeleted)="retrievePropertyList()"></app-property>
           </div>
         </mat-tab>
         <mat-tab label="Tenant">

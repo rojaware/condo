@@ -70,31 +70,19 @@ router.route('/properties/:id').delete((request, response) => {
       console.log("no data...");
       response.status(404).send('no data')
     } else {
+      // result[0] = util.toArrayOfString(result[0], 'owner')
       response.status(201).json(result[0]);
     }
   })
 })
 
-
-router.route('/propertiesByName/:name?').delete((request, response) => {
-
-  propertyController.deleteProperty(request.params.name).then(result => {
-    if (!result) {
-      console.log("no data...");
-      response.status(404).send('no data')
-    } else {
-      result[0] = util.toArrayOfString(result[0], 'owner')
-      response.status(201).json(result[0]);
-    }
-  })
-})
 
 router.route('/properties').post((request, response) => {
 
   let property = { ...request.body };
   property = util.toJoinedString(property, 'owner');
 
-  propertyController.addProperty(property).then(result => {
+  propertyController.createProperty(property).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')
@@ -196,7 +184,7 @@ router.route('/tenants').delete((request, response) => {
 
 router.route('/tenants').post((request, response) => {
   let tenant = { ...request.body }
-  tenantController.addTenant(tenant).then(result => {
+  tenantController.createTenant(tenant).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')

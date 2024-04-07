@@ -49,7 +49,7 @@ async function getTenantById(id) {
         console.log(error);
     }
 }
-async function addTenant(body) {
+async function createTenant(body) {
     const query = `
     INSERT INTO [dbo].[tenants]
         ([primaryName]
@@ -169,7 +169,7 @@ module.exports = {
     getTenants: getTenants,
     getTenantByProperty : getTenantByProperty,
     getTenantByName : getTenantByName,
-    addTenant : addTenant,
+    createTenant : createTenant,
     deleteTenantById : deleteTenantById,
     deleteTenantByProperty : deleteTenantByProperty,
     deleteAllTenants: deleteAllTenants,

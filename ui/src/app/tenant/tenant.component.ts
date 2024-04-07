@@ -3,7 +3,6 @@ import { Tenant } from '../models/tenant.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '../services/tenant.service';
 import { BaseComponent } from '../base/base.component';
-import { Document   } from '../models/document.model';
 
 @Component({
   selector: 'app-tenant',
@@ -75,11 +74,15 @@ export class TenantComponent extends BaseComponent implements OnInit {
     this.tenantService.create(this.tenant).subscribe({
       next: (res) => {
         console.log(res);
+        this.tenant.id = res.id;
         this.message = res.message
           ? res.message
           : 'This tenant has been inserted successfully!';
       },
-      error: (e) => console.error(e),
+      error: (e) => {
+        console.error(e)
+        this.errMessage = 'Failed ...' + e.message;
+      }
     });
   }
 
@@ -93,7 +96,10 @@ export class TenantComponent extends BaseComponent implements OnInit {
           ? res.message
           : 'This tenant has been updated successfully!';
       },
-      error: (e) => console.error(e),
+      error: (e) => {
+        console.error(e)
+        this.errMessage = 'Failed ...' + e.message;
+      }
     });
   }
 

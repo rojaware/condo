@@ -5,15 +5,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Document } from '../../models/document.model';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
-import { DocumentService } from '../../services/document.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { Document } from '@app/models/document.model';
+import { ConfirmDialogComponent } from '@app/confirm-dialog/confirm-dialog.component';
+import { DocumentService } from '@app/services/document.service';
 import { SelectionModel } from '@angular/cdk/collections';
-import { BaseComponent } from '../../base/base.component';
+import { BaseComponent } from '@app/base/base.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
-import { Tenant } from '../../models/tenant.model';
+import { Tenant } from '@app/models/tenant.model';
 
 @Component({
   selector: 'app-document',
@@ -40,8 +39,7 @@ export class DocumentComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    const name = this.propertyName? this.propertyName: this.tenant?.primaryName;
-    
+    const name = this.propertyName? this.propertyName: this.tenant?.primaryName;    
     this.reload(name);
   }
 
@@ -64,8 +62,6 @@ export class DocumentComponent extends BaseComponent implements OnInit {
         window.open(url, '_blank');
     });
   }
-
-  
   
   private reload(name?: string): void {
     if (name) {
@@ -142,7 +138,7 @@ export class DocumentComponent extends BaseComponent implements OnInit {
 
   upload(): void {
     if (this.currentFile) {
-      const page = this.propertyName? "property": "tenant";
+      const page = this.tenant? "tenant": "property";
       const payload = {
         file: this.currentFile,
         page: page,

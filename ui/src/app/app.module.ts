@@ -16,7 +16,7 @@ import { BaseComponent } from './base/base.component';
 import { ConfigService } from './services/config.service';
 import { MonthNamePipe } from './shared/month-name.pipe';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { DocumentComponent } from './tenant/document/document.component';
+import { DocumentComponent } from './document/document.component';
 import { NgxCurrencyDirective } from 'ngx-currency';
 import { CarouselHolderComponent } from './carousel-holder/carousel-holder.component';
 import { NgxCsvParserModule } from 'ngx-csv-parser';

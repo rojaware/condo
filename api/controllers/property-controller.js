@@ -75,7 +75,7 @@ async function getProperty(id) {
  * @param {*} property 
  * @returns 
  */
-async function addProperty(property) {
+async function createProperty(property) {
     const query = `
         INSERT INTO [dbo].[properties]
                ([name]
@@ -136,10 +136,11 @@ async function addProperty(property) {
             .input('tscc', sql.NVarChar, property.tscc)
             .input('comment', sql.NVarChar, property.comment)
             .query(query);
-        return item.recordsets;
+        return item.recordset;
     }
     catch (err) {
         console.log(err);
+        throw err;
     }
 }
 
@@ -203,14 +204,37 @@ async function updateProperty(property) {
         console.log(err);
     }
 }
+/**
+ * TODO - delete expenses, documents, delete documents under tenant, delete tenant. ...
+ * @param {*} id 
+ * @returns 
+ */
 async function deleteProperty(id) {
-   const query = `DELETE FROM [dbo].[properties] WHERE id = @id; `;
+
+   let query = 
+         `BEGIN TRANSACTION;
+            DECLARE @propertyName nchar(10);
+            SET @propertyName = (SELECT name FROM properties WHERE ID = @id)
+            -- delete expenses by property name
+            DELETE FROM EXPENSES WHERE propertyName = @propertyName;
+            -- delete documents BY property name
+            DELETE FROM documents WHERE propertyName = @propertyName;
+            -- delete documents by tenant name
+            DELETE D FROM documents D
+            INNER JOIN TENANTS T ON D.tenantName = T.primaryName
+            INNER JOIN PROPERTIES P ON T.propertyName = P.name
+            where p.name = @propertyName
+            -- delete tenant by property name
+            DELETE FROM tenants WHERE propertyName = @propertyName
+            -- delete property
+            DELETE FROM properties WHERE name = @propertyName
+         COMMIT; `;
     try {
+        const statement = query.replaceAll('@id', id);
         let pool = await sql.connect(config);
-        let item = await pool.request()
-            .input('id', sql.Int, id)            
-            .query(query);
-        return item.recordsets;
+        let item = await pool.request()     
+            .query(statement);
+        return item.rowsAffected;
     }
     catch (err) {
         console.log(err);
@@ -245,7 +269,7 @@ async function getPropertyLeaseEnding(days) {
 module.exports = {
     getProperties: getProperties,
     getProperty : getProperty,
-    addProperty : addProperty,
+    createProperty : createProperty,
     deleteProperty : deleteProperty,
     updateProperty : updateProperty,
     getPropertyLeaseEnding: getPropertyLeaseEnding,
