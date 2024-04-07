@@ -101,7 +101,6 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     });
   }
   
-
   private createTenant(): Tenant {
     let newTenant = new Tenant();
     let propertyName = (!this.currentIndex || this.currentIndex < 0) ? '': this.config.user.property.name;
@@ -143,7 +142,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       error: (e) => console.error(e),
     });
   }
-
+  
   addProperty(): void {
     let newProperty = {
       name: 'new',
@@ -165,7 +164,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     newProperty.tenant = this.createTenant();
     this.properties?.push(newProperty);
     const index = this.properties?.length;
-    this.setActiveProperty(newProperty, index);
+    this.setActiveProperty(newProperty, index);    
   }
 
   searchName(): void {

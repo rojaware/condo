@@ -8,6 +8,14 @@
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
+      <!-- Add Property on top -->
+      <div class="form-outline">        
+        <button class="m-3 btn btn-md btn-warning" 
+                (click)="addProperty()" 
+                matTooltip="Add new property">
+          Add
+        </button>
+      </div>
     </div>
   </div>
 
@@ -30,33 +38,31 @@
             <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
           </div>
         } 
-                
-        
       </li>
       }
     </ul>
 
-    <button class="m-3 btn btn-md btn-warning" (click)="addProperty()">
-      Add
-    </button>
+
   </div>
   <!--  tab menus ... #docregion slow-animation-duration -->
   @if (config.user.property){
 
     <div class="col-md-10" >
       <mat-tab-group animationDuration="2000ms" (selectedTabChange)="tabChanged($event)">
-        <!-- #enddocregion slow-animation-duration -->
+        <!-- Property tab -->
         <mat-tab label="Property">
           <div class="col-md-12">
-            <app-property [viewMode]="true" [currentProperty]="currentProperty" (isPropertyDeleted)="retrievePropertyList()"></app-property>
+            <app-property [viewMode]="true" [currentProperty]="currentProperty" (isPropertyDeleted)="refreshList()"></app-property>
           </div>
         </mat-tab>
-        <mat-tab label="Tenant">
+        <!-- Tenant tab -->
+        <mat-tab label="Tenant" *ngIf="currentProperty.id">
           <div class="col-md-12">          
             <app-tenant [viewMode]="true" [tenant]="currentTenant" ></app-tenant>          
           </div>
         </mat-tab>
-        <mat-tab label="Expense">
+        <!-- Expense tab -->
+        <mat-tab label="Expense" *ngIf="currentProperty.id">
           <div class="col-md-12">
             <app-expense [viewMode]="true"></app-expense>
           </div>

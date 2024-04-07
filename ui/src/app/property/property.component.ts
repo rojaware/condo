@@ -114,10 +114,10 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       next: (res) => {
         console.log(res);
         this.message = 'Deleted property (' + this.currentProperty.name + ') successfully'
-        this.currentProperty = {} as Property;
+        this.currentProperty = {} as Property;        
         this.isPropertyDeleted.emit(true);
         this.viewMode = true;
-        this.router.navigateByUrl('/properties');
+        this.router.navigateByUrl('properties');
       },
       error: (e) => {
         console.error(e);

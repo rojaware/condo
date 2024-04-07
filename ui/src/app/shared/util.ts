@@ -11,6 +11,12 @@ export class Util {
       return str.trim().length === 0
     }    
   }
+  static isBlank(obj: any): boolean {
+    return Object.keys(obj).length == 0  
+  }
+  static hasObject(obj: any): boolean {
+    return !this.isBlank(obj);
+  }
   static toValue(str: string): string | null {
     return this.isEmpty(str)? null: str;
   }
