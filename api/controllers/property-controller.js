@@ -34,6 +34,7 @@ async function getProperties() {
     }
     catch (error) {
         console.log(error);
+        throw error;
     }
 }
 
@@ -68,9 +69,9 @@ async function getProperty(id) {
     }
     catch (error) {
         console.log(error);
+        throw error;
     }
 }
-
 
 /**
  * 
@@ -142,12 +143,11 @@ async function createProperty(property) {
             .query(query);
         return item.recordset;
     }
-    catch (err) {
-        console.log(err);
-        throw err;
+    catch (error) {
+        console.log(error);
+        throw error;
     }
 }
-
 
 async function updateProperty(property) {
     const query = `UPDATE [properties]
@@ -206,17 +206,13 @@ async function updateProperty(property) {
             .query(query);
         return item.recordsets;
     }
-    catch (err) {
-        console.log(err);
+    catch (error) {
+        console.log(error);
+        throw error;
     }
 }
-/**
- * TODO - delete expenses, documents, delete documents under tenant, delete tenant. ...
- * @param {*} id 
- * @returns 
- */
-async function deleteProperty(id) {
 
+async function deleteProperty(id) {
    let query = 
          `BEGIN TRANSACTION;
             DECLARE @propertyName nchar(10);
@@ -242,12 +238,14 @@ async function deleteProperty(id) {
             .query(statement);
         return item.rowsAffected;
     }
-    catch (err) {
-        console.log(err);
+    catch (error) {
+        console.log(error);
+        throw error;
     }
 }
+
 /**
- * TODO find lease ending properties ... 
+ * find lease ending properties ... 
  * @param {*} id 
  * @returns 
  */
@@ -268,10 +266,32 @@ async function getPropertyLeaseEnding(days) {
              .query(query);
          return item.recordsets;
      }
-     catch (err) {
-         console.log(err);
+     catch (error) {
+         console.log(error);
+         throw error;
      }
- }
+}
+
+async function getLeaseDates() {
+    const query = `SELECT name,builder
+                          ,CONVERT(char(10), startDate ,126) as startDate
+                          ,CONVERT(char(10), endDate ,126) as endDate           
+                   FROM properties 
+                   WHERE salesDate is null 
+                     AND endDate is not null 
+                     ORDER BY endDate`;               
+    try {
+        let pool = await sql.connect(config);
+        let properties = await pool.request().query(query);
+        console.log('successful, Returning total ' + properties.rowsAffected + ' records')
+        return properties.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
     getProperties: getProperties,
     getProperty : getProperty,
@@ -279,4 +299,5 @@ module.exports = {
     deleteProperty : deleteProperty,
     updateProperty : updateProperty,
     getPropertyLeaseEnding: getPropertyLeaseEnding,
+    getLeaseDates: getLeaseDates,
 }

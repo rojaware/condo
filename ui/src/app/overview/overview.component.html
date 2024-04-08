@@ -1,0 +1,49 @@
+<mat-accordion>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        This is the expansion title
+      </mat-panel-title>
+      <mat-panel-description>
+        This is a summary of the content
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>This is the primary content of the panel.</p>
+  </mat-expansion-panel>
+  <mat-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Upcoming Lease Ending Dates by Property
+      </mat-panel-title>
+      <mat-panel-description>
+        Currently I am {{panelOpenState ? 'open' : 'closed'}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    
+      <!-- Table for label dictionary -->
+      <table mat-table [dataSource]="dataSource">
+        <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+          
+          <th mat-header-cell 
+              *matHeaderCellDef 
+              [ngSwitch]="col.key" 
+              [ngClass]="col.key === 'endDate' ? 'highlighted' : ''">
+            <span *ngSwitchDefault > {{ col.label }}</span>
+          </th>
+          <!-- check box for selection -->    
+          <td mat-cell *matCellDef="let element">
+            <!-- View mode -->
+            <div [ngSwitch]="col.type" >
+              <span *ngSwitchDefault [ngClass]="col.key === 'endDate' ? 'highlighted' : ''" >
+                {{ element[col.key] }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>      
+    
+  </mat-expansion-panel>
+</mat-accordion>

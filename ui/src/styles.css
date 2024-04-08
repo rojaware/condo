@@ -5,3 +5,14 @@
   background: #ffe0e0;
   border: 1px solid #a33a3a;
 }
+.mat-mdc-row:nth-child(odd) {
+  background-color: #FFFFFF;
+}
+
+.mat-mdc-row:nth-child(even) {
+  background-color: #F8F8F8;
+}
+
+.mat-mdc-row:hover{
+  background-color: #87CEEB !important;
+}

@@ -49,6 +49,7 @@ export const LabelColumns = [
     label: '',
   },
 ];
+
 export enum LabelTypeEnum {
   Bank = "BANKS",
   Owner = "OWNERS",  

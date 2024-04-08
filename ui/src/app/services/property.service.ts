@@ -18,6 +18,10 @@ export class PropertyService {
   get(name: any): Observable<Property> {
     return this.http.get<Property>(`${baseUrl}/${name}`);
   }
+  
+  getLeaseDates(): Observable<Property[]> {
+    return this.http.get<Property[]>(`${baseUrl}LeaseDates`);
+  }
 
   create(data: any): Observable<any> {
     return this.http.post(baseUrl, data);
@@ -33,9 +37,5 @@ export class PropertyService {
 
   deleteAll(): Observable<any> {
     return this.http.delete(baseUrl);
-  }
-
-  findByName(name: any): Observable<Property[]> {
-    return this.http.get<Property[]>(`${baseUrl}/${name}`);
   }
 }

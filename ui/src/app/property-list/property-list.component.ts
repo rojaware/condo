@@ -167,19 +167,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     this.setActiveProperty(newProperty, index);    
   }
 
-  searchName(): void {
-    this.currentProperty = {} as Property;
-    this.currentIndex = -1;
-
-    this.propertyService.findByName(this.name).subscribe({
-      next: (data) => {
-        this.properties = data;
-        console.log(data);
-      },
-      error: (e) => console.error(e),
-    });
-  }
-
+ 
   handlePropertyChange(selectedProperty: Property) {
     console.log(`Item changed to: ${selectedProperty.name}`);
     // Handle the updated item value here

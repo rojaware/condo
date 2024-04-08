@@ -24,7 +24,6 @@ router.use((request, response, next) => {
   next();
 })
 
-
 router.route('/properties').get((request, response) => {
   propertyController.getProperties().then(result => {
     if (!result) {
@@ -107,6 +106,17 @@ router.route('/properties').put((request, response) => {
   })
 })
 
+router.route('/propertiesLeaseDates').get((request, response) => {
+  propertyController.getLeaseDates().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.json(result[0]);
+    }
+  })
+})
 //############### tenants api... ########################
 
 router.route('/tenants').get((request, response) => {
