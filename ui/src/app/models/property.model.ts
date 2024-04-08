@@ -16,6 +16,7 @@ export class Property {
   startDate: string;
   endDate: string;
   extendedEndDate: string;
+  salesDate: string;
   rentFee: number;
   purchasePrice: number;
   mortgageAccountNo: string;

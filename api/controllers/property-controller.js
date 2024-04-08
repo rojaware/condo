@@ -15,6 +15,7 @@ async function getProperties() {
                ,CONVERT(char(10), startDate ,126) as startDate
                ,CONVERT(char(10), endDate ,126) as endDate
                ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
+               ,CONVERT(char(10), salesDate ,126) as salesDate
                ,[rentFee]
                ,[purchasePrice]
                ,mortgageAccountNo
@@ -48,6 +49,7 @@ async function getProperty(id) {
                ,CONVERT(char(10), occupancyDate ,126) as occupancyDate
                ,CONVERT(char(10), startDate ,126) as startDate
                ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
+               ,CONVERT(char(10), salesDate ,126) as salesDate
                ,[rentFee]
                ,[purchasePrice]
                ,mortgageAccountNo
@@ -90,6 +92,7 @@ async function createProperty(property) {
                ,[startDate]
                ,[endDate]
                ,[extendedEndDate]               
+               ,[salesDate]               
                ,[rentFee]
                ,[purchasePrice]
                ,mortgageAccountNo
@@ -102,7 +105,7 @@ async function createProperty(property) {
                 @closingDate, 
                 @occupancyDate, 
                 @startDate, 
-                @endDate, @extendedEndDate,
+                @endDate, @extendedEndDate, @salesDate
                 @rentFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
                 ,@mortgageRate
@@ -126,6 +129,7 @@ async function createProperty(property) {
             .input('startDate', sql.Date, util.toValue(property.startDate))
             .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
+            .input('salesDate', sql.Date, util.toValue(property.salesDate))
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
@@ -160,6 +164,7 @@ async function updateProperty(property) {
        ,[startDate] = @startDate
        ,[endDate] = @endDate
        ,[extendedEndDate] = @extendedEndDate
+       ,[salesDate] = @salesDate
        ,[rentFee] = @rentFee
        ,[purchasePrice] = @purchasePrice
        ,[mortgageAccountNo] = @mortgageAccountNo
@@ -188,6 +193,7 @@ async function updateProperty(property) {
             .input('startDate', sql.Date, util.toValue(property.startDate))
             .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
+            .input('salesDate', sql.Date, util.toValue(property.salesDate))
             .input('rentFee', sql.Int, property.rentFee)
             .input('purchasePrice', sql.Int, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
