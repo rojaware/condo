@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { Router } from '@angular/router';
-import { SettingService } from '../services/setting.service';
 import { Label, LabelColumns, LabelTypeEnum } from '../models/label.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { SettingService } from '@app/services/setting.service';
 
 @Component({
   selector: 'app-settings',
@@ -19,8 +19,7 @@ export class SettingsComponent extends BaseComponent implements OnInit {
   valid: any = {}  
   labelTypes = Object.values(LabelTypeEnum);
   dueDays: number = 70;
-  emails: string = 'leesungki@gmail.com, iamrufina@gmail.com';
-
+  
   constructor(
     protected router: Router,
     private settingService: SettingService,
