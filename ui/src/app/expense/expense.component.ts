@@ -208,6 +208,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       totalExpense: 0,
       netIncome: 0,
     } as Expense;
+    this.message = "New Expense has been created for new entry..."
     return expense;
   }
 
