@@ -70,11 +70,15 @@ export class SettingsComponent extends BaseComponent implements OnInit {
   saveRow(row: Label) {
     if (row.id === 0) {
       this.settingService.create(row).subscribe((newLabel: Label) => {
-        row.id = newLabel.id
-        row.isEdit = false
+        row.id = newLabel.id;
+        row.isEdit = false;
+        this.message = "Inserted Successfully";
       })
     } else {
-      this.settingService.update(row).subscribe(() => (row.isEdit = false))
+      this.settingService.update(row).subscribe(() => {
+        row.isEdit = false;
+        this.message = "Updated Successfully";
+      })
     }
   }
 

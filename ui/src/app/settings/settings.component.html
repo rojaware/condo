@@ -133,4 +133,6 @@
     </mat-form-field>
   </mat-card-content>
 </mat-card>
+    ...<span *ngIf="message">{{ message }}</span>
+    ...<span *ngIf="errMessage" class="error">{{ errMessage }}</span>
 </div>

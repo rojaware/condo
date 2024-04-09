@@ -3,10 +3,12 @@ const sql = require('mssql');
 const bulkExpense = require('./bulk-expense');
 const queries = require('./queries');
 
-async function getExpenses() {
+/** Retrieve all expenses by property name */
+async function getExpenses(propertyName) {
+  const query = `SELECT * FROM Expenses WHERE propertyName = @propertyName`;
   try {
     let pool = await sql.connect(config);
-    let items = await pool.request().query("SELECT * from Expenses");
+    let items = await pool.request().query(query);
     return items.recordsets;
   }
   catch (error) {
@@ -26,6 +28,7 @@ async function getExpenseById(id) {
     console.log(error);
   }
 }
+
 async function getExpenseByYearMonth(propertyName, year, month) {
   const query =
     `SELECT *  FROM [dbo].[expenses] 
@@ -103,6 +106,7 @@ async function upsertBulk(bodyList) {
     throw new Error(err.message)
   }
 }
+
 async function updateExpense(body) {
   try {
     let pool = await sql.connect(config);
@@ -131,6 +135,7 @@ async function updateExpense(body) {
     console.log(err);
   }
 }
+
 async function deleteExpenseByPropertyYearMonth(propertyName, year, month) {
   const query =
     `DELETE FROM [dbo].[expenses] 

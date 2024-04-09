@@ -11,8 +11,8 @@ const baseUrl = 'http://localhost:8090/api/expenses';
 export class ExpenseService {
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Expense[]> {
-    return this.http.get<Expense[]>(baseUrl);
+  getAll(propertyName: string): Observable<Expense[]> {
+    return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
   }
   
   get(id: number): Observable<Expense[]> {
@@ -39,7 +39,7 @@ export class ExpenseService {
     return this.http.delete(baseUrl);
   }
 
-  create(data: any): Observable<any> {
+  insert(data: any): Observable<any> {
     return this.http.post(baseUrl, data);
   }
 

@@ -219,8 +219,8 @@ router.route('/tenants').put((request, response) => {
 
 // ######### Expense API .... ############### 
 
-router.route('/expenses').get((request, response) => {
-  expenseController.getExpenses().then(result => {
+router.route('/expensesByProperty/:propertyName').get((request, response) => {
+  expenseController.getExpenses(request.params.propertyName).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404)

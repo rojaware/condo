@@ -107,7 +107,7 @@ async function createProperty(property) {
                 @occupancyDate, 
                 @startDate, 
                 @endDate, @extendedEndDate, @salesDate
-                @rentFee, @purchasePrice, @mortgageAccountNo
+                ,@rentFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
                 ,@mortgageRate
                 ,@maturityDate, @comment, @imageUrl, @tscc

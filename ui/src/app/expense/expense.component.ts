@@ -116,6 +116,11 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       .getByYearMonth(propertyName, this.year, null)
       .subscribe({
         next: (data: Expense[]) => {
+          if (data.length === 0) {
+            for (let i = 0; i < 12 ; i++) {
+              data.push(this.createTemplate(this.year, i));
+            }
+          }
           this.expenses = this.appendTotals(data);
           this.config.user.property.expenses = this.expenses;
           this.dataSource = new MatTableDataSource<Expense>(this.expenses);          
@@ -151,6 +156,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       .getByYearMonth(propertyName, this.year, this.month)
       .subscribe({
         next: (data: Expense[]) => {
+          if (data.length === 0) {
+            data.push(this.createTemplate(this.year, this.month));
+          }
           this.expenses = data;
           this.config.user.property.expenses = data;
           this.currentExpense = data[0];
@@ -159,7 +167,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
           }
           console.log(data);
         },
-        error: (e: any) => console.error(e),
+        error: (e: any) => {
+          console.error(e)
+        },
       });
   }
 
@@ -172,14 +182,39 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     if (this.currentExpense.id) {
       this.update();
     } else {
-      this.create();
+      this.insert();
     }
     this.viewMode = true;
   }
-  create(): void {
+
+  createTemplate(_year: number, _month: number): Expense {
+    const expense = {      
+      propertyName: this.config.user.property.name,
+      year: _year,
+      month: _month,
+      income: this.config.user.property.rentFee,  
+      travel: 0,
+      maintenance: 0,
+      commission: 0,
+      insurance: 0,
+      legal: 0,
+      managementFee: 0,
+      mortgageInterest: 0,
+      repairs: 0,
+      supplies: 0,
+      tax: 0,
+      utilities: 0,
+      depreciation: 0,
+      totalExpense: 0,
+      netIncome: 0,
+    } as Expense;
+    return expense;
+  }
+
+  insert(): void {
     this.message = '';
 
-    this.expenseService.create(this.currentExpense).subscribe({
+    this.expenseService.insert(this.currentExpense).subscribe({
       next: (res: any) => {
         console.log(res);
         this.message = res.message

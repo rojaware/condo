@@ -13,7 +13,7 @@
 
   <!-- retrieve expense buttons -->
   <div class="example-button-row" *ngIf="year">
-    <button mat-raised-button color="primary" (click)="getByMonth()">Retrieve {{ month | monthname }}</button>
+    <button mat-raised-button color="grey" (click)="getByMonth()">Retrieve {{ month | monthname }}</button>
     <button mat-raised-button color="accent" (click)="getByYear()">Retrieve {{ year }}</button>
   </div>
 </div>
