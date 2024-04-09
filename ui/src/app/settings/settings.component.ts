@@ -19,6 +19,9 @@ export class SettingsComponent extends BaseComponent implements OnInit {
   valid: any = {}  
   labelTypes = Object.values(LabelTypeEnum);
   dueDays: number = 70;
+  batchHour: number;
+  batchMinute: number;
+  time: any;
   
   constructor(
     protected router: Router,
@@ -31,11 +34,40 @@ export class SettingsComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this.settingService.getAll().subscribe((res: any) => {
-      this.dataSource.data = res
+      const batchLabels = res.filter((item: Label) => item.name = LabelTypeEnum.Batch);
+      if (batchLabels) {
+        const hour = batchLabels.find((item: Label) => item.viewValue === 'Hour')
+        this.batchHour = hour.value;
+        const minute = batchLabels.find((item: Label) => item.viewValue === 'Minute')
+        this.batchMinute = minute.value;
+        this.time;
+        this.time = hour.value + ':' + minute.value;
+      }
+      this.dataSource.data = res;      
     })
   }
-
-  editRow(row: Label) {
+  onTimeSet(time: string) {
+    this.time = time;
+    const array = time.split(':');
+    let hourRow = this.dataSource.data.find((item: Label) => item.viewValue === 'Hour')
+    if (hourRow) {
+      hourRow.value = array[0];
+      this.saveRow(hourRow);
+    }
+    let minuteRow = this.dataSource.data.find((item: Label) => item.viewValue === 'Minute')
+    if (minuteRow) {
+      minuteRow.value = array[1];
+      this.saveRow(minuteRow);
+    }
+  }
+  onDueDaysChanged() {
+    let daysRow = this.dataSource.data.find((item: Label) => item.viewValue === 'Days')
+    if (daysRow) {
+      daysRow.value = this.dueDays + '';
+      this.saveRow(daysRow);
+    }
+  }
+  saveRow(row: Label) {
     if (row.id === 0) {
       this.settingService.create(row).subscribe((newLabel: Label) => {
         row.id = newLabel.id

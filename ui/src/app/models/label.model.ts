@@ -29,7 +29,7 @@ export const LabelColumns = [
     key: 'value',
     type: 'text',
     label: 'Value',
-    required: true,
+    required: true,    
   },
   {
     key: 'viewValue',

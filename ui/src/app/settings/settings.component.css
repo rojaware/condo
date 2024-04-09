@@ -60,4 +60,13 @@
   .mat-mdc-row {
     height: auto !important;
   }
+  .batch-input {
+    width: 60%;
+    margin: auto;
+    text-align: right;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
 }
