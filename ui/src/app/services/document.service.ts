@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Document } from '@app/models/document.model';
+import { BaseService } from './base.service';
 
 const baseUrl = 'http://localhost:8090/api/documents';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentService {
-
-  constructor(private http: HttpClient) {}
+export class DocumentService extends BaseService {
+  constructor(protected http: HttpClient) {
+    super(http);
+  }
 
   getAll(): Observable<Document[]> {
     return this.http.get<Document[]>(baseUrl);

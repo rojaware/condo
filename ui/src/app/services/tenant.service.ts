@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tenant } from '../models/tenant.model';
+import { Tenant } from '@app/models/tenant.model';
+import { BaseService } from '@app/services/base.service';
 
 const baseUrl = 'http://localhost:8090/api/tenants';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TenantService {
-  constructor(private http: HttpClient) {}
+export class TenantService extends BaseService {
+  constructor(protected http: HttpClient) {
+    super(http);
+  }
 
   getAll(): Observable<Tenant[]> {
     return this.http.get<Tenant[]>(baseUrl);

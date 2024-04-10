@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Label } from '../models/label.model';
 import { Config } from '../models/config.model';
+import { BaseService } from './base.service';
 
 const baseUrl = 'http://localhost:8090/api/settings';
 const configUrl = 'http://localhost:8090/config';
@@ -10,8 +11,10 @@ const configUrl = 'http://localhost:8090/config';
 @Injectable({
   providedIn: 'root',
 })
-export class SettingService {
-  constructor(private http: HttpClient) {}
+export class SettingService extends BaseService {
+  constructor(protected http: HttpClient) {
+    super(http);
+  }
 
   getAll(): Observable<Label[]> {
     return this.http.get<Label[]>(baseUrl);
