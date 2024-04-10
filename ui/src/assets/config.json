@@ -3,5 +3,6 @@
   "apiEndpoint": "/api/", 
   "user": "",
   "banks": [], 
-  "owners": []
+  "owners": [],
+  "baseUrl": "http://localhost:8090"
 }

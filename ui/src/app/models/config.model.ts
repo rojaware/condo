@@ -8,6 +8,7 @@ export class Config {
   banks: Label[];
   owners: Label[];
   alert: Alert;
+  baseUrl: string;
 }
 
 export class Alert {

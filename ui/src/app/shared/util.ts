@@ -5,14 +5,14 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 export class Util {
   
   static isEmpty(str: string): boolean {
-    if (!str) {
+    if (!str || '') {
       return true;
     } else {
       return str.trim().length === 0
     }    
   }
   static isBlank(obj: any): boolean {
-      return !obj || Object.keys(obj).length == 0  
+    return !obj || obj == null || Object.keys(obj).length == 0  
   }
   static hasObject(obj: any): boolean {
     return !this.isBlank(obj);

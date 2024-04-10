@@ -16,7 +16,7 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { default as _rollupMoment, Moment } from 'moment';
 import { ExpenseService } from '../services/expense.service';
-import { Expense } from '../models/expense.model';
+import { Expense, ExpenseColumns } from '../models/expense.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
@@ -54,7 +54,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   @Input() currentPropertyName: string = '';
   @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
   @ViewChild('fileImportInput') fileImportInput: any;
-
+  displayedColumns: string[] = ExpenseColumns.map((col) => col.key)
+  columnsSchema: any = ExpenseColumns
   expenses: Expense[] = [];
   currentExpense: Expense;
 
@@ -65,26 +66,6 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   month: number;
   fileName: string;
 
-  displayedColumns: string[] = [
-    'id',
-    'propertyName',
-    'year',
-    'month',
-    'income',
-    'travel',
-    'maintenance',
-    'commission',
-    'insurance',
-    'legal',
-    'managementFee',
-    'mortgageInterest',
-    'repairs',
-    'supplies',
-    'tax',
-    'utilities',
-    'totalExpense',
-    'netIncome',
-  ];
   public dataSource: MatTableDataSource<Expense>;
 
   constructor(
