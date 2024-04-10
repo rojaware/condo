@@ -83,7 +83,6 @@ async function upsertBulk(bodyList) {
   try {
     const keys = Object.keys(bodyList);
     const array = Object.values(bodyList);
-    console.log(keys);
 
     let processed = 0;
     for (const body of array) {
