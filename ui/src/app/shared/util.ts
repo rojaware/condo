@@ -12,7 +12,7 @@ export class Util {
     }    
   }
   static isBlank(obj: any): boolean {
-    return Object.keys(obj).length == 0  
+      return !obj || Object.keys(obj).length == 0  
   }
   static hasObject(obj: any): boolean {
     return !this.isBlank(obj);

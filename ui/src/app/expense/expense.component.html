@@ -159,9 +159,15 @@
               </button>     
             </div>
             <div class="col-3">
-              <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Changes">
+              <button type="submit" 
+                      class="btn btn-success" 
+                      (click)="save()" 
+                      matTooltip="Save Change">
                 Save Change
               </button>      
+            </div>
+            <div class="col-3">
+              <span *ngIf="message">{{ message }}</span>
             </div>
  
           </div>      
@@ -187,8 +193,6 @@
 
       <!-- show annual expense table -->
       <div id="annual-expense" *ngIf="dataSource && expenses && expenses.length > 0">
-
-
 
         <!-- Content -->
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
@@ -306,8 +310,11 @@
   </mat-card-header>
   <mat-card-actions>
     <button mat-button>LIKE</button>
-    <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
-
+    <button type="submit" 
+            class="btn btn-success" 
+            (click)="saveAnnualExpenses()" 
+            matTooltip="Save Expenses"> Save Change
+    </button>
   </mat-card-actions>
 </mat-card>
 <br>

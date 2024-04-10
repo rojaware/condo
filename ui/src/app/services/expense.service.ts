@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Expense } from '../models/expense.model';
+import { Expense } from '@app/models/expense.model';
+import { BaseService } from './base.service';
 
 const baseUrl = 'http://localhost:8090/api/expenses';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ExpenseService {
-  constructor(private http: HttpClient) {}
+export class ExpenseService extends BaseService {
+  constructor(protected http: HttpClient) {
+    super(http);
+  }
 
   getAll(propertyName: string): Observable<Expense[]> {
     return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
@@ -24,10 +27,11 @@ export class ExpenseService {
   }
   
   getByYearMonth(propertyName: string, year: number, month: number | null): Observable<Expense[]> {    
-    if (month) {
+    if (this.util.hasObject(month)) {
       return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
     } else {
-      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}`);      
+      const property = propertyName.trim();
+      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${property}/${year}`);      
     }    
   }
   

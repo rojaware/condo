@@ -10,9 +10,7 @@ import { Property } from '../models/property.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../base/base.component';
 
-import {
-  provideMomentDateAdapter,
-} from '@angular/material-moment-adapter';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
@@ -59,27 +57,43 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   expenses: Expense[] = [];
   currentExpense: Expense;
-  
+
   message = '';
 
-  date = new FormControl(moment());  
+  date = new FormControl(moment());
   year: number;
   month: number;
   fileName: string;
 
-  displayedColumns: string[] 
-    = ['id', 'propertyName', 'year', 'month', 'income', 'travel', 'maintenance', 
-       'commission', 'insurance', 'legal', 'managementFee',
-       'mortgageInterest', 'repairs', 'supplies', 'tax',
-       'utilities', 'totalExpense', 'netIncome'  ];
+  displayedColumns: string[] = [
+    'id',
+    'propertyName',
+    'year',
+    'month',
+    'income',
+    'travel',
+    'maintenance',
+    'commission',
+    'insurance',
+    'legal',
+    'managementFee',
+    'mortgageInterest',
+    'repairs',
+    'supplies',
+    'tax',
+    'utilities',
+    'totalExpense',
+    'netIncome',
+  ];
   public dataSource: MatTableDataSource<Expense>;
 
   constructor(
     protected router: Router,
     private expenseService: ExpenseService,
-    private route: ActivatedRoute, 
-    private ngxCsvParser: NgxCsvParser) {
-      super(router);
+    private route: ActivatedRoute,
+    private ngxCsvParser: NgxCsvParser
+  ) {
+    super(router);
   }
 
   ngOnInit(): void {
@@ -93,28 +107,30 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.month = today.getMonth();
     this.getByYear();
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("property changed to ", this.currentPropertyName);
+    console.log('property changed to ', this.currentPropertyName);
     this.getByYear();
   }
-  
-  setYear(normalizedMonthAndYear: Moment,) {
+
+  setYear(normalizedMonthAndYear: Moment) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
     ctrlValue.year(normalizedMonthAndYear.year());
-    this.date.setValue(ctrlValue);    
+    this.date.setValue(ctrlValue);
   }
 
-  setMonthAndYear(normalizedMonthAndYear: Moment,
-                  datepicker: MatDatepicker<Moment>) {
+  setMonthAndYear(
+    normalizedMonthAndYear: Moment,
+    datepicker: MatDatepicker<Moment>
+  ) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
     this.month = normalizedMonthAndYear.month();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
-    datepicker.close();   
+    datepicker.close();
   }
 
   getByYear(): void {
@@ -124,13 +140,13 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: (data: Expense[]) => {
           if (data.length === 0) {
-            for (let i = 0; i < 12 ; i++) {
+            for (let i = 0; i < 12; i++) {
               data.push(this.createTemplate(this.year, i));
             }
           }
           this.expenses = this.appendTotals(data);
           this.config.user.property.expenses = this.expenses;
-          this.dataSource = new MatTableDataSource<Expense>(this.expenses);          
+          this.dataSource = new MatTableDataSource<Expense>(this.expenses);
           console.log(data);
         },
         error: (e: any) => console.error(e),
@@ -138,21 +154,24 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   }
 
   private appendTotals(data: Expense[]): Expense[] {
-    data.forEach(item => this.calculateTotal(item));
+    data.forEach((item) => this.calculateTotal(item));
     return data;
   }
 
   private calculateTotal(expense: Expense): Expense {
-    expense.totalExpense = expense.travel + expense.maintenance +
-                     expense.commission + expense.insurance +  
-                     expense.legal +
-                     expense.managementFee +
-                     expense.mortgageInterest +
-                     expense.repairs +  
-                     expense.supplies +
-                     expense.tax +
-                     expense.utilities +
-                     expense.depreciation;
+    expense.totalExpense =
+      expense.travel +
+      expense.maintenance +
+      expense.commission +
+      expense.insurance +
+      expense.legal +
+      expense.managementFee +
+      expense.mortgageInterest +
+      expense.repairs +
+      expense.supplies +
+      expense.tax +
+      expense.utilities +
+      expense.depreciation;
     expense.netIncome = expense.income - expense.totalExpense;
     return expense;
   }
@@ -169,18 +188,21 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
           this.expenses = data;
           this.config.user.property.expenses = data;
           this.currentExpense = data[0];
-          if (this.currentExpense.income === 0 || this.currentExpense.income === undefined) {
+          if (
+            this.currentExpense.income === 0 ||
+            this.currentExpense.income === undefined
+          ) {
             this.currentExpense.income = this.config.user.property.rentFee;
           }
           console.log(data);
         },
         error: (e: any) => {
-          console.error(e)
+          console.error(e);
         },
       });
   }
 
-  /** 
+  /**
    * Save single expense by month
    */
   save(): void {
@@ -193,11 +215,11 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   }
 
   createTemplate(_year: number, _month: number): Expense {
-    const expense = {      
+    const expense = {
       propertyName: this.config.user.property.name,
       year: _year,
       month: _month,
-      income: this.config.user.property.rentFee,  
+      income: this.config.user.property.rentFee,
       travel: 0,
       maintenance: 0,
       commission: 0,
@@ -213,7 +235,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       totalExpense: 0,
       netIncome: 0,
     } as Expense;
-    this.message = "New Expense has been created for new entry..."
+    this.message = 'New Expense has been created for new entry...';
     return expense;
   }
 
@@ -261,39 +283,46 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     if (file) {
       this.fileName = file.name;
       this.ngxCsvParser
-      .parse(file, {
+        .parse(file, {
           header: true, //this.header,
           delimiter: ',',
-          encoding: 'utf8'
-      })
-      .pipe()
-      .subscribe(
-          (result:  any): void => {
-              console.log('Result', result);
-              
-              this.expenses = result;
-              this.dataSource = new MatTableDataSource<Expense>(result);
-              this.message = '';
-              this.expenseService.updateBulk(this.expenses).subscribe({
-                next: (res: any) => {
-                  console.log(res);
-                  this.message = 'This expense was updated successfully!';
-                },
-                error: (e: any) => console.error(e),
-              });        
+          encoding: 'utf8',
+        })
+        .pipe()
+        .subscribe(
+          (result: any): void => {
+            console.log('Result', result);
+            this.expenses = result;
+            this.dataSource = new MatTableDataSource<Expense>(result);
+            this.message = '';
+            this.expenseService.updateBulk(this.expenses).subscribe({
+              next: (res: any) => {
+                console.log(res);
+                this.message = 'This expense was updated successfully!';
+              },
+              error: (e: any) => console.error(e),
+            });
           },
           (error: NgxCSVParserError) => {
-              console.log('Error', error);
-              this.errMessage = 'CSV import failed'
+            console.log('Error', error);
+            this.errMessage = 'CSV import failed';
           }
-      );
+        );
     }
-
   }
-  
+
+  saveAnnualExpenses(): void {
+    this.expenseService.updateBulk(this.expenses).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.message = 'This expense was updated successfully!';
+      },
+      error: (e: any) => console.error(e),
+    });    
+  }
+
   onEditChanged(): void {
     this.viewMode = !this.viewMode;
     this.message = '';
-  } 
-
+  }
 }
