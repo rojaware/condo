@@ -1,123 +1,152 @@
-.example-month-picker .mat-calendar-period-button {
-  pointer-events: none;
-}
+.expense-form {
+  .example-month-picker .mat-calendar-period-button {
+    pointer-events: none;
+  }
 
-.example-month-picker .mat-calendar-arrow {
-  display: none;
-}
+  .example-month-picker .mat-calendar-arrow {
+    display: none;
+  }
 
-.edit-form {
-  margin: inherit;
-}
-.form-group {
-  display: flex;
-}
-.edit-form-field {
-  width: -webkit-fill-available;
-  margin-bottom: -2em;
-  padding-right: 10px;
-}
-.button-space {
-  padding-right: 10px;
-}
-div.demo {
+  .edit-form {
+    margin: inherit;
+  }
+
+  .form-group {
+    display: flex;
+  }
+
+  .edit-form-field {
+    width: -webkit-fill-available;
+    margin-bottom: -2em;
+    padding-right: 10px;
+  }
+
+  .button-space {
+    padding-right: 10px;
+  }
+
+  div.demo {
     display: table;
     width: 100%;
-    table-layout: fixed;    /* For cells of equal size */
-}
-div.demo span {
-    display: table-cell;
-    
-}
-.right_header {
-  color: #461212;
-  position: absolute;
-  right: 310px;
-}
-span label {
-  font-weight: bold;
-}
-.form-group {
-  display: flex;
-  margin-top: 1rem;
-}
-.example-button-row button,
-.example-button-row a {
-  margin-right: 8px;
-  margin-left: 8px;
-}
+    table-layout: fixed;
+    /* For cells of equal size */
+  }
 
-.example-disabled {
-  display: inline-block;
-}
-#annual-expense {
-  .mdc-data-table__cell {  
-    text-align: right !important;
+  div.demo span {
+    display: table-cell;
+
   }
-  .mdc-data-table__cell, .mdc-data-table__header-cell {
-    padding: 0 1px 0 1px !important;  
+  div input {
+    max-width: 50px;
   }
-  .mat-mdc-cell {
-    border: 1px solid hsl(76, 49%, 68%) !important;
+
+  .right_header {
+    color: #461212;
+    position: absolute;
+    right: 310px;
   }
-  .demo-table {
-    width: 100%;
+
+  span label {
+    font-weight: bold;
   }
-  .mat-column-month {
-    width: 32px;
-    border-right: 1px solid  hsl(76, 49%, 68%) ;
-    font-style: italic;
+
+  .form-group {
+    display: flex;
+    margin-top: 1rem;
+  }
+
+  .example-button-row button,
+  .example-button-row a {
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+
+  .example-disabled {
+    display: inline-block;
+  }
+
+  #annual-expense {
+    .mdc-data-table__cell {
+      text-align: right !important;
+    }
+
+    .mdc-data-table__cell,
+    .mdc-data-table__header-cell {
+      padding: 0 1px 0 1px !important;
+    }
+
+    .mat-mdc-cell {
+      border: 1px solid hsl(76, 49%, 68%) !important;
+    }
+
+    .demo-table {
+      width: 100%;
+    }
+
+    .mat-column-month {
+      width: 32px;
+      border-right: 1px solid hsl(76, 49%, 68%);
+      font-style: italic;
+      text-align: center;
+    }
+
+    .mat-column-income {
+
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .mat-column-totalExpense {
+      font-weight: bold;
+      text-align: right;
+      color: #461212;
+      font-style: italic;
+    }
+
+    .mat-column-netIncome {
+      font-weight: bold;
+      text-align: right;
+      font-style: italic;
+    }
+
+    .mat-mdc-raised-button.mat-primary {
+      --mdc-protected-button-container-color: #dae8ba !important;
+    }
+  }
+
+  .container {
+    max-width: 1540px !important;
+  }
+
+  /* csv sample */
+  .csv-file-chooser-section {
+    padding: 10px;
+    margin: 5%;
+    border: 1px solid;
     text-align: center;
   }
-  .mat-column-income {
-    
-    font-weight: bold;
-    text-align: right;
+
+  .csv-result-table {
+    margin: 5%;
+    border: 1px solid #73AD21;
+
   }
-  .mat-column-totalExpense {  
-    font-weight: bold;
-    text-align: right;
-    color:#461212;
+
+  table,
+  th,
+  td {
+    border: 1px solid black;
+  }
+
+  .message {
     font-style: italic;
+    color: mediumslateblue;
+    font-weight: 600;
   }
-  .mat-column-netIncome {  
-    font-weight: bold;
-    text-align: right;
+
+  div span {
     font-style: italic;
+    color: mediumslateblue;
+    font-weight: 600;
   }
-  .mat-mdc-raised-button.mat-primary {
-    --mdc-protected-button-container-color: #dae8ba !important;
-  }
-}
-.container {
-  max-width: 1540px !important;
-}
-
-/* csv sample */
-.csv-file-chooser-section {
-  padding: 10px;
-  margin: 5%;
-  border: 1px solid;
-  text-align: center;
-}
-
-.csv-result-table {
-  margin: 5%;
-  border: 1px solid #73AD21;
-
-}
-
-table, th, td {
-  border: 1px solid black;
-}
-
-.message {
-  font-style: italic;
-  color:mediumslateblue;
-  font-weight: 600;
-}
-div span {
-  font-style: italic;
-  color:mediumslateblue;
-  font-weight: 600;
 }

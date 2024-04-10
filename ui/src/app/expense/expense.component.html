@@ -1,3 +1,4 @@
+<div class="expense-form">
 <div class="form-group">
 
   <!-- calendar -->
@@ -196,109 +197,37 @@
 
         <!-- Content -->
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef > ID </th>
-            <td mat-cell *matCellDef="let element" > {{element.id }} </td>      
+          <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+        
+            <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+              <span *ngSwitchDefault > {{ col.label }}</span>
+            </th>
+    
+            <td mat-cell *matCellDef="let element">
+              <!-- View mode  {{ element | json }} -->
+      
+              <!-- Edit mode -->          
+              <div [ngSwitch]="col.type" >
+                <div class="form-input" *ngSwitchCase="'read'">
+                  {{ element[col.key] }} 
+                </div>
+    
+                <div class="form-input" *ngSwitchDefault>
+                  
+                    <input  
+                            [required]="col.required"
+                            [pattern]="col.pattern"
+                            [type]="col.type"
+                            [(ngModel)]="element[col.key]" /> 
+                            <!-- 
+                            (change)="inputHandler($event, element.id, col.key)"-->
+                  
+                </div>
+              </div>
+               
+            </td>
           </ng-container>
-          <ng-container matColumnDef="propertyName">
-            <th mat-header-cell *matHeaderCellDef > propertyName </th>
-            <td mat-cell *matCellDef="let element" > {{element.propertyName }} </td>      
-          </ng-container>
-          <ng-container matColumnDef="year">
-            <th mat-header-cell *matHeaderCellDef > year </th>
-            <td mat-cell *matCellDef="let element" > {{element.year  }} </td>
-            
-          </ng-container>
-
-          <!-- Month Column -->
-          <ng-container matColumnDef="month">
-            <th mat-header-cell *matHeaderCellDef > Month </th>
-            <td mat-cell *matCellDef="let element" > {{element.month | monthname }} </td>
-            
-          </ng-container>
-
-          <!-- income Column -->
-          <ng-container matColumnDef="income">
-            <th mat-header-cell *matHeaderCellDef> Income </th>
-            <td mat-cell *matCellDef="let element"> {{element.income | currency }} </td>
-          </ng-container>
-
-          <!-- travel Column -->
-          <ng-container matColumnDef="travel">
-            <th mat-header-cell *matHeaderCellDef> Travel </th>
-            <td mat-cell *matCellDef="let element"> {{element.travel | currency }} </td>
-          </ng-container>
-
-          <!-- maintenance Column -->
-          <ng-container matColumnDef="maintenance">
-            <th mat-header-cell *matHeaderCellDef matTooltip="Maintenance fee"> Maint. </th>
-            <td mat-cell *matCellDef="let element"> {{element.maintenance | currency }} </td>
-          </ng-container>
-
-          <!-- commission Column -->
-          <ng-container matColumnDef="commission">
-            <th mat-header-cell *matHeaderCellDef matTooltip="Commission paid agent"> Comm </th>
-            <td mat-cell *matCellDef="let element"> {{element.commission | currency }} </td>
-          </ng-container>
-
-          <!-- insurance Column -->
-          <ng-container matColumnDef="insurance">
-            <th mat-header-cell *matHeaderCellDef> Insurance </th>
-            <td mat-cell *matCellDef="let element"> {{element.insurance | currency }} </td>
-          </ng-container>
-
-          <!-- legal Column -->
-          <ng-container matColumnDef="legal" matTooltip="Legal fee">
-            <th mat-header-cell *matHeaderCellDef> Legal </th>
-            <td mat-cell *matCellDef="let element"> {{element.legal | currency }} </td>
-          </ng-container>
-
-          <!-- managementFee Column -->
-          <ng-container matColumnDef="managementFee">
-            <th mat-header-cell *matHeaderCellDef matTooltip="Condo Management Fee"> Mgt Fee </th>
-            <td mat-cell *matCellDef="let element"> {{element.managementFee | currency }} </td>
-          </ng-container>
-
-          <!-- mortgageInterest Column -->
-          <ng-container matColumnDef="mortgageInterest">
-            <th mat-header-cell *matHeaderCellDef matTooltip="Mortgage Interest Paid"> Mortgage <br>Interest </th>
-            <td mat-cell *matCellDef="let element"> {{element.mortgageInterest | currency }} </td>
-          </ng-container>
-
-          <!-- repairs Column -->
-          <ng-container matColumnDef="repairs">
-            <th mat-header-cell *matHeaderCellDef> Repairs </th>
-            <td mat-cell *matCellDef="let element"> {{element.repairs | currency }} </td>
-          </ng-container>
-          <!-- supplies Column -->
-          <ng-container matColumnDef="supplies">
-            <th mat-header-cell *matHeaderCellDef> Supplies </th>
-            <td mat-cell *matCellDef="let element"> {{element.supplies | currency }} </td>
-          </ng-container>
-
-          <!-- tax Column -->
-          <ng-container matColumnDef="tax">
-            <th mat-header-cell *matHeaderCellDef matTooltip="Property Tax"> Tax </th>
-            <td mat-cell *matCellDef="let element"> {{element.tax | currency }} </td>
-          </ng-container>
-
-          <!-- utilities Column -->
-          <ng-container matColumnDef="utilities">
-            <th mat-header-cell *matHeaderCellDef matTooltip="Utilities such as Hydro, Water, Gas"> Utilities</th>
-            <td mat-cell *matCellDef="let element"> {{element.utilities | currency }} </td>
-          </ng-container>
-
-          <!-- totalExpense Column -->
-          <ng-container matColumnDef="totalExpense">
-            <th mat-header-cell *matHeaderCellDef> Total <br> Expense </th>
-            <td mat-cell *matCellDef="let element"> {{element.totalExpense | currency }} </td>
-          </ng-container>
-
-          <!-- netIncome Column -->
-          <ng-container matColumnDef="netIncome">
-            <th mat-header-cell *matHeaderCellDef> Net <br> Income </th>
-            <td mat-cell *matCellDef="let element"> {{element.netIncome | currency }} </td>
-          </ng-container>
+          
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -318,3 +247,4 @@
   </mat-card-actions>
 </mat-card>
 <br>
+</div>

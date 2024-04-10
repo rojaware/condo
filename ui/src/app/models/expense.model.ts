@@ -77,17 +77,17 @@ export const ExpenseColumns = [
   {
     key: 'maintenance',
     type: 'currency',
-    label: 'maintenance',    
+    label: 'maint\nenance',    
   },
   {
     key: 'commission',
     type: 'currency',
-    label: 'commission',    
+    label: 'commi\nssion',    
   },
   {
     key: 'insurance',
     type: 'currency',
-    label: 'insurance',    
+    label: 'insur\nance',    
   },
   {
     key: 'legal',
@@ -97,12 +97,12 @@ export const ExpenseColumns = [
   {
     key: 'managementFee',
     type: 'currency',
-    label: 'managementFee',    
+    label: 'mgt\nFee',    
   },
   {
     key: 'mortgageInterest',
     type: 'currency',
-    label: 'mortgageInterest',    
+    label: 'mortgage\nInterest',    
   },
   {
     key: 'repairs',
@@ -112,7 +112,7 @@ export const ExpenseColumns = [
   {
     key: 'supplies',
     type: 'currency',
-    label: 'supplies',    
+    label: 'suppl\nies',    
   },
   {
     key: 'tax',
@@ -122,23 +122,23 @@ export const ExpenseColumns = [
   {
     key: 'utilities',
     type: 'currency',
-    label: 'utilities',    
+    label: 'utili\nties',    
   },
   {
     key: 'depreciation',
     type: 'currency',
-    label: 'depreciation',    
+    label: 'depre\nciation',    
   },
 
   // total
   {
     key: 'totalExpense',
     type: 'read',
-    label: 'totalExpense',
+    label: 'total\nExpense',
   },
   {
     key: 'netIncome',
     type: 'read',
-    label: 'netIncome',
+    label: 'net\nIncome',
   }
 ];
