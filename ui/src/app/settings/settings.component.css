@@ -60,6 +60,10 @@
   .mat-mdc-row {
     height: auto !important;
   }
+  .mat-mdc-select {
+    font-size: small !important;
+  }
+
   .batch-input {
     width: 60%;
     margin: auto;
