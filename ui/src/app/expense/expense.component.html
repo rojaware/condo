@@ -63,11 +63,11 @@
           </h4>
 
           @if (viewMode) {
-            <button class="badge badge-warning " (click)="viewMode = false">
+            <button class="badge badge-warning " (click)="onEditChanged()">
               <mat-icon>edit</mat-icon>
             </button>
           } @else {
-            <button class="badge badge-warning " (click)="viewMode = true">
+            <button class="badge badge-warning " (click)="onEditChanged()">
               <mat-icon>remove_red_eye</mat-icon>
             </button>
           }
@@ -187,11 +187,8 @@
 
       <!-- show annual expense table -->
       <div id="annual-expense" *ngIf="dataSource && expenses && expenses.length > 0">
-        <!-- Filter -->
-        <mat-form-field>
-          <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-        </mat-form-field>
+
+
 
         <!-- Content -->
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
@@ -302,10 +299,6 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-          <!-- Row shown when there is no matching data. -->
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-          </tr>
         </table>
 
       </div>      
@@ -313,6 +306,8 @@
   </mat-card-header>
   <mat-card-actions>
     <button mat-button>LIKE</button>
+    <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
+
   </mat-card-actions>
 </mat-card>
 <br>

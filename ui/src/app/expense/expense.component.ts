@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
   ViewChild,
+  SimpleChanges,
 } from '@angular/core';
 import { Property } from '../models/property.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,7 +53,7 @@ export const YEAR_MONTH_FORMATS = {
 })
 export class ExpenseComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
-  @Input() currentProperty: Property = {} as Property;
+  @Input() currentPropertyName: string = '';
   @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
   @ViewChild('fileImportInput') fileImportInput: any;
 
@@ -90,6 +91,12 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     // Get the year from the date object
     this.year = today.getFullYear();
     this.month = today.getMonth();
+    this.getByYear();
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("property changed to ", this.currentPropertyName);
+    this.getByYear();
   }
   
   setYear(normalizedMonthAndYear: Moment,) {
@@ -173,11 +180,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-  
+  /** 
+   * Save single expense by month
+   */
   save(): void {
     if (this.currentExpense.id) {
       this.update();
@@ -286,6 +291,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   }
   
-
+  onEditChanged(): void {
+    this.viewMode = !this.viewMode;
+    this.message = '';
+  } 
 
 }
