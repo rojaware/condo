@@ -248,7 +248,7 @@ router.route('/expensesByPropertyYearMonth/:propertyName/:year/:month?').get((re
   expenseController.getExpenseByYearMonth(params.propertyName, params.year, params.month).then(result => {
     if (!result) {
       console.log("no data...");
-      response.status(404).send('no data')
+      response.status(200).json([])
     } else {
       response.status(201).json(result[0]);
     }

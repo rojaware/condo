@@ -2,6 +2,7 @@ var config = require('../dbconfig');
 const sql = require('mssql');
 const bulkExpense = require('./bulk-expense');
 const queries = require('./queries');
+const Util = require('../shared/util');
 
 /** Retrieve all expenses by property name */
 async function getExpenses(propertyName) {
@@ -135,7 +136,9 @@ async function updateExpense(body) {
   }
 }
 
-async function deleteExpenseByPropertyYearMonth(propertyName, year, month) {
+async function deleteExpenseByPropertyYearMonth(propertyName, _year, _month) {
+  const year = Util.toValue(_year);
+  const month = Util.toValue(_month);
   const query =
     `DELETE FROM [dbo].[expenses] 
       WHERE propertyName = @propertyName
@@ -144,6 +147,7 @@ async function deleteExpenseByPropertyYearMonth(propertyName, year, month) {
       SELECT @propertyName as propertyName, @year as year, @month as month`;
 
   try {
+
     let pool = await sql.connect(config);
     let item = await pool.request()
       .input('propertyName', sql.NVarChar, propertyName)

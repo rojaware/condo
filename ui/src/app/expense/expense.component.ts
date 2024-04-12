@@ -6,17 +6,15 @@ import {
   ViewChild,
   SimpleChanges,
 } from '@angular/core';
-import { Property } from '../models/property.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent } from '../base/base.component';
-
+import { BaseComponent } from '@app/base/base.component';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { default as _rollupMoment, Moment } from 'moment';
-import { ExpenseService } from '../services/expense.service';
-import { Expense, ExpenseColumns } from '../models/expense.model';
+import { ExpenseService } from '@app/services/expense.service';
+import { Expense, ExpenseColumns } from '@app/models/expense.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
@@ -54,8 +52,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   @Input() currentPropertyName: string = '';
   @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
   @ViewChild('fileImportInput') fileImportInput: any;
-  displayedColumns: string[] = ExpenseColumns.map((col) => col.key)
-  columnsSchema: any = ExpenseColumns
+  displayedColumns: string[] = ExpenseColumns.map((col) => col.key);
+  columnsSchema: any = ExpenseColumns;
   expenses: Expense[] = [];
   currentExpense: Expense;
 
@@ -72,12 +70,12 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     protected router: Router,
     private expenseService: ExpenseService,
     private route: ActivatedRoute,
-    private ngxCsvParser: NgxCsvParser
-  ) {
+    private ngxCsvParser: NgxCsvParser ) {
     super(router);
   }
 
   ngOnInit(): void {
+    
     if (!this.viewMode) {
       this.message = '';
     }
@@ -87,6 +85,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.year = today.getFullYear();
     this.month = today.getMonth();
     this.getByYear();
+    this.message = "";
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -99,19 +98,19 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.year = normalizedMonthAndYear.year();
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
+    this.expenses = [];
   }
 
   setMonthAndYear(
     normalizedMonthAndYear: Moment,
-    datepicker: MatDatepicker<Moment>
-  ) {
+    datepicker: MatDatepicker<Moment>  ) {
     const ctrlValue = this.date.value ?? moment();
     this.year = normalizedMonthAndYear.year();
     this.month = normalizedMonthAndYear.month();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
-    datepicker.close();
+    datepicker.close();    
   }
 
   getByYear(): void {
@@ -248,8 +247,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     });
   }
 
-  delete(): void {
-    this.expenseService.delete(this.currentExpense.propertyName).subscribe({
+  delete(year?: number, month?: number): void {
+    this.expenseService.delete(this.currentPropertyName, year, month).subscribe({
       next: (res: any) => {
         console.log(res);
         this.router.navigate(['/properties']);
@@ -258,7 +257,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     });
   }
 
-  /** CSV Example... */
+ 
+
+  /** CSV File Import ... */
   onFileSelected(event: any): void {
     const file: File = event.srcElement.files[0];
     if (file) {
@@ -292,6 +293,17 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     }
   }
 
+  public saveDataInCSV(): void {
+    const name = 'expense_' + this.currentPropertyName + '_' + this.year;
+    let csvContent = this.exportDataInCSV(this.expenses);
+
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvContent);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = name + '.csv';
+    hiddenElement.click();
+  }
+
   saveAnnualExpenses(): void {
     this.expenseService.updateBulk(this.expenses).subscribe({
       next: (res: any) => {
@@ -299,11 +311,44 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         this.message = 'This expense was updated successfully!';
       },
       error: (e: any) => console.error(e),
-    });    
+    });
   }
 
   onEditChanged(): void {
     this.viewMode = !this.viewMode;
     this.message = '';
   }
+
+  exportDataInCSV(data: Array<any>): string {
+    if (data.length == 0) {
+      return '';
+    }
+
+    let propertyNames = Object.keys(data[0]);
+    let rowWithPropertyNames = propertyNames.join(',') + '\n';
+
+    let csvContent = rowWithPropertyNames;
+
+    let rows: string[] = [];
+
+    data.forEach((item) => {
+      let values: string[] = [];
+
+      propertyNames.forEach((key) => {
+        let val: any = item[key];
+
+        if (val !== undefined && val !== null) {
+          val = new String(val);
+        } else {
+          val = '';
+        }
+        values.push(val);
+      });
+      rows.push(values.join(','));
+    });
+    csvContent += rows.join('\n');
+
+    return csvContent;
+  }
+
 }

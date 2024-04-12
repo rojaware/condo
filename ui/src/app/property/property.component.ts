@@ -26,7 +26,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   @ViewChild('extendedEndDatePicker', { static: false }) private extendedEndDatePicker: MatDatepicker<Date>;
   @ViewChild('salesDatePicker', { static: false }) private salesDatePicker: MatDatepicker<Date>;
   
-  
   dateToday: number = Date.now();  
   banks: Label[] ;
   owners: Label[];

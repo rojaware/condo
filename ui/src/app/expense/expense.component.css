@@ -36,9 +36,6 @@
     display: table-cell;
 
   }
-  div input {
-    max-width: 50px;
-  }
 
   .right_header {
     color: #461212;
@@ -111,6 +108,10 @@
 
     .mat-mdc-raised-button.mat-primary {
       --mdc-protected-button-container-color: #dae8ba !important;
+    }
+
+    div input {
+      max-width: 50px;
     }
   }
 

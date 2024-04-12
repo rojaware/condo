@@ -104,7 +104,7 @@
       </mat-form-field>    
 
       <mat-form-field class="edit-form-field">
-        <mat-label>Mortgage Bank :: debug {{ config.banks | json}}</mat-label>
+        <mat-label>Mortgage Bank</mat-label>
         <mat-select id="bank" [(ngModel)]="currentProperty.bank" name="bank" [disabled]="viewMode">
           @for (bank of config.banks; track bank) {
             <mat-option [value]="bank.value">{{bank.viewValue}}</mat-option>
@@ -255,8 +255,9 @@
                id="purchaseDate" 
                [(ngModel)]="currentProperty.purchaseDate" 
                name="purchaseDate"
+               placeholder="YYYY-MM-DD"
                [disabled]="viewMode" >
-        <mat-hint>YYYY-MM-DD</mat-hint>
+        
         <mat-datepicker-toggle matIconSuffix [for]="purchaseDatePicker"></mat-datepicker-toggle>
         <mat-datepicker #purchaseDatePicker></mat-datepicker>
       </mat-form-field>      
@@ -279,7 +280,9 @@
 
     </div>
 
+    <!-- Mortgage : Account No, Variable/Fixed, -->
     <div class="form-group">
+      <!-- Account NO -->
       <mat-form-field class="edit-form-field">
         <mat-label>Mortgage Account #</mat-label>
         <input id="mortgageAccountNo" matInput type="text" [(ngModel)]="currentProperty.mortgageAccountNo"
@@ -291,6 +294,7 @@
         }
       </mat-form-field>
       
+      <!-- Variable or Fixed -->
       <div class="edit-form-field" style="display: flex;">
         <label style="padding: 0 16px; font-size: smaller;">Variable or Fixed</label>
         <mat-button-toggle-group appearance="legacy"  
@@ -303,16 +307,16 @@
           <mat-button-toggle  value="F">Fixed</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-    </div>
-
-    <div class="form-group">
+      
+      <!-- Mortgage Rate -->
       <mat-form-field class="edit-form-field">
         <mat-label>Mortgage Rate</mat-label>
         <input id="mortgageRate"
-               matInput type="text" 
+               matInput type="number"
                [(ngModel)]="currentProperty.mortgageRate" 
                name="mortgageRate"
-               [readonly]="viewMode" />
+               [readonly]="viewMode" ui-percentage-mask
+               />               
                <span matSuffix>%</span>
         @if (currentProperty.mortgageRate && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.mortgageRate = 0">
@@ -320,6 +324,45 @@
         </button>
         }
       </mat-form-field>
+      
+    </div>
+
+    <!-- Mortgage : -->
+    <div class="form-group">
+
+      <!-- Payment Frequency: Weekly, Bi-Weekly, Semi-Monthly and Monthly. -->
+      <div class="edit-form-field" style="display: flex;">
+        <label style="padding: 0 16px; font-size: smaller;">Payment Frequency</label>
+        <mat-button-toggle-group appearance="legacy"  
+                                 class="edit-form-field" 
+                                 id="paymentFrequency"
+                                 [disabled]="viewMode"
+                                 [(ngModel)]="currentProperty.paymentFrequency" 
+                                 name="paymentFrequency">          
+          <mat-button-toggle  value="W">Weekly</mat-button-toggle>
+          <mat-button-toggle  value="BW">Bi-Weekly</mat-button-toggle>
+          <mat-button-toggle  value="SM">Semi-Monthly</mat-button-toggle>
+          <mat-button-toggle  value="M">Monthly</mat-button-toggle>          
+        </mat-button-toggle-group>
+      </div>      
+      <!-- Payment Amount -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Payment Amount</mat-label>
+        <input id="paymentAmount" 
+               matInput 
+               type="text" 
+               [(ngModel)]="currentProperty.paymentAmount" 
+               name="paymentAmount"
+               [readonly]="viewMode" 
+               currencyMask />
+        @if (currentProperty.paymentAmount && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.paymentAmount = 0">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+
+      <!-- Maturity Date -->
       <mat-form-field class="edit-form-field">
         <mat-label>Maturity Date</mat-label>
         <input matInput 

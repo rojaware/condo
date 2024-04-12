@@ -19,9 +19,11 @@ export class Property {
   salesDate: string;
   rentFee: number;
   purchasePrice: number;
-  mortgageAccountNo: string;
-  mortgageType: string;
   mortgageRate: number;
+  mortgageAccountNo: string;
+  mortgageType: string;  
+  paymentFrequency: string;
+  paymentAmount: number;  
   maturityDate: string;
   comment: string;
   tenant: Tenant;

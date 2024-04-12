@@ -26,7 +26,7 @@ export class ExpenseService extends BaseService {
     return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
   }
   
-  getByYearMonth(propertyName: string, year: number, month: number | null): Observable<Expense[]> {    
+  getByYearMonth(propertyName: string, year: number, month?: number | null): Observable<Expense[]> {    
     if (this.util.hasObject(month)) {
       return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
     } else {
@@ -36,7 +36,7 @@ export class ExpenseService extends BaseService {
   }
   
   delete(propertyName: any, year?: any, month?: any): Observable<any> {
-    return this.http.delete(`${baseUrl}/${propertyName}/${year}/${month}`);
+    return this.http.delete(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
   }
   
   deleteAll(): Observable<any> {

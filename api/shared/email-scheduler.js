@@ -51,7 +51,9 @@ async function sendMail(alert) {
           settingController.getLandlordEmail(property.owner).then( async ownerEmail => {
             const emails = ownerEmail? alert.subscriber + ',' + ownerEmail: alert.subscriber;
             const endDate = moment(property.endDate).format('YYYY-MM-DD');
-            const body = `Lease on ${property.name} will end ${property.diff} days on ${endDate} `
+            const body = `Dear Landlord,
+Your condo lease on ${property.name} will end ${property.diff} days on ${endDate}. Please prepare renewal with new price
+Sincerely,  `
             const service = new MailService();
             const response = await service.sendMail(
               emails,

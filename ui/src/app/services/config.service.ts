@@ -3,20 +3,23 @@ import { Injectable } from '@angular/core';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Config } from '../models/config.model';
 import { SettingService } from './setting.service';
+import { BaseService } from './base.service';
 
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigService {
+export class ConfigService extends BaseService {
   static config: Config;
   env: string;
-  private http: HttpClient;
+  
 
   constructor(private readonly httpHandler: HttpBackend,
+    protected http: HttpClient,
     private settingService: SettingService) {
-    this.http = new HttpClient(httpHandler);
+      super(http);
+      this.http = new HttpClient(httpHandler);
   }
 
   _load(): void {

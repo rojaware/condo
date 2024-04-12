@@ -20,7 +20,7 @@ async function getProperties() {
                ,[purchasePrice]
                ,mortgageAccountNo
                ,mortgageType
-               ,mortgageRate
+               ,mortgageRate, paymentFrequency, paymentAmount
                ,CONVERT(char(10), maturityDate ,126) as maturityDate
                ,comment
                ,imageUrl
@@ -55,7 +55,7 @@ async function getProperty(id) {
                ,[purchasePrice]
                ,mortgageAccountNo
                ,mortgageType
-               ,mortgageRate
+               ,mortgageRate, paymentFrequency, paymentAmount
                ,CONVERT(char(10), maturityDate ,126) as maturityDate
                ,comment
                ,imageUrl, tscc
@@ -98,7 +98,7 @@ async function createProperty(property) {
                ,[purchasePrice]
                ,mortgageAccountNo
                ,mortgageType
-               ,mortgageRate
+               ,mortgageRate, paymentFrequency, paymentAmount
                ,maturityDate, comment, imageUrl, tscc
                ,[owner])
          VALUES
@@ -109,7 +109,7 @@ async function createProperty(property) {
                 @endDate, @extendedEndDate, @salesDate
                 ,@rentFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
-                ,@mortgageRate
+                ,@mortgageRate, @paymentFrequency, @paymentAmount
                 ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@owner);
          SELECT  IDENT_CURRENT('properties') as id ;`;
@@ -131,11 +131,13 @@ async function createProperty(property) {
             .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
             .input('salesDate', sql.Date, util.toValue(property.salesDate))
-            .input('rentFee', sql.Int, property.rentFee)
-            .input('purchasePrice', sql.Int, property.purchasePrice)
+            .input('rentFee', sql.Money, property.rentFee)
+            .input('purchasePrice', sql.Money, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
             .input('mortgageType', sql.NVarChar, property.mortgageType)
-            .input('mortgageRate', sql.Decimal, property.mortgageRate)
+            .input('paymentFrequency', sql.NVarChar, property.paymentFrequency)
+            .input('paymentAmount', sql.Money, property.paymentAmount)
+            .input('mortgageRate', sql.Money, property.mortgageRate)
             .input('maturityDate', sql.Date, util.toValue(property.maturityDate))
             .input('imageUrl', sql.NVarChar, property.imageUrl)
             .input('tscc', sql.NVarChar, property.tscc)
@@ -171,6 +173,8 @@ async function updateProperty(property) {
        ,[mortgageType] = @mortgageType
        ,[mortgageRate] = @mortgageRate
        ,[maturityDate] = @maturityDate
+       ,[paymentFrequency] = @paymentFrequency
+       ,[paymentAmount] = @paymentAmount
        ,[imageUrl] = @imageUrl
        ,[tscc] = @tscc
        ,[comment] = @comment
@@ -194,12 +198,14 @@ async function updateProperty(property) {
             .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
             .input('salesDate', sql.Date, util.toValue(property.salesDate))
-            .input('rentFee', sql.Int, property.rentFee)
-            .input('purchasePrice', sql.Int, property.purchasePrice)
+            .input('rentFee', sql.Money, property.rentFee)
+            .input('purchasePrice', sql.Money, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
             .input('mortgageType', sql.NVarChar, property.mortgageType)
-            .input('mortgageRate', sql.Decimal, property.mortgageRate)
-            .input('maturityDate', sql.Date, util.toValue(property.maturityDate))            
+            .input('mortgageRate', sql.Money, property.mortgageRate)
+            .input('maturityDate', sql.Date, util.toValue(property.maturityDate))
+            .input('paymentFrequency', sql.NVarChar, property.paymentFrequency)
+            .input('paymentAmount', sql.Money, property.paymentAmount)                        
             .input('imageUrl', sql.NVarChar, property.imageUrl)   
             .input('tscc', sql.NVarChar, property.tscc) 
             .input('comment', sql.NVarChar, property.comment)    

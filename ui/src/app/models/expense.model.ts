@@ -45,17 +45,17 @@ export const ExpenseColumns = [
 
   {
     key: 'id',
-    type: 'read',
+    type: 'hidden',
     label: 'ID',    
   },
   {
     key: 'propertyName',
-    type: 'read',
+    type: 'hidden',
     label: 'Property',
   },  
   {
     key: 'year',
-    type: 'read',
+    type: 'hidden',
     label: 'Year',
   },  
   {
@@ -66,8 +66,7 @@ export const ExpenseColumns = [
   {
     key: 'income',
     type: 'currency',
-    label: 'income',
-    required: true,    
+    label: 'income',   
   },
   {
     key: 'travel',
@@ -77,17 +76,17 @@ export const ExpenseColumns = [
   {
     key: 'maintenance',
     type: 'currency',
-    label: 'maint\nenance',    
+    label: 'maintenance',    
   },
   {
     key: 'commission',
     type: 'currency',
-    label: 'commi\nssion',    
+    label: 'commission',    
   },
   {
     key: 'insurance',
     type: 'currency',
-    label: 'insur\nance',    
+    label: 'insurance',    
   },
   {
     key: 'legal',
@@ -97,22 +96,23 @@ export const ExpenseColumns = [
   {
     key: 'managementFee',
     type: 'currency',
-    label: 'mgt\nFee',    
+    label: 'mgt Fee',    
   },
   {
     key: 'mortgageInterest',
     type: 'currency',
-    label: 'mortgage\nInterest',    
+    label: 'mtg Interest',    
   },
   {
     key: 'repairs',
     type: 'currency',
     label: 'repairs',    
+    
   },
   {
     key: 'supplies',
     type: 'currency',
-    label: 'suppl\nies',    
+    label: 'supplies',    
   },
   {
     key: 'tax',
@@ -122,23 +122,24 @@ export const ExpenseColumns = [
   {
     key: 'utilities',
     type: 'currency',
-    label: 'utili\nties',    
+    label: 'utilities',    
   },
   {
     key: 'depreciation',
     type: 'currency',
-    label: 'depre\nciation',    
+    label: 'depreciation',    
+    hidden: true,
   },
 
   // total
   {
     key: 'totalExpense',
     type: 'read',
-    label: 'total\nExpense',
+    label: 'total Expense',
   },
   {
     key: 'netIncome',
     type: 'read',
-    label: 'net\nIncome',
+    label: 'net Income',
   }
 ];

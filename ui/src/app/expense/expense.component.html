@@ -4,56 +4,48 @@
   <!-- calendar -->
   <mat-form-field>
     <mat-label>Month and Year</mat-label>
-    <input matInput [matDatepicker]="dp" [formControl]="date">
+    <input matInput [matDatepicker]="datePicker" [formControl]="date">
     <mat-hint>MM/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-    <mat-datepicker #dp startView="multi-year" (yearSelected)="setYear($event)"
-      (monthSelected)="setMonthAndYear($event, dp)" panelClass="example-month-picker">
+    <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+    <mat-datepicker #datePicker 
+                    startView="multi-year" 
+                    (yearSelected)="setYear($event)"
+                    (monthSelected)="setMonthAndYear($event, datePicker)" 
+                    panelClass="example-month-picker">
     </mat-datepicker>
   </mat-form-field>
 
   <!-- retrieve expense buttons -->
   <div class="example-button-row" *ngIf="year">
-    <button mat-raised-button color="grey" (click)="getByMonth()">Retrieve {{ month | monthname }}</button>
-    <button mat-raised-button color="accent" (click)="getByYear()">Retrieve {{ year }}</button>
+    <button class="btn btn-success" (click)="getByMonth()">Retrieve {{ month | monthname }}</button>
+    <button class="btn btn-primary" (click)="getByYear()">Retrieve {{ year }}</button>
   </div>
+  
+  <div class="example-button-row">
+    <button class="btn btn-secondary"
+            style="display:block;" 
+            onclick="document.getElementById('csvFileUpload').click()">
+            Import CSV</button>
+ 
+    <input type="file" 
+            #fileImportInput 
+            name="File Upload" 
+            id="csvFileUpload" 
+            (change)="onFileSelected($event)"
+            accept=".csv" 
+            style="display:none"/>
+  </div>      
+  
 </div>
 
 <p *ngIf="!year || (currentExpense && currentExpense.propertyName !== config.user.property.name)">
   Select year and month for {{ config.user.property.name }} ...
 </p>
 
-<!-- Import csv -->
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Import CSV</mat-card-title>
-    <mat-card-subtitle style="display: flex;">
-      <div class="csv-file-chooser-section">
-        <input type="file" 
-               #fileImportInput 
-               name="File Upload" 
-               id="csvFileUpload" 
-               (change)="onFileSelected($event)"
-               accept=".csv" />
-      </div>      
-      <div class="file-upload">{{ fileName || 'No file uploaded yet.' }}</div>
-      <button mat-mini-fab color="primary" class="upload-btn" (click)="fileImportInput.click()">
-        <mat-icon>attach_file</mat-icon>
-      </button>
-    </mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-actions>
-    <button mat-button class="message">{{ this.message }}</button>    
-  </mat-card-actions>
-</mat-card>
-<br>
-
-<!-- End of csv import -->
-
 <!-- Monthly Expense -->
-<mat-card>
+<mat-card  *ngIf="this.currentExpense">
   <mat-card-header>
-    <mat-card-title>Monthly Expense</mat-card-title>
+    <mat-card-title>Monthly Expense, {{ this.month | monthname}} </mat-card-title>
     <mat-card-subtitle>
       <div class="edit-form" *ngIf="currentExpense">
 
@@ -74,7 +66,7 @@
           }
         </div>
         <!-- Monthly Expense Form -->
-        <form style="height: 300px;">
+        <form >
           <!-- Income -->
           <div class="form-group">
             <mat-form-field class="edit-form-field">
@@ -173,6 +165,7 @@
  
           </div>      
         </form>
+
         <div class="form-group">
     
           ...<span *ngIf="message">{{ message }}</span>
@@ -183,13 +176,12 @@
       </div>
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-actions>
-  </mat-card-actions>
 </mat-card>
+
 <!-- Annual Expenses -->
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Annual Expenses</mat-card-title>
+    <mat-card-title>Annual Expenses, {{ year }}</mat-card-title>
     <mat-card-subtitle>
 
       <!-- show annual expense table -->
@@ -199,35 +191,40 @@
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
           <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
         
-            <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
-              <span *ngSwitchDefault > {{ col.label }}</span>
+            <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.type" >
+              <span *ngSwitchCase="'hidden'"></span>
+              <span *ngSwitchDefault > {{ col.label }}</span>             
             </th>
     
             <td mat-cell *matCellDef="let element">
-              <!-- View mode  {{ element | json }} -->
       
               <!-- Edit mode -->          
               <div [ngSwitch]="col.type" >
+                <div class="form-input" *ngSwitchCase="'hidden'">
+
+                </div>
                 <div class="form-input" *ngSwitchCase="'read'">
-                  {{ element[col.key] }} 
+                  @if (col.key === 'month'){
+                    {{ element[col.key] | monthname }}
+                  } @else if (col.key === 'year') {
+                    '--'
+                  } @else {
+                    {{ element[col.key] | currency }}
+                  }
                 </div>
     
-                <div class="form-input" *ngSwitchDefault>
-                  
-                    <input  
-                            [required]="col.required"
-                            [pattern]="col.pattern"
-                            [type]="col.type"
-                            [(ngModel)]="element[col.key]" /> 
-                            <!-- 
-                            (change)="inputHandler($event, element.id, col.key)"-->
-                  
+                <div class="form-input" *ngSwitchDefault >
+                  <input  
+                    [required]="col.required"
+                    [pattern]="col.pattern"
+                    [type]="col.type"
+                    [(ngModel)]="element[col.key]" /> 
+                    <!-- 
+                    (change)="inputHandler($event, element.id, col.key)"-->
                 </div>
               </div>
-               
             </td>
           </ng-container>
-          
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -238,12 +235,11 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button type="submit" 
-            class="btn btn-success" 
-            (click)="saveAnnualExpenses()" 
-            matTooltip="Save Expenses"> Save Change
-    </button>
+    <div class="example-button-row" *ngIf="expenses">
+      <button class="btn btn-success"  (click)="saveAnnualExpenses()">Save Change</button>
+      <button class="btn btn-secondary"  (click)="saveDataInCSV()"> Export to CSV </button>
+      <button class="btn btn-danger"  (click)="delete( year )"> Delete {{ year }} </button>
+    </div>    
   </mat-card-actions>
 </mat-card>
 <br>

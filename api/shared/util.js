@@ -3,7 +3,12 @@ class Util {
     if (!str) {
       return true;
     } else {
-      return str.toString().trim().length === 0
+      if (str === 'undefined') {
+        return true;
+      } else {
+        return str.toString().trim().length === 0
+      }
+      
     }    
   }
   

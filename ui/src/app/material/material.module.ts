@@ -23,6 +23,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatRadioModule } from '@angular/material/radio';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const material = [
   MatTabsModule,
@@ -60,7 +61,7 @@ const material = [
   // MatStepperModule,
   MatTableModule,
   MatTabsModule,
-  // MatToolbarModule,
+  MatToolbarModule,
   CarouselModule,
   NgxMatTimepickerModule,
 ];

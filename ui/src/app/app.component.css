@@ -1,6 +1,7 @@
 .container {
   margin-left: inherit !important;
   margin-right: inherit !important;
+  max-width: 1540px;
 }
 
 .mr-auto {
