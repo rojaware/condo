@@ -138,6 +138,13 @@
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
+          <!-- comment -->
+          <div class="form-group">
+            <mat-form-field class="edit-form-field">
+              <mat-label>Comment</mat-label>
+              <textarea id="comment" matInput [(ngModel)]="currentExpense.comment" name="comment" [readonly]="viewMode" ></textarea>
+            </mat-form-field>
+          </div>
 
           <!-- Button , Cancel, Delete, Save -->
           <div *ngIf="!viewMode" class=" form-group button-space">
@@ -212,7 +219,12 @@
                     {{ element[col.key] | currency }}
                   }
                 </div>
-    
+                <div class="form-input" *ngSwitchCase="'write'">
+                  <textarea  
+                    [(ngModel)]="element[col.key]" > 
+                  </textarea>
+                </div>
+
                 <div class="form-input" *ngSwitchDefault >
                   <input  
                     [required]="col.required"
@@ -235,11 +247,14 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-actions>
-    <div class="example-button-row" *ngIf="expenses">
+    <div class="example-button-row" *ngIf="expenses.length > 0">
       <button class="btn btn-success"  (click)="saveAnnualExpenses()">Save Change</button>
       <button class="btn btn-secondary"  (click)="saveDataInCSV()"> Export to CSV </button>
       <button class="btn btn-danger"  (click)="delete( year )"> Delete {{ year }} </button>
     </div>    
+    <div class="col-3">
+      <span *ngIf="message">{{ message }}</span>
+    </div>
   </mat-card-actions>
 </mat-card>
 <br>

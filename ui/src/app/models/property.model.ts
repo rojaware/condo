@@ -18,6 +18,7 @@ export class Property {
   extendedEndDate: string;
   salesDate: string;
   rentFee: number;
+  managementFee: number;
   purchasePrice: number;
   mortgageRate: number;
   mortgageAccountNo: string;
@@ -33,4 +34,8 @@ export class Property {
   tscc: string;
   index?: number;
   purchaseDate: string;
+  insuranceCompany: string;
+  policyNo: string;
+  insuranceFee: number;  
+  propertyTax: number;
 }

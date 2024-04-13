@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BaseComponent } from '../base/base.component';
+import { BaseComponent } from '@app/base/base.component';
 import { Router } from '@angular/router';
-import { Label, LabelColumns, LabelTypeEnum } from '../models/label.model';
+import { Label, LabelColumns, LabelTypeEnum } from '@app/models/label.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '@app/confirm-dialog/confirm-dialog.component';
 import { SettingService } from '@app/services/setting.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class SettingsComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     this.settingService.getAll().subscribe((res: any) => {
-      const batchLabels = res.filter((item: Label) => item.name = LabelTypeEnum.Batch);
+      const batchLabels = res.filter((item: Label) => item.name === LabelTypeEnum.Batch);
       if (batchLabels) {
         const hour = batchLabels.find((item: Label) => item.viewValue === 'Hour')
         this.batchHour = hour.value;

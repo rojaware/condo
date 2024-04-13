@@ -49,6 +49,9 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
             case LabelTypeEnum.Owner:
               this.config.owners.push(item);  
               break;
+            case LabelTypeEnum.Insurance:
+              this.config.insuranceCompanies.push(item);  
+              break;              
             default:
               break;              
           }
@@ -159,7 +162,13 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       endDate: '',
       extendedEndDate: '',
       rentFee: 0,
+      managementFee: 0,
+      paymentFrequency: '',
+      paymentAmount: 0,
       purchasePrice: 0,
+      insuranceCompany: '',
+      policyNo: '',
+
     } as unknown as Property;
     newProperty.tenant = this.createTenant();
     this.properties?.push(newProperty);

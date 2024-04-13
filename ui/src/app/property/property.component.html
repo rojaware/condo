@@ -56,8 +56,9 @@
       </mat-form-field>
     </div>
 
-    <!-- Address -->
+    <!-- Address, Builder, URL -->
     <div class="form-group">
+      <!-- Address -->
       <mat-form-field class="edit-form-field">
         <mat-label>Address</mat-label>
         <input id="address" matInput type="text" [(ngModel)]="currentProperty.address" name="address"
@@ -68,6 +69,18 @@
         </button>
         }
       </mat-form-field>
+      <!-- Builder/Condo Management Company -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Builder</mat-label>
+        <input id="builder" matInput type="text" [(ngModel)]="currentProperty.builder" name="builder"
+          [readonly]="viewMode" />
+        @if (currentProperty.builder && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.builder = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+      <!-- Photo URL -->
       <mat-form-field class="edit-form-field">
         <mat-label>Photo</mat-label>
         <input id="imageUrl" matInput type="text" [(ngModel)]="currentProperty.imageUrl" name="imageUrl"
@@ -80,9 +93,10 @@
       </mat-form-field>      
       
     </div>
-    <!-- Roll No, Customer No, Mortgage Bank -->
+    <!-- Property Tax::  Roll No, TSCC, Customer No, -->
     <div class="form-group">
-      <mat-form-field class="edit-form-field">
+      <!-- Tax Roll # -->
+      <mat-form-field class="edit-form-field" >
         <mat-label>Property Tax Roll #</mat-label>
         <input id="rollNo" matInput type="text" [(ngModel)]="currentProperty.rollNo" name="rollNo"
           [readonly]="viewMode" />
@@ -92,6 +106,7 @@
         </button>
         }
       </mat-form-field>
+      <!-- Tax Customer # -->
       <mat-form-field class="edit-form-field">
         <mat-label>Property Tax Customer #</mat-label>
         <input id="propertyCustomerNo" matInput type="text" [(ngModel)]="currentProperty.propertyCustomerNo"
@@ -103,29 +118,7 @@
         }
       </mat-form-field>    
 
-      <mat-form-field class="edit-form-field">
-        <mat-label>Mortgage Bank</mat-label>
-        <mat-select id="bank" [(ngModel)]="currentProperty.bank" name="bank" [disabled]="viewMode">
-          @for (bank of config.banks; track bank) {
-            <mat-option [value]="bank.value">{{bank.viewValue}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      
-    </div>
-
-    <!-- builder, tscc, size -->
-    <div class="form-group">
-      <mat-form-field class="edit-form-field">
-        <mat-label>Builder</mat-label>
-        <input id="builder" matInput type="text" [(ngModel)]="currentProperty.builder" name="builder"
-          [readonly]="viewMode" />
-        @if (currentProperty.builder && !viewMode) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.builder = ''">
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
+      <!-- TSCC -->
       <mat-form-field class="edit-form-field">
         <mat-label>TSCC</mat-label>
         <input id="tscc" matInput type="text" [(ngModel)]="currentProperty.tscc" name="tscc" [readonly]="viewMode" />
@@ -135,6 +128,66 @@
         </button>
         }
       </mat-form-field>      
+      <!-- Property Tax -->
+      <mat-form-field class="edit-form-field" appearance="fill" matTooltip="Toronto Property Tax keeps Two-instalment plan: Interim: March 1. Final bill: July 2" >
+        <mat-label>Property Tax</mat-label>        
+        <input id="propertyTax" 
+               matInput 
+               type="text" 
+               [(ngModel)]="currentProperty.propertyTax" 
+               name="propertyTax"
+               [readonly]="viewMode" 
+               currencyMask />
+        @if (currentProperty.propertyTax && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.propertyTax = 0">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>       
+      
+    </div>
+
+    <!-- Insurance: Company, Policy #, Fee, size -->
+    <div class="form-group">
+
+      <!-- Insurance Company -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Insurance Company</mat-label>
+        <mat-select id="insuranceCompany" [(ngModel)]="currentProperty.insuranceCompany" name="insuranceCompany" [disabled]="viewMode">
+          @for (insuranceCompany of config.insuranceCompanies; track insuranceCompany) {
+            <mat-option [value]="insuranceCompany.value">{{insuranceCompany.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Policy # -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Policy #</mat-label>
+        <input id="policyNo" matInput type="text" [(ngModel)]="currentProperty.policyNo"
+          name="policyNo" [readonly]="viewMode" />
+        @if (currentProperty.policyNo && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.policyNo = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>   
+
+      <!-- Insurance Fee -->
+      <mat-form-field class="edit-form-field" appearance="fill">
+        <mat-label>Insurance Fee</mat-label>        
+        <input id="insuranceFee" 
+                matInput 
+                type="text" 
+                [(ngModel)]="currentProperty.insuranceFee" 
+                name="insuranceFee"
+                [readonly]="viewMode" 
+                currencyMask />
+        @if (currentProperty.insuranceFee && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.insuranceFee = 0">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
       <mat-form-field class="edit-form-field">
         <mat-label>Size (sq)</mat-label>
         <span matSuffix>sq ft</span>
@@ -232,6 +285,7 @@
     </div>
 
     <div class="form-group">
+      <!-- Rent -->
       <mat-form-field class="edit-form-field" appearance="fill">
         <mat-label>Rent Fee</mat-label>        
         <input id="rentFee" 
@@ -243,6 +297,22 @@
                currencyMask />
         @if (currentProperty.rentFee && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.rentFee = 0">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+      <!-- Management Fee-->
+      <mat-form-field class="edit-form-field" appearance="fill">
+        <mat-label>Management Fee</mat-label>        
+        <input id="managementFee" 
+               matInput 
+               type="text" 
+               [(ngModel)]="currentProperty.managementFee" 
+               name="managementFee"
+               [readonly]="viewMode" 
+               currencyMask />
+        @if (currentProperty.managementFee && !viewMode) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="currentProperty.managementFee = 0">
           <mat-icon>close</mat-icon>
         </button>
         }
@@ -280,8 +350,23 @@
 
     </div>
 
-    <!-- Mortgage : Account No, Variable/Fixed, -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title></mat-card-title>
+        <mat-card-subtitle>Mortgage</mat-card-subtitle>
+      </mat-card-header>
+          <!-- Mortgage : Account No, Variable/Fixed, -->
     <div class="form-group">
+      <!-- Mortgage Bank -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Mortgage Bank</mat-label>
+        <mat-select id="bank" [(ngModel)]="currentProperty.bank" name="bank" [disabled]="viewMode">
+          @for (bank of config.banks; track bank) {
+            <mat-option [value]="bank.value">{{bank.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
       <!-- Account NO -->
       <mat-form-field class="edit-form-field">
         <mat-label>Mortgage Account #</mat-label>
@@ -376,6 +461,10 @@
         <mat-datepicker #maturityDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
+    <mat-card-actions></mat-card-actions>
+    </mat-card>
+    <br>
+
 
     <!-- comment -->
     <div class="form-group">

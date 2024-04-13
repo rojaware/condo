@@ -25,6 +25,7 @@ import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/materia
 import { MY_FORMATS } from './models/expense.model';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
+import { MortgageComponent } from './mortgage/mortgage.component';
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -45,6 +46,7 @@ export const initConfig =
     CarouselHolderComponent,
     SettingsComponent,
     OverviewComponent,
+    MortgageComponent,
   ],
   imports: [
     HttpClientModule,

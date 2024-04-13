@@ -37,9 +37,9 @@ router.route('/properties').get((request, response) => {
   })
 })
 
-router.route('/properties/:id').get((request, response) => {
+router.route('/properties/:name').get((request, response) => {
 
-  propertyController.getProperty(request.params.id).then(result => {
+  propertyController.getProperty(request.params.name).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')

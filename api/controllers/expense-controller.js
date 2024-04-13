@@ -71,6 +71,7 @@ async function insertExpense(body) {
       .input('utilities', sql.Money, body.utilities)
       .input('depreciation', sql.Money, body.depreciation)
       .input('income', sql.Money, body.income)
+      .input('comment', sql.NVarChar, body.comment)
       .query(queries.insertExpense);
     return item.recordset;
   }
@@ -128,6 +129,7 @@ async function updateExpense(body) {
       .input('utilities', sql.Money, body.utilities)
       .input('depreciation', sql.Money, body.depreciation)
       .input('income', sql.Money, body.income)
+      .input('comment', sql.NVarChar, body.comment)
       .query(queries.updateExpense);
     return item.rowsAffected;
   }
@@ -147,7 +149,6 @@ async function deleteExpenseByPropertyYearMonth(propertyName, _year, _month) {
       SELECT @propertyName as propertyName, @year as year, @month as month`;
 
   try {
-
     let pool = await sql.connect(config);
     let item = await pool.request()
       .input('propertyName', sql.NVarChar, propertyName)

@@ -27,6 +27,7 @@ export class Expense {
   // total
   totalExpense: number;
   netIncome: number;
+  comment: string;
 }
 
 export const MY_FORMATS = {
@@ -141,5 +142,10 @@ export const ExpenseColumns = [
     key: 'netIncome',
     type: 'read',
     label: 'net Income',
+  },
+  {
+    key: 'comment',
+    type: 'write',
+    label: 'comment',
   }
 ];

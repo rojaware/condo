@@ -14,7 +14,7 @@ import { Label } from '@app/models/label.model';
   
 })
 export class PropertyComponent extends BaseComponent implements OnInit {
-  @Input() viewMode = false;
+  @Input() viewMode = true;
   @Input() currentProperty: Property = {} as Property;  
   @Output() isPropertyDeleted = new EventEmitter<boolean>();
   @ViewChild('occupancyDatePicker', { static: false }) private occupancyDatePicker: MatDatepicker<Date>;
@@ -42,11 +42,11 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     if (!this.viewMode ) {
       this.message = '';      
       this.errMessage = '';
-      this.getProperty(this.route.snapshot.params['name']);
+      this.getProperty(this.currentProperty.name);
     }
   }
   
-  getProperty(name: string): void {
+  private getProperty(name: string): void {
     this.message = '';
     this.errMessage = '';    
     this.propertyService.get(name).subscribe({

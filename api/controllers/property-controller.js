@@ -16,7 +16,7 @@ async function getProperties() {
                ,CONVERT(char(10), endDate ,126) as endDate
                ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
                ,CONVERT(char(10), salesDate ,126) as salesDate
-               ,[rentFee]
+               ,[rentFee], managementFee
                ,[purchasePrice]
                ,mortgageAccountNo
                ,mortgageType
@@ -25,6 +25,7 @@ async function getProperties() {
                ,comment
                ,imageUrl
                ,tscc
+               ,insuranceCompany, policyNo, insuranceFee, propertyTax
                ,[owner] from Properties`;               
     try {
         let pool = await sql.connect(config);
@@ -38,7 +39,7 @@ async function getProperties() {
     }
 }
 
-async function getProperty(id) {
+async function getProperty(name) {
     const query = `SELECT [name], [id]
                ,[address]
                ,[rollNo]
@@ -51,7 +52,7 @@ async function getProperty(id) {
                ,CONVERT(char(10), startDate ,126) as startDate
                ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
                ,CONVERT(char(10), salesDate ,126) as salesDate
-               ,[rentFee]
+               ,[rentFee], managementFee
                ,[purchasePrice]
                ,mortgageAccountNo
                ,mortgageType
@@ -59,11 +60,12 @@ async function getProperty(id) {
                ,CONVERT(char(10), maturityDate ,126) as maturityDate
                ,comment
                ,imageUrl, tscc
-               ,[owner] from Properties where id = @id`;
+               ,insuranceCompany, policyNo, insuranceFee, propertyTax
+               ,[owner] from Properties where name = @name`;
     try {
         let pool = await sql.connect(config);
         let property = await pool.request()
-            .input('id', sql.VarChar, id)
+            .input('name', sql.VarChar, name)
             .query(query);
         return property.recordsets;
     }
@@ -94,12 +96,13 @@ async function createProperty(property) {
                ,[endDate]
                ,[extendedEndDate]               
                ,[salesDate]               
-               ,[rentFee]
+               ,[rentFee], managementFee
                ,[purchasePrice]
                ,mortgageAccountNo
                ,mortgageType
                ,mortgageRate, paymentFrequency, paymentAmount
                ,maturityDate, comment, imageUrl, tscc
+               ,insuranceCompany, policyNo, insuranceFee, propertyTax
                ,[owner])
          VALUES
                (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder,
@@ -107,10 +110,11 @@ async function createProperty(property) {
                 @occupancyDate, 
                 @startDate, 
                 @endDate, @extendedEndDate, @salesDate
-                ,@rentFee, @purchasePrice, @mortgageAccountNo
+                ,@rentFee, @managementFee, @purchasePrice, @mortgageAccountNo
                 ,@mortgageType
                 ,@mortgageRate, @paymentFrequency, @paymentAmount
                 ,@maturityDate, @comment, @imageUrl, @tscc
+                ,@insuranceCompany, @policyNo, @insuranceFee, @propertyTax
                 ,@owner);
          SELECT  IDENT_CURRENT('properties') as id ;`;
          console.log('property.occupancyDate ==> ' + property.occupancyDate)
@@ -131,7 +135,8 @@ async function createProperty(property) {
             .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
             .input('salesDate', sql.Date, util.toValue(property.salesDate))
-            .input('rentFee', sql.Money, property.rentFee)
+            .input('rentFee', sql.Money, property.rentFee) 
+            .input('managementFee', sql.Money, property.managementFee) 
             .input('purchasePrice', sql.Money, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
             .input('mortgageType', sql.NVarChar, property.mortgageType)
@@ -141,6 +146,10 @@ async function createProperty(property) {
             .input('maturityDate', sql.Date, util.toValue(property.maturityDate))
             .input('imageUrl', sql.NVarChar, property.imageUrl)
             .input('tscc', sql.NVarChar, property.tscc)
+            .input('insuranceCompany', sql.NVarChar, property.insuranceCompany)
+            .input('policyNo', sql.NVarChar, property.policyNo)
+            .input('insuranceFee', sql.Money, property.insuranceFee)
+            .input('propertyTax', sql.Money, property.propertyTax)
             .input('comment', sql.NVarChar, property.comment)
             .query(query);
         return item.recordset;
@@ -168,6 +177,7 @@ async function updateProperty(property) {
        ,[extendedEndDate] = @extendedEndDate
        ,[salesDate] = @salesDate
        ,[rentFee] = @rentFee
+       ,managementFee = @managementFee
        ,[purchasePrice] = @purchasePrice
        ,[mortgageAccountNo] = @mortgageAccountNo
        ,[mortgageType] = @mortgageType
@@ -177,6 +187,10 @@ async function updateProperty(property) {
        ,[paymentAmount] = @paymentAmount
        ,[imageUrl] = @imageUrl
        ,[tscc] = @tscc
+       ,insuranceCompany = @insuranceCompany
+       ,policyNo = @policyNo
+       ,insuranceFee = @insuranceFee
+       ,propertyTax = @propertyTax
        ,[comment] = @comment
     WHERE id = @id;
              SELECT @id as id;`;
@@ -198,7 +212,8 @@ async function updateProperty(property) {
             .input('endDate', sql.Date, util.toValue(property.endDate))
             .input('extendedEndDate', sql.Date, util.toValue(property.extendedEndDate))
             .input('salesDate', sql.Date, util.toValue(property.salesDate))
-            .input('rentFee', sql.Money, property.rentFee)
+            .input('rentFee', sql.Money, property.rentFee) 
+            .input('managementFee', sql.Money, property.managementFee) 
             .input('purchasePrice', sql.Money, property.purchasePrice)
             .input('mortgageAccountNo', sql.NVarChar, property.mortgageAccountNo)
             .input('mortgageType', sql.NVarChar, property.mortgageType)
@@ -208,6 +223,10 @@ async function updateProperty(property) {
             .input('paymentAmount', sql.Money, property.paymentAmount)                        
             .input('imageUrl', sql.NVarChar, property.imageUrl)   
             .input('tscc', sql.NVarChar, property.tscc) 
+            .input('insuranceCompany', sql.NVarChar, property.insuranceCompany)
+            .input('policyNo', sql.NVarChar, property.policyNo)
+            .input('insuranceFee', sql.Money, property.insuranceFee)
+            .input('propertyTax', sql.Money, property.propertyTax)
             .input('comment', sql.NVarChar, property.comment)    
             .query(query);
         return item.recordsets;

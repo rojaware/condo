@@ -4,5 +4,6 @@
   "user": "",
   "banks": [], 
   "owners": [],
+  "insuranceCompanies": [],
   "baseUrl": "http://localhost:8090"
 }

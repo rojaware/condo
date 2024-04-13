@@ -52,19 +52,19 @@
         <!-- Property tab -->
         <mat-tab label="Property">
           <div class="col-md-12">
-            <app-property [viewMode]="true" [currentProperty]="currentProperty" (isPropertyDeleted)="refreshList()"></app-property>
+            <app-property [viewMode]="false" [currentProperty]="currentProperty" (isPropertyDeleted)="refreshList()"></app-property>
           </div>
         </mat-tab>
         <!-- Tenant tab -->
         <mat-tab label="Tenant" *ngIf="currentProperty.id">
           <div class="col-md-12">          
-            <app-tenant [viewMode]="true" [tenant]="currentTenant" ></app-tenant>          
+            <app-tenant [viewMode]="false" [tenant]="currentTenant" ></app-tenant>          
           </div>
         </mat-tab>
         <!-- Expense tab -->
         <mat-tab label="Expense" *ngIf="currentProperty.id">
           <div class="col-md-12">
-            <app-expense [viewMode]="true" [currentPropertyName]="currentProperty.name"></app-expense>
+            <app-expense [viewMode]="false" [currentPropertyName]="currentProperty.name"></app-expense>
           </div>
         </mat-tab>
       </mat-tab-group>

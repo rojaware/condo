@@ -62,6 +62,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   date = new FormControl(moment());
   year: number;
   month: number;
+  presentYear: number;
+  presentMonth: number;
   fileName: string;
 
   public dataSource: MatTableDataSource<Expense>;
@@ -83,7 +85,9 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
     // Get the year from the date object
     this.year = today.getFullYear();
+    this.presentYear = today.getFullYear();
     this.month = today.getMonth();
+    this.presentMonth = today.getMonth();
     this.getByYear();
     this.message = "";
   }
@@ -115,6 +119,10 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   getByYear(): void {
     const propertyName = this.config.user.property.name;
+    if (!this.year) {
+      // current year is default
+      this.year = this.presentYear;
+    }
     this.expenseService
       .getByYearMonth(propertyName, this.year, null)
       .subscribe({
@@ -168,12 +176,22 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
           this.expenses = data;
           this.config.user.property.expenses = data;
           this.currentExpense = data[0];
-          if (
-            this.currentExpense.income === 0 ||
-            this.currentExpense.income === undefined
-          ) {
-            this.currentExpense.income = this.config.user.property.rentFee;
+
+          if (this.year = this.presentYear) {
+            if (
+              this.currentExpense.income === 0 ||
+              this.currentExpense.income === undefined
+            ) {
+              this.currentExpense.income = this.config.user.property.rentFee;
+            }
+            if (
+              this.currentExpense.managementFee === 0 ||
+              this.currentExpense.managementFee === undefined
+            ) {
+              this.currentExpense.managementFee = this.config.user.property.managementFee;
+            }          
           }
+
           console.log(data);
         },
         error: (e: any) => {
@@ -195,6 +213,12 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   }
 
   createTemplate(_year: number, _month: number): Expense {
+    let insuranceFee = 0;
+    let propertyTax = 0;
+    if (_year === this.presentYear && _month === 3) {
+      insuranceFee = this.config.user.property.insuranceFee;
+      propertyTax = this.config.user.property.propertyTax;
+    }
     const expense = {
       propertyName: this.config.user.property.name,
       year: _year,
@@ -203,13 +227,13 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       travel: 0,
       maintenance: 0,
       commission: 0,
-      insurance: 0,
+      insurance: insuranceFee,
       legal: 0,
-      managementFee: 0,
+      managementFee: this.config.user.property.managementFee,
       mortgageInterest: 0,
       repairs: 0,
       supplies: 0,
-      tax: 0,
+      tax: propertyTax,
       utilities: 0,
       depreciation: 0,
       totalExpense: 0,

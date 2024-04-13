@@ -54,4 +54,5 @@ export enum LabelTypeEnum {
   Bank = "BANKS",
   Owner = "OWNERS",  
   Batch = "BATCH",  
+  Insurance = "INSURANCES",  
 }
