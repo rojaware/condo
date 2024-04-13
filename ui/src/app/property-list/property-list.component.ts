@@ -71,8 +71,8 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     console.log('current config is ' + JSON.stringify(this.config) );
   }
 
-  retrievePropertyList(): void {
-    this.propertyService.getAll().subscribe({
+  async retrievePropertyList(): Promise<void> {
+    await this.propertyService.getAll().subscribe({
       next: (data) => {        
         // retrieve all tenants by property
         if (data) {

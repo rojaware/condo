@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../services/config.service';
+import { ConfigService } from '@app/services/config.service';
 import { Router } from '@angular/router';
-import { Config } from '../models/config.model';
+import { Config } from '@app/models/config.model';
 import { Util } from '../shared/util';
 
 @Component({
@@ -20,5 +20,9 @@ export class BaseComponent implements OnInit {
   constructor(protected router: Router) {}
 
   ngOnInit(): void {
+  }
+  
+  print(): void {
+    window.print()
   }
 }

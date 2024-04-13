@@ -1,25 +1,25 @@
-<div class="edit-form">
+<div class="edit-form" id="property">
   <div class="form-group">
     <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
     @if (viewMode) {
-    <button class="badge badge-warning " (click)="viewMode = false" *ngIf="!util.isBlank(currentProperty)">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
-    } @else {
-    <button class="badge badge-warning " (click)="viewMode = true">
-      <mat-icon>remove_red_eye</mat-icon>
-    </button>
-    <!-- Button , Cancel, Delete, Save -->
-    
-    <div *ngIf="!viewMode" class=" button-space"  style="display: flex">      
-        <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes"> Cancel </button>
-        <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
-        <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
-    </div>
-    
-    
+      <button class="badge badge-warning " (click)="viewMode = false" *ngIf="!util.isBlank(currentProperty)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
+    } @else { 
+
+      <button class="badge badge-warning " (click)="viewMode = true">
+        <mat-icon>remove_red_eye</mat-icon>
+      </button>
+      <!-- Button , Cancel, Delete, Save -->
+      
+      <div *ngIf="!viewMode" class=" button-space"  style="display: flex">      
+          <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes"> Cancel </button>
+          <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
+          <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
+      </div>
     }
+    <button class="btn btn-secondary"  (click)="print()"> Print </button>
   </div>
   <div class="form-group">
     

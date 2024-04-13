@@ -1,4 +1,4 @@
-<div class="edit-form">
+<div class="edit-form" id="tenant">
   
   <!-- title with edit / view buttons -->
   <div class="form-group">
@@ -11,7 +11,8 @@
     } @else {
       <button class="badge badge-warning " (click)="viewMode = true"><mat-icon>remove_red_eye</mat-icon></button>
     }
-
+    <button class="btn btn-secondary"  (click)="print()"> Print </button>
+    
     <!-- Button , Cancel, Delete, Save -->
     <div *ngIf="!viewMode" class=" button-space" style="display: flex">
       <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">Cancel</button>           
