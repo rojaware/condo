@@ -26,7 +26,7 @@ async function getProperties() {
                ,imageUrl
                ,tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
-               ,[owner] from Properties`;               
+               ,[owner] from Properties WHERE salesDate is null`;               
     try {
         let pool = await sql.connect(config);
         let properties = await pool.request().query(query);
@@ -61,7 +61,7 @@ async function getProperty(name) {
                ,comment
                ,imageUrl, tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
-               ,[owner] from Properties where name = @name`;
+               ,[owner] from Properties where name = @name AND salesDate is null`;
     try {
         let pool = await sql.connect(config);
         let property = await pool.request()

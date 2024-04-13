@@ -52,6 +52,9 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
             case LabelTypeEnum.Insurance:
               this.config.insuranceCompanies.push(item);  
               break;              
+            case LabelTypeEnum.Cycle:
+              this.config.cycles.push(item);  
+              break;              
             default:
               break;              
           }

@@ -1,28 +1,33 @@
-.list {
-  text-align: left;
-  margin: inherit;
-}
-.input-group {
-  flex-wrap: inherit;
-}
-::ng-deep .mat-mdc-tab-body-wrapper {
-  display: grid !important;
-}
-li {
-  span {
-    font-style: italic;
-    color:mediumslateblue;
-    font-weight: 600;
+
+#property-list-form {
+  .list {
+    text-align: left;
+    margin: inherit;
   }
-  cursor: pointer;
-} 
-
-.mat-badge-content {
-  background: mediumslateblue !important;
-  color: white !important;
+  .input-group {
+    flex-wrap: inherit;
+  }
+  ::ng-deep .mat-mdc-tab-body-wrapper {
+    display: grid !important;
+  }
+  li {
+    span {
+      font-style: italic;
+      color:mediumslateblue;
+      font-weight: 600;
+    }
+    cursor: pointer;
+  } 
+  
+  .mat-badge-content {
+    background: mediumslateblue !important;
+    color: white !important;
+  }
+  .list-group-item.active {
+    color: #611b1b;
+    background-color: antiquewhite;
+  }
+  .example-tab-icon {
+    margin-right: 8px;
+  }
 }
-.list-group-item.active {
-  color: #611b1b;
-  background-color: antiquewhite;
-}
-

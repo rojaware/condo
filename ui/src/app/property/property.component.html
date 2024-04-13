@@ -350,12 +350,8 @@
 
     </div>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title></mat-card-title>
-        <mat-card-subtitle>Mortgage</mat-card-subtitle>
-      </mat-card-header>
-          <!-- Mortgage : Account No, Variable/Fixed, -->
+    
+     <!-- Mortgage : Account No, Variable/Fixed, -->
     <div class="form-group">
       <!-- Mortgage Bank -->
       <mat-form-field class="edit-form-field">
@@ -408,28 +404,21 @@
           <mat-icon>close</mat-icon>
         </button>
         }
-      </mat-form-field>
-      
+      </mat-form-field>      
     </div>
 
     <!-- Mortgage : -->
     <div class="form-group">
-
       <!-- Payment Frequency: Weekly, Bi-Weekly, Semi-Monthly and Monthly. -->
-      <div class="edit-form-field" style="display: flex;">
-        <label style="padding: 0 16px; font-size: smaller;">Payment Frequency</label>
-        <mat-button-toggle-group appearance="legacy"  
-                                 class="edit-form-field" 
-                                 id="paymentFrequency"
-                                 [disabled]="viewMode"
-                                 [(ngModel)]="currentProperty.paymentFrequency" 
-                                 name="paymentFrequency">          
-          <mat-button-toggle  value="W">Weekly</mat-button-toggle>
-          <mat-button-toggle  value="BW">Bi-Weekly</mat-button-toggle>
-          <mat-button-toggle  value="SM">Semi-Monthly</mat-button-toggle>
-          <mat-button-toggle  value="M">Monthly</mat-button-toggle>          
-        </mat-button-toggle-group>
-      </div>      
+      <mat-form-field class="edit-form-field">
+        <mat-label>Payment Frequency</mat-label>
+        <mat-select id="paymentFrequency" [(ngModel)]="currentProperty.paymentFrequency" name="paymentFrequency" [disabled]="viewMode">
+          @for (paymentFrequency of config.cycles; track paymentFrequency) {
+            <mat-option [value]="paymentFrequency.value">{{paymentFrequency.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+     
       <!-- Payment Amount -->
       <mat-form-field class="edit-form-field">
         <mat-label>Payment Amount</mat-label>
@@ -461,8 +450,7 @@
         <mat-datepicker #maturityDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
-    <mat-card-actions></mat-card-actions>
-    </mat-card>
+    
     <br>
 
 

@@ -8,6 +8,7 @@ export class Config {
   banks: Label[];
   owners: Label[];
   insuranceCompanies: Label[];
+  cycles: Label[];
   alert: Alert;
   baseUrl: string;
 }
