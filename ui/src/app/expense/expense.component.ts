@@ -275,6 +275,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.expenseService.delete(this.currentPropertyName, year, month).subscribe({
       next: (res: any) => {
         console.log(res);
+        this.message = 'Deleted successfully'
         this.router.navigate(['/properties']);
       },
       error: (e: any) => console.error(e),

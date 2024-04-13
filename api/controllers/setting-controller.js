@@ -3,6 +3,7 @@ const sql = require('mssql');
 
 async function getSettings() {
   try {
+    console.log('Connecting database  => ' + config.database)
     let pool = await sql.connect(config);
     let items = await pool.request().query("SELECT * from LABELS");
     return items.recordsets;

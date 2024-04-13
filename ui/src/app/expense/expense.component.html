@@ -52,7 +52,7 @@
         <div style="display: flex">
           <h4 class="button-space">{{ currentExpense.propertyName | uppercase }} 
             <span>{{ month | monthname }}</span> 
-            {{ year }}
+            {{ date | json }}
           </h4>
 
           @if (viewMode) {
@@ -200,7 +200,7 @@
         
             <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.type" >
               <span *ngSwitchCase="'hidden'"></span>
-              <span *ngSwitchDefault > {{ col.label }}</span>             
+              <span *ngSwitchDefault > {{ col.label | titlecase }}</span>             
             </th>
     
             <td mat-cell *matCellDef="let element">
