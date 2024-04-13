@@ -3,7 +3,7 @@
 Condo is a property management program for landlord to collect property, tenants and expense details. This application is made of Angular version 17 + NodeJS + MS SQL Server.
 
 `
-<h1 align="center">Condo Condo Property Management</h1>
+<h1 align="center">Condo Property Management</h1>
 <h3 align="center">A management program to make landlord with multiple property for rent</h3>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=rojaware&label=Profile%20views&color=0e75b6&style=flat" alt="rojaware" /> </p>
