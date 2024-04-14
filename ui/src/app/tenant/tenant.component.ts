@@ -112,4 +112,8 @@ export class TenantComponent extends BaseComponent implements OnInit {
       error: (e) => console.error(e),
     });
   }
+
+  print(): void {
+    // super.print('tenant');
+  }
 }

@@ -11,13 +11,14 @@
     } @else {
       <button class="badge badge-warning " (click)="viewMode = true"><mat-icon>remove_red_eye</mat-icon></button>
     }
-    <button class="btn btn-secondary"  (click)="print()"> Print </button>
+    
     
     <!-- Button , Cancel, Delete, Save -->
     <div *ngIf="!viewMode" class=" button-space" style="display: flex">
       <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">Cancel</button>           
       <button *ngIf="tenant.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">Delete</button>     
       <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">Save Change</button>
+      <button class="btn btn-secondary"  (click)="print()"> Print </button>
     </div>       
   </div>
   <div class="form-group">    

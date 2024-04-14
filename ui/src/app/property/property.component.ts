@@ -12,6 +12,8 @@ import { Property } from '@app/models/property.model';
 import { BaseComponent } from '@app/base/base.component';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { Label } from '@app/models/label.model';
+import printJS from 'print-js';
+
 
 @Component({
   selector: 'app-property',
@@ -34,6 +36,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   dateToday: number = Date.now();
   banks: Label[];
   owners: Label[];
+  printJS = printJS;
+  propertyData: Property[] = [];
 
   constructor(
     protected router: Router,
@@ -163,5 +167,42 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       }
     }
   }
-
+   
+  get printableObject(): Property[] {
+    this.propertyData.push(this.currentProperty);
+    return this.propertyData;
+  }
+  printStyle = `table, td, th {
+                  border: 1px solid black;
+                }
+                thead {
+                  float: left;   
+                }
+                thead td, th {
+                  display: block;   
+                }
+                thead th, td {
+                  display: block;   
+                }                                
+                tbody {
+                  
+                  float: left;
+                  display: flex;
+                }
+                tr {
+                  display: table-row;
+                  vertical-align: inherit;
+                  unicode-bidi: isolate;
+                  border-color: inherit;
+              }
+                td {
+                  text-align: left;
+                  max-width: 100%;
+                }
+                table {
+                  border-collapse: collapse;
+                  width: 100%;
+                }             
+                `;
+  
 }

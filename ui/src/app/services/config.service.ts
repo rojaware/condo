@@ -52,4 +52,8 @@ export class ConfigService extends BaseService {
     });
   }
 
+  get config(): Config {
+    return this.config;
+  }
+
 }

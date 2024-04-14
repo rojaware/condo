@@ -26,11 +26,14 @@ export class ExpenseService extends BaseService {
     return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
   }
   
-  getByYearMonth(propertyName: string, year: number, month?: number | null): Observable<Expense[]> {    
+  getByYearMonth(propertyName: string, year?: number | null, month?: number | null): Observable<Expense[]> {    
+    const property = propertyName.trim();
     if (this.util.hasObject(month)) {
-      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
+      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${property}/${year}/${month}`);
     } else {
-      const property = propertyName.trim();
+      if (!year) {
+        year = new Date().getFullYear();
+      }
       return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${property}/${year}`);      
     }    
   }

@@ -45,14 +45,14 @@
 <!-- Monthly Expense -->
 <mat-card  *ngIf="this.currentExpense">
   <mat-card-header>
-    <mat-card-title>Monthly Expense, {{ this.month | monthname}} </mat-card-title>
+    <mat-card-title>Monthly Expense </mat-card-title>
     <mat-card-subtitle>
       <div class="edit-form" *ngIf="currentExpense">
 
         <div style="display: flex">
           <h4 class="button-space">{{ currentExpense.propertyName | uppercase }} 
-            <span>{{ month | monthname }}</span> 
-            {{ date | json }}
+            <span>{{ month | monthname }} {{ year }}</span> 
+            
           </h4>
 
           @if (viewMode) {

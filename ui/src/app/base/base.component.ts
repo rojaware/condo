@@ -21,8 +21,9 @@ export class BaseComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
-  print(): void {
+
+
+  _print(): void {
     window.print()
   }
 }

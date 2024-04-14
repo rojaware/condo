@@ -56,4 +56,5 @@ export enum LabelTypeEnum {
   Batch = "BATCH",  
   Insurance = "INSURANCES",  
   Cycle = "CYCLES",  
+  Database = 'DB',
 }
