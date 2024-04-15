@@ -23,7 +23,7 @@ export class BaseComponent implements OnInit {
   }
 
 
-  _print(): void {
+  print(): void {
     window.print()
   }
 }
