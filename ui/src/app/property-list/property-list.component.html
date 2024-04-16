@@ -3,7 +3,7 @@
     <div class="input-group">
       <div class="form-outline">
         <mat-form-field class="example-full-width">
-          <mat-label>Search by property</mat-label>
+          <mat-label>Search</mat-label>
           <input type="search" 
                  [(ngModel)]="searchTerm" 
                  (input)="search(searchTerm)" 
@@ -18,7 +18,7 @@
         <button class="m-3 btn btn-md btn-warning" 
                 (click)="addProperty()" 
                 matTooltip="Add new property">
-          Add
+          Add Property
         </button>
       </div>
     </div>
@@ -71,7 +71,7 @@
             Mortgage
           </ng-template>
           <div class="col-md-12">
-            <app-mortgage [currentProperty]="currentProperty" ></app-mortgage>
+            <app-mortgage [currentProperty]="currentProperty" (isMortgageSaved)="updateProperty()" ></app-mortgage>
           </div>
         </mat-tab>        
         <!-- Tenant tab -->

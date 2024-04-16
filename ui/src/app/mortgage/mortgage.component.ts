@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseComponent } from '@app/base/base.component';
 import { Mortgage } from '@app/models/mortgage.model';
@@ -11,6 +11,8 @@ import { Property } from '@app/models/property.model';
 })
 export class MortgageComponent extends BaseComponent implements OnInit {
   @Input() currentProperty: Property;
+  @Output() isMortgageSaved = new EventEmitter<boolean>();
+  
   
   constructor(
     protected router: Router,
@@ -22,9 +24,6 @@ export class MortgageComponent extends BaseComponent implements OnInit {
   }
 
   save(): void {
-
-  }
-  delete(): void {
-
+    this.isMortgageSaved.emit(true);
   }
 }

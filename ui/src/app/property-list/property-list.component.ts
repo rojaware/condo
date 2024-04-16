@@ -196,6 +196,21 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     this.searchTerm = searchTerm.toLowerCase();
   }
 
+  updateProperty(): void {
+    this.propertyService.update(this.currentProperty).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.message = res.message
+          ? res.message
+          : 'This property has been updated successfully!';        
+      },
+      error: (e) => {
+        console.error(e);
+        this.errMessage = 'Failed saving...' + e.message;
+      },
+    });
+  }
+
   /** no reference */
   filterItems(searchTerm: string) {
     const key = searchTerm.toLowerCase();

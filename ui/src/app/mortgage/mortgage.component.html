@@ -4,7 +4,6 @@
     <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
       <!-- Button , Cancel, Delete, Save -->      
       <div class=" button-space"  style="display: flex">                
-          <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
           <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
           <button class="btn btn-secondary" (click)="print()"> Print </button>
       </div>
