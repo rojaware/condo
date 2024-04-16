@@ -196,11 +196,14 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     this.searchTerm = searchTerm.toLowerCase();
   }
 
+  /** no reference */
   filterItems(searchTerm: string) {
+    const key = searchTerm.toLowerCase();
     if (this.properties) {
       this.filteredProperties = this.properties.filter((item: Property) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.name.toLowerCase().includes(key)
       );
     }
   }
+
 }

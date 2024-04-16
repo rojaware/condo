@@ -27,12 +27,13 @@
   <!-- side property list -->
   <div class="col-md-2">
     <h4>Property List</h4>
-    <ul class="list-group">
+    <ul class="list-group" *ngIf="properties">
       @for (property of properties | searchFilter: searchTerm ; track property.name; let i = $index) {
       <li class="list-group-item"
           [class.active]="i == currentIndex" 
           (click)="setActiveProperty(property, i)" 
-          matTooltip="{{property.address}}">
+          matTooltip="{{property.address}}"
+          >
         @if (property.owner && property.owner.includes('angela')) {          
           <div  matBadge="4" matBadgeOverlap="true" matBadgePosition="above after" matBadgeSize="small">
             {{ property.name }} 
@@ -46,10 +47,7 @@
       </li>
       }
     </ul>
-    <input type="text" [(ngModel)]="searchTerm" placeholder="Search" />
-    debug :: <pre>{{ filteredProperties | json }}</pre>
-
-
+    
   </div>
   <!--  tab menus ... #docregion slow-animation-duration -->
   @if (config.user.property){
