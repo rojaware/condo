@@ -8,6 +8,7 @@ const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
 const documentsController = require('./controllers/document-controller');
 const settingController = require('./controllers/setting-controller');
+const mortgageController = require('./controllers/mortgage-controller');
 var util = require('./shared/util');
 
 // Home page route.
@@ -595,6 +596,107 @@ router.route('/settingsLandlord/:owner').get((request, response) => {
 })
 /***************** End of Settings API */
 
+//############### Mortgages api... ########################
+
+router.route('/mortgages').get((request, response) => {
+
+  mortgageController.getMortgages().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.json(result[0]);
+    }
+  })  
+})
+router.route('/mortgagesByProperty/:name').get((request, response) => {
+
+  mortgageController.getMortgageByProperty(request.params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/mortgagesById/:id').get((request, response) => {
+
+  mortgageController.getMortgageById(request.params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/mortgages').post((request, response) => {
+  let mortgage = { ...request.body }
+  mortgageController.createMortgage(mortgage).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/mortgages/:id').delete((request, response) => {
+  const params = request.params;
+  mortgageController.deleteMortgageById(params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/mortgagesByProperty/:propertyName').delete((request, response) => {
+  const params = request.params;
+  mortgageController.deleteMortgageByProperty(params.propertyName).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/mortgages').delete((request, response) => {
+  const params = request.params;
+  mortgageController.deleteAllMortgages(params.propertyName).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+
+
+
+router.route('/mortgages').put((request, response) => {
+
+  let mortgage = { ...request.body };
+  mortgageController.updateMortgage(mortgage).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+//############### mortgages api... ########################
 
 
 module.exports = router;

@@ -14,16 +14,17 @@ import { SettingService } from '@app/services/setting.service';
 @Component({
   selector: 'app-property-list',
   templateUrl: './property-list.component.html',
-  styleUrls: ['./property-list.component.css'],
+  styleUrls: ['./property-list.component.css'],  
 })
 export class PropertyListComponent extends BaseComponent implements OnInit, AfterViewInit  {
-  properties?: Property[];
+  properties?: Property[] = [];
+  filteredProperties?: Property[] = [];
   currentProperty: Property;
   currentTenant: Tenant;
 
   currentIndex? = -1;
   name = '';
-  search: String = '';
+  searchTerm: string = '';
   
   constructor(
     protected router: Router,
@@ -123,6 +124,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     };
     return newTenant;    
   }
+
   refreshList(): void {
     this.retrievePropertyList();
     this.currentProperty = {} as Property;
@@ -178,7 +180,6 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     const index = this.properties?.length;
     this.setActiveProperty(newProperty, index);    
   }
-
  
   handlePropertyChange(selectedProperty: Property) {
     console.log(`Item changed to: ${selectedProperty.name}`);
@@ -189,5 +190,17 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
     console.log('tabChangeEvent => ', tabChangeEvent);
     console.log('index => ', tabChangeEvent.index);
+  }
+
+  search(searchTerm: string) {
+    this.searchTerm = searchTerm.toLowerCase();
+  }
+
+  filterItems(searchTerm: string) {
+    if (this.properties) {
+      this.filteredProperties = this.properties.filter((item: Property) =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
   }
 }

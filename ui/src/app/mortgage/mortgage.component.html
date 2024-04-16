@@ -1,1 +1,113 @@
-<p>mortgage works!</p>
+<div class="edit-form" id="mortgage">
+  <!-- Title and Buttons -->
+  <div class="form-group">
+    <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
+      <!-- Button , Cancel, Delete, Save -->      
+      <div class=" button-space"  style="display: flex">                
+          <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Property"> Delete </button>     
+          <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
+          <button class="btn btn-secondary" (click)="print()"> Print </button>
+      </div>
+  </div>
+
+  <div class="form-group">    
+    ...<span *ngIf="message">{{ message }}</span>
+    ...<span *ngIf="errMessage" class="error">{{ errMessage }}</span>
+  </div>
+
+  <form *ngIf="!util.isBlank(currentProperty)"> 
+     <!-- Mortgage : Account No, Variable/Fixed, -->
+     <div class="form-group">
+      <!-- Mortgage Bank -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Mortgage Bank</mat-label>
+        <mat-select id="bank" [(ngModel)]="currentProperty.bank" name="bank">
+          @for (bank of config.banks; track bank) {
+            <mat-option [value]="bank.value">{{bank.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Account NO -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Mortgage Account #</mat-label>
+        <input id="mortgageAccountNo" matInput type="text" [(ngModel)]="currentProperty.mortgageAccountNo"
+          name="mortgageAccountNo" />
+      </mat-form-field>
+      
+      <!-- Variable or Fixed -->
+      <div class="edit-form-field" style="display: flex;">
+        <label style="padding: 0 16px; font-size: smaller;">Variable or Fixed</label>
+        <mat-button-toggle-group appearance="legacy"  
+                                 class="edit-form-field" 
+                                 id="mortgageType"
+                                 [(ngModel)]="currentProperty.mortgageType" 
+                                 name="mortgageType">          
+          <mat-button-toggle  value="V">Variable</mat-button-toggle>
+          <mat-button-toggle  value="F">Fixed</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      
+      <!-- Mortgage Rate -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Mortgage Rate</mat-label>
+        <input id="mortgageRate"
+               matInput type="number"
+               [(ngModel)]="currentProperty.mortgageRate" 
+               name="mortgageRate"
+               ui-percentage-mask />               
+               <span matSuffix>%</span>
+      </mat-form-field>      
+    </div>
+
+    <!-- Mortgage : -->
+    <div class="form-group">
+      <!-- Payment Frequency: Weekly, Bi-Weekly, Semi-Monthly and Monthly. -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Payment Frequency</mat-label>
+        <mat-select id="paymentFrequency" 
+                    [(ngModel)]="currentProperty.paymentFrequency" 
+                    name="paymentFrequency"  >
+          @for (paymentFrequency of config.cycles; track paymentFrequency) {
+            <mat-option [value]="paymentFrequency.value">{{paymentFrequency.viewValue}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+     
+      <!-- Payment Amount -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Payment Amount</mat-label>
+        <input id="paymentAmount" 
+               matInput 
+               type="text" 
+               [(ngModel)]="currentProperty.paymentAmount" 
+               name="paymentAmount"
+               currencyMask />
+      </mat-form-field>
+
+      <!-- Maturity Date -->
+      <mat-form-field class="edit-form-field">
+        <mat-label>Maturity Date</mat-label>
+        <input matInput 
+               [matDatepicker]="maturityDatePicker"
+               id="maturityDate" 
+               [(ngModel)]="currentProperty.maturityDate" 
+               name="maturityDate">
+        <mat-hint>YYYY-MM-DD</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="maturityDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #maturityDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    
+    <br>
+
+    <!-- comment -->
+    <div class="form-group">
+      <mat-form-field class="edit-form-field">
+        <mat-label>Comment</mat-label>
+        <textarea id="comment" matInput [(ngModel)]="currentProperty.comment" name="comment"></textarea>
+      </mat-form-field>
+    </div>
+
+  </form>
+</div>

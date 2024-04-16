@@ -26,6 +26,7 @@ import { MY_FORMATS } from './models/expense.model';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
 import { MortgageComponent } from './mortgage/mortgage.component';
+import { SearchFilterPipe } from './shared/search-filter.pipe';
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -47,6 +48,7 @@ export const initConfig =
     SettingsComponent,
     OverviewComponent,
     MortgageComponent,
+    SearchFilterPipe,
   ],
   imports: [
     HttpClientModule,

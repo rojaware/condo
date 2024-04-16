@@ -8,7 +8,7 @@ export class Property {
   rollNo: string;
   propertyCustomerNo: string;
   owner?: string[];
-  bank: string;
+
   size: number;
   builder: string;
   closingDate: string;
@@ -20,6 +20,8 @@ export class Property {
   rentFee: number;
   managementFee: number;
   purchasePrice: number;
+  // Mortgage Detail
+  bank: string;
   mortgageRate: number;
   mortgageAccountNo: string;
   mortgageType: string;  
@@ -27,6 +29,7 @@ export class Property {
   paymentAmount: number;  
   maturityDate: string;
   comment: string;
+  
   tenant: Tenant;
   expenses: Expense[];
   documents: Document[];
