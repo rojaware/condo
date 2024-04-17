@@ -1,92 +1,106 @@
-.edit-form {
-  margin: inherit;
-  .btn {
-    margin: 0 50px 0 50px !important;
+
+
+  .edit-form {
+    margin: inherit;
+
+    .btn {
+      margin: 0 50px 0 50px !important;
+    }
   }
-}
-.form-group {
-  display: flex;
-  margin-top: 1rem;
-}
-.edit-form-field {
-  width: -webkit-fill-available;
-  margin-bottom: -2em;
-  padding-right: 10px;
-}
-.button-space {
-  padding-right: 10px;
-}
-div.demo {
+
+  .form-group {
+    display: flex;
+    margin-top: 1rem;
+  }
+
+  .edit-form-field {
+    width: -webkit-fill-available;
+    margin-bottom: -2em;
+    padding-right: 10px;
+  }
+
+  .button-space {
+    padding-right: 10px;
+  }
+
+  div.demo {
     display: table;
     width: 100%;
-    table-layout: fixed;    /* For cells of equal size */
-}
-div.demo span {
+    table-layout: fixed;
+    /* For cells of equal size */
+  }
+
+  div.demo span {
     display: table-cell;
     text-align: left;
-}
-.right_header {
-  color: #461212;
-  position: absolute;
-  right: 310px;
-}
-span label {
-  font-weight: bold;
-}
+  }
 
-p {
-  font-family: Lato;
-}
-table {
-  width: 90%;
-  margin: auto;
-  margin-top: 25px;
-}
-.btn-edit {
-  text-align: right;
-}
-h2 {
-  text-align: center;
-  padding-top: 20px;
-}
+  .right_header {
+    color: #461212;
+    position: absolute;
+    right: 310px;
+  }
 
-.table-header {
-  width: 90%;
-  margin: auto;
-  text-align: right;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  span label {
+    font-weight: bold;
+  }
 
-.button-add-row {
-  background: #1b9e1b;
-  color: #ffffff;
-}
+  p {
+    font-family: Lato;
+  }
 
-.button-remove-rows {
-  background: red;
-  color: #ffffff;
-  margin-right: 5px;
-}
+  table {
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+  }
 
-.button-remove {
-  color: red;
-}
+  .btn-edit {
+    text-align: right;
+  }
 
-::ng-deep .mat-form-field-infix {
-  width: 100% !important;
-}
+  h2 {
+    text-align: center;
+    padding-top: 20px;
+  }
 
-.form-input {
-  padding-right: 5px;
-}
+  .table-header {
+    width: 90%;
+    margin: auto;
+    text-align: right;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-div span {
-  font-style: italic;
-  color:mediumslateblue;
-  font-weight: 600;
-}
+  .button-add-row {
+    background: #1b9e1b;
+    color: #ffffff;
+  }
+
+  .button-remove-rows {
+    background: red;
+    color: #ffffff;
+    margin-right: 5px;
+  }
+
+  .button-remove {
+    color: red;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    width: 100% !important;
+  }
+
+  .form-input {
+    padding-right: 5px;
+  }
+
+  div span {
+    font-style: italic;
+    color: mediumslateblue;
+    font-weight: 600;
+  }
 
 

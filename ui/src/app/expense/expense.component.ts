@@ -271,6 +271,11 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     });
   }
 
+  onDeleteClicked(year: number, month: number) {
+    if(confirm("Are you sure to delete this property? ")) {
+      this.delete(year, month);
+    }
+  }
   delete(year?: number, month?: number): void {
     this.expenseService.delete(this.currentPropertyName, year, month).subscribe({
       next: (res: any) => {

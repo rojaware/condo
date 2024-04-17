@@ -108,7 +108,11 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       },
     });
   }
-
+  onDeleteClicked() {
+    if(confirm("Are you sure to delete this property? ")) {
+      this.delete()
+    }
+  }
   delete(): void {
     this.message = '';
     this.errMessage = '';
@@ -134,12 +138,10 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   onConciergePhoneChanged(event: any): void {
     const formatted = this.phonePipe.transform(event.target.value);
     this.currentProperty.conciergePhone = formatted;
-    formatted;
   }
   onManagementPhoneChanged(event: any): void {
     const formatted = this.phonePipe.transform(event.target.value);
     this.currentProperty.managementPhone = formatted;
-    formatted;
   }
   /**
    * 1. set fiscal year date to end date, overwrite

@@ -1,22 +1,23 @@
 <div class="edit-form" id="tenant">
   
   <!-- title with edit / view buttons -->
-  <div class="form-group">
-    <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | titlecase }}</h4>
+  <div class="form-group" style="  width: max-content;">
+    <h4 class="" *ngIf="tenant">{{ tenant.primaryName | titlecase }}</h4>
     @if (viewMode) {
       <button class="badge badge-warning " (click)="viewMode = false">
         <mat-icon>edit</mat-icon>
       </button>
-      <button *ngIf="tenant.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">Delete</button>     
-    } @else {
-      <button class="badge badge-warning " (click)="viewMode = true"><mat-icon>remove_red_eye</mat-icon></button>
+      <button *ngIf="tenant.id" class="btn btn-danger" (click)="onDeleteClicked()" matTooltip="Delete Tenant">Delete</button>     
+    } @else {      
+      <button  class="btn btn-primary"  (click)="viewMode = true">
+        View
+      </button>
     }
-    
-    
+        
     <!-- Button , Cancel, Delete, Save -->
     <div *ngIf="!viewMode" class=" button-space" style="display: flex">
       <button class="btn btn-info" (click)="viewMode = true" matTooltip="Cancel Changes">Cancel</button>           
-      <button *ngIf="tenant.id" class="btn btn-danger" (click)="delete()" matTooltip="Delete Tenant">Delete</button>     
+      <button *ngIf="tenant.id" class="btn btn-danger" (click)="onDeleteClicked()" matTooltip="Delete Tenant">Delete</button>     
       <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Tenant">Save Change</button>
       <button class="btn btn-secondary"  (click)="print()"> Print </button>
     </div>       
@@ -70,7 +71,13 @@
     <div class="form-group">
       <mat-form-field class="edit-form-field">
         <mat-label>Phone</mat-label>
-        <input id="phone" matInput type="text" [(ngModel)]="tenant.phone" name="phone" [readonly]="viewMode" />
+        <input id="phone" 
+               matInput 
+               type="text" 
+               [(ngModel)]="tenant.phone" 
+               name="phone" 
+               [readonly]="viewMode" 
+               (blur)="onPhoneChanged($event)"/>
         @if (tenant.phone && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.phone = ''">
           <mat-icon>close</mat-icon>
@@ -102,11 +109,14 @@
     </div>
 
     <!-- comment -->
-    <div class="form-group">
+    <div class="form-group" matTooltip="Use this field if you have more tenant contacts">
       <mat-form-field class="edit-form-field">
         <mat-label>Comment</mat-label>
-        <textarea id="comment" matInput [(ngModel)]="tenant.comment" name="comment"
-          [readonly]="viewMode"></textarea>
+        <textarea id="comment" 
+                  matInput 
+                  [(ngModel)]="tenant.comment" 
+                  name="comment"
+                  [readonly]="viewMode"></textarea>
         @if (tenant.comment && !viewMode) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="tenant.comment = ''">
           <mat-icon>close</mat-icon>

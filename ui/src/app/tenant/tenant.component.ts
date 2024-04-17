@@ -3,6 +3,7 @@ import { Tenant } from '../models/tenant.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '../services/tenant.service';
 import { BaseComponent } from '../base/base.component';
+import { PhonePipe } from '@app/shared/phone.pipe';
 
 @Component({
   selector: 'app-tenant',
@@ -15,6 +16,7 @@ export class TenantComponent extends BaseComponent implements OnInit {
   
   dateToday: number = Date.now();
   message: string;
+  phonePipe = new PhonePipe();
 
   constructor(
     protected router: Router,
@@ -103,6 +105,11 @@ export class TenantComponent extends BaseComponent implements OnInit {
     });
   }
 
+  onDeleteClicked() {
+    if(confirm("Are you sure to delete this tenant? ")) {
+      this.delete()
+    }
+  }
   delete(): void {
     this.tenantService.delete(this.tenant.propertyName).subscribe({
       next: (res) => {
@@ -113,4 +120,8 @@ export class TenantComponent extends BaseComponent implements OnInit {
     });
   }
 
+  onPhoneChanged(event: any): void {
+    const formatted = this.phonePipe.transform(event.target.value);
+    this.tenant.phone = formatted;
+  }
 }
