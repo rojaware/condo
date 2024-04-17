@@ -12,12 +12,14 @@ import { Property } from '@app/models/property.model';
 import { BaseComponent } from '@app/base/base.component';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { Label } from '@app/models/label.model';
+import { PhonePipe } from '@app/shared/phone.pipe';
 
 
 @Component({
   selector: 'app-property',
   templateUrl: './property.component.html',
   styleUrls: ['./property.component.css'],
+  
 })
 export class PropertyComponent extends BaseComponent implements OnInit {
   @Input() viewMode = true;
@@ -36,11 +38,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   banks: Label[];
   owners: Label[];
   propertyData: Property[] = [];
+  phonePipe = new PhonePipe();
 
   constructor(
     protected router: Router,
     private propertyService: PropertyService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute, 
+    
   ) {
     super(router);
   }
@@ -127,6 +131,16 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   onNgModelChange(event: any): void {}
 
+  onConciergePhoneChanged(event: any): void {
+    const formatted = this.phonePipe.transform(event.target.value);
+    this.currentProperty.conciergePhone = formatted;
+    formatted;
+  }
+  onManagementPhoneChanged(event: any): void {
+    const formatted = this.phonePipe.transform(event.target.value);
+    this.currentProperty.managementPhone = formatted;
+    formatted;
+  }
   /**
    * 1. set fiscal year date to end date, overwrite
    * 2. make the extended end date empty
@@ -154,13 +168,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       }
     } else {
       // extendedEndDate exists...
-      if (
-        !this.util.isEmpty(this.currentProperty.endDate) &&
-        this.util.getDaysDifference(
-          this.currentProperty.startDate,
-          this.currentProperty.endDate
-        ) < 1
-      ) {
+      if (!this.util.isEmpty(this.currentProperty.endDate) &&
+           this.util.getDaysDifference(this.currentProperty.startDate,this.currentProperty.endDate) < 1 ) {
         this.currentProperty.extendedEndDate = '';
       }
     }

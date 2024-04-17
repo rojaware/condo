@@ -26,6 +26,7 @@ async function getProperties() {
                ,imageUrl
                ,tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
+               ,conciergePhone, managementPhone, managementEmail
                ,[owner] from Properties WHERE salesDate is null`;               
     try {
         let pool = await sql.connect(config);
@@ -61,6 +62,7 @@ async function getProperty(name) {
                ,comment
                ,imageUrl, tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
+               ,conciergePhone, managementPhone, managementEmail
                ,[owner] from Properties where name = @name AND salesDate is null`;
     try {
         let pool = await sql.connect(config);
@@ -103,6 +105,7 @@ async function createProperty(property) {
                ,mortgageRate, paymentFrequency, paymentAmount
                ,maturityDate, comment, imageUrl, tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
+               ,conciergePhone, managementPhone, managementEmail
                ,[owner])
          VALUES
                (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder,
@@ -115,6 +118,7 @@ async function createProperty(property) {
                 ,@mortgageRate, @paymentFrequency, @paymentAmount
                 ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@insuranceCompany, @policyNo, @insuranceFee, @propertyTax
+                ,@conciergePhone, @managementPhone, @managementEmail
                 ,@owner);
          SELECT  IDENT_CURRENT('properties') as id ;`;
          console.log('property.occupancyDate ==> ' + property.occupancyDate)
@@ -150,7 +154,10 @@ async function createProperty(property) {
             .input('policyNo', sql.NVarChar, property.policyNo)
             .input('insuranceFee', sql.Money, property.insuranceFee)
             .input('propertyTax', sql.Money, property.propertyTax)
-            .input('comment', sql.NVarChar, property.comment)
+            .input('comment', sql.NVarChar, property.comment)            
+            .input('conciergePhone', sql.NVarChar, property.conciergePhone)
+            .input('managementPhone', sql.NVarChar, property.managementPhone)
+            .input('managementEmail', sql.NVarChar, property.managementEmail)
             .query(query);
         return item.recordset;
     }
@@ -192,6 +199,9 @@ async function updateProperty(property) {
        ,insuranceFee = @insuranceFee
        ,propertyTax = @propertyTax
        ,[comment] = @comment
+       ,conciergePhone = @conciergePhone
+       ,managementPhone = @managementPhone
+       ,managementEmail = @managementEmail
     WHERE id = @id;
              SELECT @id as id;`;
     try {
@@ -227,7 +237,10 @@ async function updateProperty(property) {
             .input('policyNo', sql.NVarChar, property.policyNo)
             .input('insuranceFee', sql.Money, property.insuranceFee)
             .input('propertyTax', sql.Money, property.propertyTax)
-            .input('comment', sql.NVarChar, property.comment)    
+            .input('comment', sql.NVarChar, property.comment)            
+            .input('conciergePhone', sql.NVarChar, property.conciergePhone)
+            .input('managementPhone', sql.NVarChar, property.managementPhone)
+            .input('managementEmail', sql.NVarChar, property.managementEmail)
             .query(query);
         return item.recordsets;
     }

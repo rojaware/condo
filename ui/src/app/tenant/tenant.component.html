@@ -2,7 +2,7 @@
   
   <!-- title with edit / view buttons -->
   <div class="form-group">
-    <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | uppercase }}</h4>
+    <h4 class="button-space" *ngIf="tenant">{{ tenant.primaryName | titlecase }}</h4>
     @if (viewMode) {
       <button class="badge badge-warning " (click)="viewMode = false">
         <mat-icon>edit</mat-icon>

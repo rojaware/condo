@@ -41,4 +41,7 @@ export class Property {
   policyNo: string;
   insuranceFee: number;  
   propertyTax: number;
+  conciergePhone: string;
+  managementPhone: string;
+  managementEmail: string;
 }

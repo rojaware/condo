@@ -1,7 +1,7 @@
 <div class="edit-form" id="mortgage">
   <!-- Title and Buttons -->
   <div class="form-group">
-    <h4 class="button-space">{{ currentProperty.name | uppercase }}</h4>
+    <h4 class="button-space">{{ currentProperty.bank | titlecase }}</h4>
       <!-- Button , Cancel, Delete, Save -->      
       <div class=" button-space"  style="display: flex">                
           <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
