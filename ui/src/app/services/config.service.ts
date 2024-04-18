@@ -5,15 +5,12 @@ import { Config } from '../models/config.model';
 import { SettingService } from './setting.service';
 import { BaseService } from './base.service';
 
-
-
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService extends BaseService {
   static config: Config;
-  env: string;
-  
+  env: string; 
 
   constructor(private readonly httpHandler: HttpBackend,
     protected http: HttpClient,
@@ -52,8 +49,8 @@ export class ConfigService extends BaseService {
     });
   }
 
-  get config(): Config {
-    return this.config;
-  }
+  // get config(): Config {
+  //   return this.config;
+  // }
 
 }

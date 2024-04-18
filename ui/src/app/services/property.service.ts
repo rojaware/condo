@@ -4,41 +4,44 @@ import { Observable } from 'rxjs';
 import { Property } from '../models/property.model';
 import { BaseService } from './base.service';
 
-const baseUrl = 'http://localhost:8090/api/properties';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PropertyService extends BaseService {
+  //  'http://localhost:8090/api/properties';
+  baseUrl: string = '';
   constructor(protected http: HttpClient) {
     super(http);
+    this.baseUrl = this.baseurl + 'properties';
   }
 
-  getAll(): Observable<Property[]> {
-    return this.http.get<Property[]>(baseUrl);
+  getAll(): Observable<Property[]> {    
+    console.log('config base url in property  service is.... ' + this.baseurl)
+    return this.http.get<Property[]>(this.baseUrl);
   }
 
   get(name: any): Observable<Property> {
-    return this.http.get<Property>(`${baseUrl}/${name}`);
+    return this.http.get<Property>(`${this.baseUrl}/${name}`);
   }
   
   getLeaseDates(): Observable<Property[]> {
-    return this.http.get<Property[]>(`${baseUrl}LeaseDates`);
+    return this.http.get<Property[]>(`${this.baseUrl}LeaseDates`);
   }
 
   create(data: any): Observable<any> {
-    return this.http.post(baseUrl, data);
+    return this.http.post(this.baseUrl, data);
   }
 
   update(data: any): Observable<any> {
-    return this.http.put(`${baseUrl}`, data);
+    return this.http.put(`${this.baseUrl}`, data);
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
   deleteAll(): Observable<any> {
-    return this.http.delete(baseUrl);
+    return this.http.delete(this.baseUrl);
   }
 }

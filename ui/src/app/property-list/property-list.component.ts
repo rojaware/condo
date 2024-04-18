@@ -9,6 +9,7 @@ import { User } from '@app/models/user.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LabelTypeEnum } from '@app/models/label.model';
 import { SettingService } from '@app/services/setting.service';
+import { environment } from 'environments/environment';
 
 
 @Component({
@@ -33,10 +34,13 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     private settingService: SettingService,
     private route: ActivatedRoute,      ) {
     super(router);
+    
+    this.propertyService.setBaseUrl(this.config.baseUrl)
   }
   ngOnInit(): void {
     this.retrievePropertyList();
     this.setupSettings();
+    console.log('API Key:', environment.apiKey);
   }
   setupSettings() {
     this.settingService.getAll().subscribe({

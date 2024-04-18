@@ -50,6 +50,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    console.log('....current url is ' + this.baseurl)
   }
 
   private getProperty(name: string): void {

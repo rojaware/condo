@@ -4,58 +4,60 @@ import { Observable } from 'rxjs';
 import { Expense } from '@app/models/expense.model';
 import { BaseService } from './base.service';
 
-const baseUrl = 'http://localhost:8090/api/expenses';
+// const baseUrl = 'http://localhost:8090/api/expenses';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExpenseService extends BaseService {
+  baseUrl: string = '';
   constructor(protected http: HttpClient) {
     super(http);
+    this.baseUrl = this.baseurl + 'expenses';
   }
 
   getAll(propertyName: string): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
+    return this.http.get<Expense[]>(`${this.baseUrl}ByProperty/${propertyName}`);
   }
   
   get(id: number): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${baseUrl}/${id}`);
+    return this.http.get<Expense[]>(`${this.baseUrl}/${id}`);
   }
 
   getByProperty(propertyName: any): Observable<Expense[]> {
-    return this.http.get<Expense[]>(`${baseUrl}ByProperty/${propertyName}`);
+    return this.http.get<Expense[]>(`${this.baseUrl}ByProperty/${propertyName}`);
   }
   
   getByYearMonth(propertyName: string, year?: number | null, month?: number | null): Observable<Expense[]> {    
     const property = propertyName.trim();
     if (this.util.hasObject(month)) {
-      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${property}/${year}/${month}`);
+      return this.http.get<Expense[]>(`${this.baseUrl}ByPropertyYearMonth/${property}/${year}/${month}`);
     } else {
       if (!year) {
         year = new Date().getFullYear();
       }
-      return this.http.get<Expense[]>(`${baseUrl}ByPropertyYearMonth/${property}/${year}`);      
+      return this.http.get<Expense[]>(`${this.baseUrl}ByPropertyYearMonth/${property}/${year}`);      
     }    
   }
   
   delete(propertyName: any, year?: any, month?: any): Observable<any> {
-    return this.http.delete(`${baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
+    return this.http.delete(`${this.baseUrl}ByPropertyYearMonth/${propertyName}/${year}/${month}`);
   }
   
   deleteAll(): Observable<any> {
-    return this.http.delete(baseUrl);
+    return this.http.delete(this.baseUrl);
   }
 
   insert(data: any): Observable<any> {
-    return this.http.post(baseUrl, data);
+    return this.http.post(this.baseUrl, data);
   }
 
   update(data: any): Observable<any> {
-    return this.http.put(`${baseUrl}`, data);
+    return this.http.put(`${this.baseUrl}`, data);
   }
   
   updateBulk(data: any): Observable<any> {
-    return this.http.post(`${baseUrl}Bulk`, data);
+    return this.http.post(`${this.baseUrl}Bulk`, data);
   }
 
 }

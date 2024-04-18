@@ -16,10 +16,14 @@ export class BaseComponent implements OnInit {
   errMessage: string;
   message: string;
   util =  Util;
+  baseurl = '';
 
-  constructor(protected router: Router) {}
+  constructor(protected router: Router) {
+    this.baseurl = this.config.baseUrl;
+  }
 
   ngOnInit(): void {
+
   }
 
 

@@ -4,40 +4,42 @@ import { Observable } from 'rxjs';
 import { Document } from '@app/models/document.model';
 import { BaseService } from './base.service';
 
-const baseUrl = 'http://localhost:8090/api/documents';
+// const baseUrl = 'http://localhost:8090/api/documents';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentService extends BaseService {
+  baseUrl: string = '';
   constructor(protected http: HttpClient) {
     super(http);
+    this.baseUrl = this.baseurl + 'documents';
   }
 
   getAll(): Observable<Document[]> {
-    return this.http.get<Document[]>(baseUrl);
+    return this.http.get<Document[]>(this.baseUrl);
   }
 
   getByPropertyOrTenant(name?: string): Observable<Document[]> {    
     if (name) {
-      return this.http.get<Document[]>(`${baseUrl}ByPropertyOrTenant/${name}`);
+      return this.http.get<Document[]>(`${this.baseUrl}ByPropertyOrTenant/${name}`);
     }
     return new Observable<Document[]>;    
   }
 
   openFile(id: number, name: string): Observable<any> {
-    return this.http.get(`${baseUrl}ById/${id}`,
+    return this.http.get(`${this.baseUrl}ById/${id}`,
      { responseType: 'blob' });
   }
 
   getById(id: number): Observable<Document> {
-    return this.http.get<Document>(`${baseUrl}ById/${id}`);
+    return this.http.get<Document>(`${this.baseUrl}ById/${id}`);
   }
 
   create(data: any, file: File): Observable<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    return this.http.post(baseUrl, formData);
+    return this.http.post(this.baseUrl, formData);
   }
   /**
    * New method to upload file on doc controller
@@ -56,7 +58,7 @@ export class DocumentService extends BaseService {
       
     console.log('sending form data')
 
-    const req = new HttpRequest('POST', `${baseUrl}`, formData, {
+    const req = new HttpRequest('POST', `${this.baseUrl}`, formData, {
       responseType: 'json',
     });
 
@@ -64,15 +66,15 @@ export class DocumentService extends BaseService {
   }
 
   getFiles(): Observable<any> {
-    return this.http.get(`${baseUrl}/documents`);
+    return this.http.get(`${this.baseUrl}/documents`);
   }
 
   deleteByPropertyOrTenantName(propertyOrTenantName?: string): Observable<any> {
-    return this.http.delete(`${baseUrl}ByPropertyOrTenant/${propertyOrTenantName}`);
+    return this.http.delete(`${this.baseUrl}ByPropertyOrTenant/${propertyOrTenantName}`);
   }
 
   deleteById(id: number): Observable<any> {
-    return this.http.delete(`${baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
   
   /**
@@ -81,14 +83,14 @@ export class DocumentService extends BaseService {
    * @returns 
    */
   deleteByIdList(idArray: string): Observable<any> {
-    return this.http.delete(`${baseUrl}ByIdList/${idArray}`);
+    return this.http.delete(`${this.baseUrl}ByIdList/${idArray}`);
   }
 
   deleteAll(id: number): Observable<any> {
-    return this.http.delete(`${baseUrl}`);
+    return this.http.delete(`${this.baseUrl}`);
   }
 
   update(data: any): Observable<any> {    
-    return this.http.put(`${baseUrl}`, data);
+    return this.http.put(`${this.baseUrl}`, data);
   }
 }
