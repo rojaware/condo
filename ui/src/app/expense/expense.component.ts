@@ -143,6 +143,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   private appendTotals(data: Expense[]): Expense[] {
     data.forEach((item) => this.calculateTotal(item));
+    // attach total row at the bottom...
+    
     return data;
   }
 
@@ -204,6 +206,10 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
    * Save single expense by month
    */
   save(): void {
+    this.expenses = this.appendTotals(this.expenses);
+          this.config.user.property.expenses = this.expenses;
+          this.dataSource = new MatTableDataSource<Expense>(this.expenses);
+        
     if (this.currentExpense.id) {
       this.update();
     } else {

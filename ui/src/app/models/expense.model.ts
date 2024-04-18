@@ -77,17 +77,17 @@ export const ExpenseColumns = [
   {
     key: 'maintenance',
     type: 'currency',
-    label: 'maintenance',    
+    label: 'mainte\nnance',    
   },
   {
     key: 'commission',
     type: 'currency',
-    label: 'commission',    
+    label: 'commi\nssion',    
   },
   {
     key: 'insurance',
     type: 'currency',
-    label: 'insurance',    
+    label: 'insur\nance',    
   },
   {
     key: 'legal',
@@ -128,7 +128,7 @@ export const ExpenseColumns = [
   {
     key: 'depreciation',
     type: 'currency',
-    label: 'depreciation',    
+    label: 'depre\nciation',    
     hidden: true,
   },
 

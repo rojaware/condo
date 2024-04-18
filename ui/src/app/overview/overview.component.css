@@ -3,3 +3,6 @@
   color:mediumslateblue;
   font-weight: 600;
 }
+ul li{
+  list-style-type: decimal;
+}
