@@ -22,7 +22,7 @@ import { PhonePipe } from '@app/shared/phone.pipe';
   
 })
 export class PropertyComponent extends BaseComponent implements OnInit {
-  @Input() viewMode = true;
+  @Input() viewMode = false;
   @Input() currentProperty: Property = {} as Property;
   @Output() isPropertyDeleted = new EventEmitter<boolean>();
   @ViewChild('occupancyDatePicker', { static: false }) private occupancyDatePicker: MatDatepicker<Date>;
@@ -85,7 +85,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
         this.message = res.message
           ? res.message
           : 'This property has been updated successfully!';
-        this.viewMode = true;
       },
       error: (e) => {
         console.error(e);
@@ -102,7 +101,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
         this.message = res.message
           ? res.message
           : 'This property was updated successfully!';
-        this.viewMode = true;
       },
       error: (e) => {
         console.error(e);
@@ -125,7 +123,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
           'Deleted property (' + this.currentProperty.name + ') successfully';
         this.currentProperty = {} as Property;
         this.isPropertyDeleted.emit(true);
-        this.viewMode = true;
         this.router.navigateByUrl('properties');
       },
       error: (e) => {

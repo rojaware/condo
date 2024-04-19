@@ -14,7 +14,7 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { default as _rollupMoment, Moment } from 'moment';
 import { ExpenseService } from '@app/services/expense.service';
-import { Expense, ExpenseColumns } from '@app/models/expense.model';
+import { Expense, ExpenseColumns, HomeExpenseColumns } from '@app/models/expense.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
@@ -52,7 +52,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   @Input() currentPropertyName: string = '';
   @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
   @ViewChild('fileImportInput') fileImportInput: any;
-  displayedColumns: string[] = ExpenseColumns.map((col) => col.key);
+  displayedColumns: string[] = ExpenseColumns.map((col) => col.key); 
   columnsSchema: any = ExpenseColumns;
   expenses: Expense[] = [];
   currentExpense: Expense;
@@ -94,6 +94,13 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('property changed to ', this.currentPropertyName);
+    if (this.currentPropertyName.indexOf('home') > -1) {
+      console.log(' i am at home')
+      this.columnsSchema = HomeExpenseColumns;
+    } else {
+      console.log(' out of home...')
+      this.columnsSchema = ExpenseColumns;
+    }
     this.getByYear();
   }
 

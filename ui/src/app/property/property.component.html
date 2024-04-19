@@ -1,12 +1,6 @@
 <div class="edit-form" id="property">
   <div class="form-group">
     <h4 class="button-space">{{ currentProperty.name | titlecase }}</h4>
-    @if (viewMode) {
-      <button class="badge badge-warning " (click)="viewMode = false" *ngIf="!util.isBlank(currentProperty)">
-        Edit
-      </button>
-      <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="onDeleteClicked()" matTooltip="Delete Property"> Delete </button>     
-    } @else { 
 
       <button  class="btn btn-primary"  (click)="viewMode = true">
         View
@@ -18,7 +12,7 @@
           <button *ngIf="currentProperty.id" class="btn btn-danger" (click)="onDeleteClicked()" matTooltip="Delete Property"> Delete </button>     
           <button type="submit" class="btn btn-success" (click)="save()" matTooltip="Save Property"> Save Change </button>
       </div>
-    }
+
     <button class="btn btn-secondary"  
             (click)="print()"> Print </button>
   </div>

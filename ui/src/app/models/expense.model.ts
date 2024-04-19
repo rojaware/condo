@@ -149,3 +149,109 @@ export const ExpenseColumns = [
     label: 'comment',
   }
 ];
+
+export const HomeExpenseColumns = [
+
+  {
+    key: 'id',
+    type: 'hidden',
+    label: 'ID',    
+  },
+  {
+    key: 'propertyName',
+    type: 'hidden',
+    label: 'Property',
+  },  
+  {
+    key: 'year',
+    type: 'hidden',
+    label: 'Year',
+  },  
+  {
+    key: 'month',
+    type: 'read',
+    label: 'Month',
+  },
+  {
+    key: 'income',
+    type: 'currency',
+    label: 'income',   
+  },
+  {
+    key: 'travel',
+    type: 'currency',
+    label: 'travel',    
+  },
+  {
+    key: 'maintenance',
+    type: 'currency',
+    label: 'Home Insurance',    
+  },
+  {
+    key: 'insurance',
+    type: 'currency',
+    label: 'Auto Insurance',    
+  },
+  {
+    key: 'legal',
+    type: 'currency',
+    label: 'Gas',    
+  },  
+  {
+    key: 'managementFee',
+    type: 'currency',
+    label: 'Hydro',    
+  },
+  {
+    key: 'mortgageInterest',
+    type: 'currency',
+    label: 'Water',    
+  },
+  {
+    key: 'repairs',
+    type: 'currency',
+    label: 'Water Heater',    
+    
+  },
+  {
+    key: 'supplies',
+    type: 'currency',
+    label: 'Internet',    
+  },
+  {
+    key: 'tax',
+    type: 'currency',
+    label: 'Property Tax',    
+  },
+  {
+    key: 'utilities',
+    type: 'currency',
+    label: 'Mobile',    
+  },
+  {
+    key: 'depreciation',
+    type: 'currency',
+    label: 'Netflix',    
+  },
+  {
+    key: 'commission',
+    type: 'currency',
+    label: 'Youtube',    
+  },
+  // total
+  {
+    key: 'totalExpense',
+    type: 'read',
+    label: 'total Expense',
+  },
+  {
+    key: 'netIncome',
+    type: 'read',
+    label: 'net Income',
+  },
+  {
+    key: 'comment',
+    type: 'write',
+    label: 'comment',
+  }
+];
