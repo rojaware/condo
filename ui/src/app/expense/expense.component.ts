@@ -144,8 +144,30 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   private appendTotals(data: Expense[]): Expense[] {
     data.forEach((item) => this.calculateTotal(item));
     // attach total row at the bottom...
-    
+    const lastRow = this.insertLastRow(data);
+    data.push(lastRow);
     return data;
+  }
+  private insertLastRow(expenseList: Expense[]): Expense {
+    let lastRow = new Expense();
+    lastRow.id = -1;
+    lastRow['income'] = expenseList.map((item: Expense) => item['income']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['travel'] = expenseList.map((item: Expense) => item['travel']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['maintenance'] = expenseList.map((item: Expense) => item['maintenance']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['commission'] = expenseList.map((item: Expense) => item['commission']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['insurance'] = expenseList.map((item: Expense) => item['insurance']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['legal'] = expenseList.map((item: Expense) => item['legal']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['managementFee'] = expenseList.map((item: Expense) => item['managementFee']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['mortgageInterest'] = expenseList.map((item: Expense) => item['mortgageInterest']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['repairs'] = expenseList.map((item: Expense) => item['repairs']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['supplies'] = expenseList.map((item: Expense) => item['supplies']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['tax'] = expenseList.map((item: Expense) => item['tax']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['utilities'] = expenseList.map((item: Expense) => item['utilities']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['depreciation'] = expenseList.map((item: Expense) => item['depreciation']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['totalExpense'] = expenseList.map((item: Expense) => item['totalExpense']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['netIncome'] = expenseList.map((item: Expense) => item['netIncome']).reduce((acc, curr) => acc + curr, 0);
+    
+    return lastRow;
   }
 
   private calculateTotal(expense: Expense): Expense {
@@ -265,7 +287,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   update(): void {
     this.message = '';
-
+        
     this.expenseService.update(this.currentExpense).subscribe({
       next: (res: any) => {
         console.log(res);
@@ -292,8 +314,6 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       error: (e: any) => console.error(e),
     });
   }
-
- 
 
   /** CSV File Import ... */
   onFileSelected(event: any): void {
@@ -341,7 +361,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   }
 
   saveAnnualExpenses(): void {
-    this.expenseService.updateBulk(this.expenses).subscribe({
+    let pureExpenses = this.expenses.filter(item => !(item.id === -1))
+    this.expenseService.updateBulk(pureExpenses).subscribe({
       next: (res: any) => {
         console.log(res);
         this.message = 'This expense was updated successfully!';
@@ -362,9 +383,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
     let propertyNames = Object.keys(data[0]);
     let rowWithPropertyNames = propertyNames.join(',') + '\n';
-
     let csvContent = rowWithPropertyNames;
-
     let rows: string[] = [];
 
     data.forEach((item) => {

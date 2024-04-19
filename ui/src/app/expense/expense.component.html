@@ -212,7 +212,11 @@
                 </div>
                 <div class="form-input" *ngSwitchCase="'read'">
                   @if (col.key === 'month'){
-                    {{ element[col.key] | monthname }}
+                    @if (element[col.key]) {
+                      {{ element[col.key] | monthname }}
+                    } @else {
+                      Total
+                    }
                   } @else if (col.key === 'year') {
                     '--'
                   } @else {
