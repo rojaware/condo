@@ -1,0 +1,121 @@
+<div class="home-expense-form" id="expense">
+  <div class="form-group">
+  
+    <!-- calendar -->
+    <mat-form-field>
+      <mat-label>Month and Year</mat-label>
+      <input matInput [matDatepicker]="datePicker" [formControl]="date">
+      <mat-hint>MM/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+      <mat-datepicker #datePicker 
+                      startView="multi-year" 
+                      (yearSelected)="setYear($event)"
+                      (monthSelected)="setMonthAndYear($event, datePicker)" 
+                      panelClass="example-month-picker">
+      </mat-datepicker>
+    </mat-form-field>
+  
+    <!-- retrieve expense buttons -->
+    <div class="example-button-row" *ngIf="year">
+      <button class="btn btn-primary" (click)="getByYear()">Retrieve {{ year }}</button>
+    </div>
+    
+    <div class="example-button-row">
+      <button class="btn btn-secondary"
+              style="display:block;" 
+              onclick="document.getElementById('csvFileUpload').click()">
+              Import CSV</button>
+   
+      <input type="file" 
+              #fileImportInput 
+              name="File Upload" 
+              id="csvFileUpload" 
+              (change)="onFileSelected($event)"
+              accept=".csv" 
+              style="display:none"/>
+    </div>        
+  </div>
+  
+  <p *ngIf="!year || (currentExpense && currentExpense.propertyName !== config.user.property.name)">
+    Select year and month for {{ config.user.property.name }} ...
+  </p>
+  
+  <!-- Annual Expenses -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Annual Expenses, {{ year }}</mat-card-title>
+      <mat-card-subtitle>
+  
+        <!-- show annual expense table -->
+        <div id="annual-expense" *ngIf="dataSource && expenses && expenses.length > 0">
+  
+          <!-- Content -->
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table" >
+            <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+          
+              <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.type" >
+                <span *ngSwitchCase="'hidden'"></span>
+                <span *ngSwitchDefault > {{ col.label | titlecase }}</span>             
+              </th>
+      
+              <td mat-cell *matCellDef="let element">
+        
+                <!-- Edit mode -->          
+                <div [ngSwitch]="col.type" >
+                  <div class="form-input" *ngSwitchCase="'hidden'">
+  
+                  </div>
+                  <div class="form-input" *ngSwitchCase="'read'">
+                    @if (col.key === 'month'){
+                      @if (element[col.key] > -1) {
+                        {{ element[col.key] | monthname }}
+                      } @else {
+                        Total
+                      }
+                    } @else if (col.key === 'year') {
+                      '--'
+                    } @else {
+                      {{ element[col.key] | currency }}
+                    }
+                  </div>
+                  <div class="form-input" *ngSwitchCase="'write'">
+                    <textarea  
+                      [(ngModel)]="element[col.key]" > 
+                    </textarea>
+                  </div>
+  
+                  <div class="form-input" *ngSwitchDefault >
+                    <input  
+                      [required]="col.required"
+                      [pattern]="col.pattern"
+                      [type]="col.type"
+                      [(ngModel)]="element[col.key]" /> 
+                      <!-- 
+                      (change)="inputHandler($event, element.id, col.key)"-->
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+          </table>
+  
+        </div>      
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+      <div class="example-button-row" *ngIf="expenses.length > 0">
+        <button class="btn btn-success"  (click)="saveAnnualExpenses()">Save Change</button>
+        <button class="btn btn-secondary"  (click)="saveDataInCSV()"> Export to CSV </button>
+        <button class="btn btn-danger"  (click)="delete( year )"> Delete {{ year }} </button>
+      </div>    
+      <div class="col-3">
+        <span *ngIf="message">{{ message }}</span>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  
+  <br>
+  </div>

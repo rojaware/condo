@@ -6,6 +6,7 @@ const multer = require('multer');
 const propertyController = require('./controllers/property-controller');
 const tenantController = require('./controllers/tenant-controller');
 const expenseController = require('./controllers/expense-controller');
+const homeExpenseController = require('./controllers/home-expense-controller');
 const documentsController = require('./controllers/document-controller');
 const settingController = require('./controllers/setting-controller');
 const mortgageController = require('./controllers/mortgage-controller');
@@ -217,7 +218,6 @@ router.route('/tenants').put((request, response) => {
     }
   })
 })
-
 // ######### Expense API .... ############### 
 
 router.route('/expensesByProperty/:propertyName').get((request, response) => {
@@ -302,7 +302,6 @@ router.route('/expenses').post((request, response) => {
   })
 })
 
-
 router.route('/expensesBulk').post((request, response) => {
   let expenses = { ...request.body }
   expenseController.upsertBulk(expenses).then(result => {
@@ -319,6 +318,115 @@ router.route('/expensesBulk').post((request, response) => {
 router.route('/expenses').put((request, response) => {
   let expense = { ...request.body }
   expenseController.updateExpense(expense).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+// ######### Home Expense API .... ############### 
+
+router.route('/homeExpensesByProperty/:propertyName').get((request, response) => {
+  homeExpenseController.getExpenses(request.params.propertyName).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/homeExpenses/:id').get((request, response) => {
+  const params = request.params;
+  homeExpenseController.getExpenseById(params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/homeExpensesByPropertyYearMonth/:propertyName/:year/:month?').get((request, response) => {
+  const params = request.params;
+  homeExpenseController.getExpenseByYearMonth(params.propertyName, params.year, params.month).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(200).json([])
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/homeExpenses/:id').delete((request, response) => {
+  const params = request.params;
+  homeExpenseController.deleteExpenseById(params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/homeExpensesByPropertyYearMonth/:propertyName/:year?/:month?').delete((request, response) => {
+  const params = request.params;
+  homeExpenseController.deleteExpenseByPropertyYearMonth(params.propertyName, params.year, params.month).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/homeExpenses').delete((request, response) => {
+  const params = request.params;
+  homeExpenseController.purge().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/homeExpenses').post((request, response) => {
+  let expense = { ...request.body }
+  homeExpenseController.insertExpense(expense).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/homeExpensesBulk').post((request, response) => {
+  let expenses = { ...request.body }
+  homeExpenseController.upsertBulk(expenses).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  }, 
+  err => response.status(404).send('Error' + err.message))
+})
+
+router.route('/homeExpenses').put((request, response) => {
+  let expense = { ...request.body }
+  homeExpenseController.updateExpense(expense).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404).send('no data')

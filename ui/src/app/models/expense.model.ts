@@ -30,6 +30,19 @@ export class Expense {
   comment: string;
 }
 
+export class HomeExpense extends Expense {
+  autoInsurance: number;
+  gas: number;
+  hydro: number;
+  water: number;
+  waterHeaterRental: number;
+  internet: number;
+  mobile: number;
+  netflix: number;
+  youtube: number;
+  others: string;
+}
+
 export const MY_FORMATS = {
   parse: {
     dateInput: 'YYYY-MM-DD',
@@ -78,11 +91,7 @@ export const ExpenseColumns = [
     key: 'maintenance',
     type: 'currency',
     label: 'mainte\nnance',    
-  },
-  {
-    key: 'commission',
-    type: 'currency',
-    label: 'commi\nssion',    
+    home: 'Home Insurance',    
   },
   {
     key: 'insurance',
@@ -132,6 +141,11 @@ export const ExpenseColumns = [
     hidden: true,
   },
 
+  {
+    key: 'commission',
+    type: 'currency',
+    label: 'commi\nssion',    
+  },
   // total
   {
     key: 'totalExpense',
@@ -183,38 +197,37 @@ export const HomeExpenseColumns = [
     label: 'travel',    
   },
   {
-    key: 'maintenance',
+    key: 'insurance',
     type: 'currency',
     label: 'Home Insurance',    
   },
   {
-    key: 'insurance',
+    key: 'autoInsurance',
     type: 'currency',
     label: 'Auto Insurance',    
   },
   {
-    key: 'legal',
+    key: 'gas',
     type: 'currency',
     label: 'Gas',    
   },  
   {
-    key: 'managementFee',
+    key: 'hydro',
     type: 'currency',
     label: 'Hydro',    
   },
   {
-    key: 'mortgageInterest',
+    key: 'water',
     type: 'currency',
     label: 'Water',    
   },
   {
-    key: 'repairs',
+    key: 'waterHeaterRental',
     type: 'currency',
-    label: 'Water Heater',    
-    
+    label: 'Water Heater',        
   },
   {
-    key: 'supplies',
+    key: 'internet',
     type: 'currency',
     label: 'Internet',    
   },
@@ -224,17 +237,17 @@ export const HomeExpenseColumns = [
     label: 'Property Tax',    
   },
   {
-    key: 'utilities',
+    key: 'mobile',
     type: 'currency',
     label: 'Mobile',    
   },
   {
-    key: 'depreciation',
+    key: 'netflix',
     type: 'currency',
     label: 'Netflix',    
   },
   {
-    key: 'commission',
+    key: 'youtube',
     type: 'currency',
     label: 'Youtube',    
   },

@@ -28,6 +28,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { MortgageComponent } from './mortgage/mortgage.component';
 import { SearchFilterPipe } from './shared/search-filter.pipe';
 import { PhonePipe } from './shared/phone.pipe';
+import { HomeExpenseComponent } from './home-expense/home-expense.component';
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -51,6 +52,7 @@ export const initConfig =
     MortgageComponent,
     SearchFilterPipe,
     PhonePipe,
+    HomeExpenseComponent,
   ],
   imports: [
     HttpClientModule,

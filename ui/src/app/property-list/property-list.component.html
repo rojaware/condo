@@ -53,7 +53,7 @@
   @if (config.user.property){
 
     <div class="col-md-10" >
-      <mat-tab-group animationDuration="2000ms" (selectedTabChange)="tabChanged($event)">
+      <mat-tab-group animationDuration="2000ms" (selectedTabChange)="tabChanged($event)" >
         <!-- Property tab -->
         <mat-tab >
           <ng-template mat-tab-label>
@@ -86,13 +86,24 @@
           </div>
         </mat-tab>
         <!-- Expense tab -->
-        <mat-tab label="Expense" *ngIf="currentProperty.id">
+        <mat-tab label="Expense" *ngIf="currentProperty.id && currentProperty.name.indexOf('home') === -1">
           <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">attach_money</mat-icon>
             Expense
           </ng-template>          
           <div class="col-md-12">
             <app-expense [viewMode]="false" [currentPropertyName]="currentProperty.name"></app-expense>
+          </div>
+        </mat-tab>
+        
+        <!-- Home Expense tab -->
+        <mat-tab label="Expense" *ngIf="currentProperty.id && currentProperty.name.indexOf('home') > -1">
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">attach_money</mat-icon>
+            Home Expense
+          </ng-template>          
+          <div class="col-md-12">
+            <app-home-expense [viewMode]="false" [currentPropertyName]="currentProperty.name"></app-home-expense>
           </div>
         </mat-tab>
       </mat-tab-group>

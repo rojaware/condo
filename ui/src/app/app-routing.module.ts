@@ -7,6 +7,7 @@ import { TenantComponent } from './tenant/tenant.component';
 import { DocumentComponent } from './document/document.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
+import { HomeExpenseComponent } from './home-expense/home-expense.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'properties', pathMatch: 'full' },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'tenants/:propertyName', component: TenantComponent },
   { path: 'expenses', component: ExpenseComponent },
   { path: 'expenses/:propertyName/:year', component: ExpenseComponent },
+  { path: 'homeExpenses', component: HomeExpenseComponent },
+  { path: 'homeExpenses/:propertyName/:year', component: HomeExpenseComponent },  
   { path: 'documents', component: DocumentComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'overview', component: OverviewComponent },

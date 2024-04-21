@@ -13,11 +13,11 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 import { default as _rollupMoment, Moment } from 'moment';
-import { ExpenseService } from '@app/services/expense.service';
-import { Expense, ExpenseColumns, HomeExpenseColumns } from '@app/models/expense.model';
+import { HomeExpense, HomeExpenseColumns } from '@app/models/expense.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
+import { HomeExpenseService } from '@app/services/home-expense.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -36,9 +36,9 @@ export const YEAR_MONTH_FORMATS = {
 };
 
 @Component({
-  selector: 'app-expense',
-  templateUrl: './expense.component.html',
-  styleUrl: './expense.component.css',
+  selector: 'app-home-expense',
+  templateUrl: './home-expense.component.html',
+  styleUrl: './home-expense.component.css',
   providers: [
     // Moment can be provided globally to your app by adding `provideMomentDateAdapter`
     // to your app config. We provide it at the component level here, due to limitations
@@ -47,15 +47,15 @@ export const YEAR_MONTH_FORMATS = {
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class ExpenseComponent extends BaseComponent implements OnInit {
+export class HomeExpenseComponent extends BaseComponent implements OnInit {
   @Input() viewMode = false;
   @Input() currentPropertyName: string = '';
   @ViewChild('picker', { static: false }) private picker: MatDatepicker<Date>;
   @ViewChild('fileImportInput') fileImportInput: any;
-  displayedColumns: string[] = ExpenseColumns.map((col) => col.key); 
+  displayedColumns: string[] = HomeExpenseColumns.map((col) => col.key); 
   columnsSchema: any = [];
-  expenses: Expense[] = [];
-  currentExpense: Expense;
+  expenses: HomeExpense[] = [];
+  currentExpense: HomeExpense;
 
   message = '';
 
@@ -66,11 +66,11 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   presentMonth: number;
   fileName: string;
 
-  public dataSource: MatTableDataSource<Expense>;
+  public dataSource: MatTableDataSource<HomeExpense>;
 
   constructor(
     protected router: Router,
-    private expenseService: ExpenseService,
+    private expenseService: HomeExpenseService,
     private route: ActivatedRoute,
     private ngxCsvParser: NgxCsvParser ) {
     super(router);
@@ -94,7 +94,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('property changed to ', this.currentPropertyName);
-    this.columnsSchema = ExpenseColumns;  
+    this.columnsSchema = HomeExpenseColumns;  
     this.getByYear();
   }
 
@@ -127,7 +127,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
     this.expenseService
       .getByYearMonth(propertyName, this.year, null)
       .subscribe({
-        next: (data: Expense[]) => {
+        next: (data: HomeExpense[]) => {
           if (data.length === 0) {
             for (let i = 0; i < 12; i++) {
               data.push(this.createTemplate(this.year, i));
@@ -135,43 +135,52 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
           }
           this.expenses = this.appendTotals(data);
           this.config.user.property.expenses = this.expenses;
-          this.dataSource = new MatTableDataSource<Expense>(this.expenses);
+          this.dataSource = new MatTableDataSource<HomeExpense>(this.expenses);
           console.log(data);
         },
         error: (e: any) => console.error(e),
       });
   }
 
-  private appendTotals(data: Expense[]): Expense[] {
+  private appendTotals(data: HomeExpense[]): HomeExpense[] {
     data.forEach((item) => this.calculateTotal(item));
     // attach total row at the bottom...
     const lastRow = this.insertLastRow(data);
     data.push(lastRow);
     return data;
   }
-  private insertLastRow(expenseList: Expense[]): Expense {
-    let lastRow = new Expense();
+  private insertLastRow(expenseList: HomeExpense[]): HomeExpense {
+    let lastRow = new HomeExpense();
     lastRow.id = -1;
-    lastRow['income'] = expenseList.map((item: Expense) => item['income']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['travel'] = expenseList.map((item: Expense) => item['travel']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['maintenance'] = expenseList.map((item: Expense) => item['maintenance']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['commission'] = expenseList.map((item: Expense) => item['commission']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['insurance'] = expenseList.map((item: Expense) => item['insurance']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['legal'] = expenseList.map((item: Expense) => item['legal']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['managementFee'] = expenseList.map((item: Expense) => item['managementFee']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['mortgageInterest'] = expenseList.map((item: Expense) => item['mortgageInterest']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['repairs'] = expenseList.map((item: Expense) => item['repairs']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['supplies'] = expenseList.map((item: Expense) => item['supplies']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['tax'] = expenseList.map((item: Expense) => item['tax']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['utilities'] = expenseList.map((item: Expense) => item['utilities']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['depreciation'] = expenseList.map((item: Expense) => item['depreciation']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['totalExpense'] = expenseList.map((item: Expense) => item['totalExpense']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['netIncome'] = expenseList.map((item: Expense) => item['netIncome']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['income'] = expenseList.map((item: HomeExpense) => item['income']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['travel'] = expenseList.map((item: HomeExpense) => item['travel']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['maintenance'] = expenseList.map((item: HomeExpense) => item['maintenance']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['commission'] = expenseList.map((item: HomeExpense) => item['commission']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['insurance'] = expenseList.map((item: HomeExpense) => item['insurance']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['legal'] = expenseList.map((item: HomeExpense) => item['legal']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['managementFee'] = expenseList.map((item: HomeExpense) => item['managementFee']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['mortgageInterest'] = expenseList.map((item: HomeExpense) => item['mortgageInterest']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['repairs'] = expenseList.map((item: HomeExpense) => item['repairs']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['supplies'] = expenseList.map((item: HomeExpense) => item['supplies']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['tax'] = expenseList.map((item: HomeExpense) => item['tax']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['utilities'] = expenseList.map((item: HomeExpense) => item['utilities']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['autoInsurance'] = expenseList.map((item: HomeExpense) => item['autoInsurance']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['gas'] = expenseList.map((item: HomeExpense) => item['gas']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['hydro'] = expenseList.map((item: HomeExpense) => item['hydro']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['water'] = expenseList.map((item: HomeExpense) => item['water']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['waterHeaterRental'] = expenseList.map((item: HomeExpense) => item['waterHeaterRental']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['internet'] = expenseList.map((item: HomeExpense) => item['internet']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['mobile'] = expenseList.map((item: HomeExpense) => item['mobile']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['netflix'] = expenseList.map((item: HomeExpense) => item['netflix']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['youtube'] = expenseList.map((item: HomeExpense) => item['youtube']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['depreciation'] = expenseList.map((item: HomeExpense) => item['depreciation']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['totalExpense'] = expenseList.map((item: HomeExpense) => item['totalExpense']).reduce((acc, curr) => acc + curr, 0);
+    lastRow['netIncome'] = expenseList.map((item: HomeExpense) => item['netIncome']).reduce((acc, curr) => acc + curr, 0);
     
     return lastRow;
   }
 
-  private calculateTotal(expense: Expense): Expense {
+  private calculateTotal(expense: HomeExpense): HomeExpense {
     expense.totalExpense =
       expense.travel +
       expense.maintenance +
@@ -184,45 +193,19 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       expense.supplies +
       expense.tax +
       expense.utilities +
-      expense.depreciation;
+      expense.depreciation +
+      
+      expense.autoInsurance +
+      expense.gas +
+      expense.hydro +
+      expense.water +
+      expense.waterHeaterRental +
+      expense.internet +
+      expense.mobile +
+      expense.netflix +
+      expense.youtube 
     expense.netIncome = expense.income - expense.totalExpense;
     return expense;
-  }
-
-  getByMonth(): void {
-    const propertyName = this.config.user.property.name;
-    this.expenseService
-      .getByYearMonth(propertyName, this.year, this.month)
-      .subscribe({
-        next: (data: Expense[]) => {
-          if (data.length === 0) {
-            data.push(this.createTemplate(this.year, this.month));
-          }
-          this.expenses = data;
-          this.config.user.property.expenses = data;
-          this.currentExpense = data[0];
-
-          if (this.year = this.presentYear) {
-            if (
-              this.currentExpense.income === 0 ||
-              this.currentExpense.income === undefined
-            ) {
-              this.currentExpense.income = this.config.user.property.rentFee;
-            }
-            if (
-              this.currentExpense.managementFee === 0 ||
-              this.currentExpense.managementFee === undefined
-            ) {
-              this.currentExpense.managementFee = this.config.user.property.managementFee;
-            }          
-          }
-
-          console.log(data);
-        },
-        error: (e: any) => {
-          console.error(e);
-        },
-      });
   }
 
   /**
@@ -231,17 +214,17 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   save(): void {
     this.expenses = this.appendTotals(this.expenses);
           this.config.user.property.expenses = this.expenses;
-          this.dataSource = new MatTableDataSource<Expense>(this.expenses);
+          this.dataSource = new MatTableDataSource<HomeExpense>(this.expenses);
         
     if (this.currentExpense.id) {
       this.update();
     } else {
       this.insert();
     }
-    this.viewMode = true;
+    
   }
 
-  createTemplate(_year: number, _month: number): Expense {
+  createTemplate(_year: number, _month: number): HomeExpense {
     let insuranceFee = 0;
     let propertyTax = 0;
     if (_year === this.presentYear && _month === 3) {
@@ -252,22 +235,32 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
       propertyName: this.config.user.property.name,
       year: _year,
       month: _month,
-      income: this.config.user.property.rentFee,
+      income: this.config.user.property.rentFee || 0,
       travel: 0,
       maintenance: 0,
       commission: 0,
-      insurance: insuranceFee,
+      insurance: insuranceFee || 0,
       legal: 0,
-      managementFee: this.config.user.property.managementFee,
+      managementFee: this.config.user.property.managementFee || 0,
       mortgageInterest: 0,
       repairs: 0,
       supplies: 0,
-      tax: propertyTax,
+      tax: propertyTax || 0,
       utilities: 0,
       depreciation: 0,
+      autoInsurance: 0,
+              hydro: 0,
+              gas: 0 ,
+              water: 0, 
+              waterHeaterRental: 0,               
+              internet: 0,	
+              mobile: 0,              
+              netflix: 0,
+              youtube: 0,
+              others: '',
       totalExpense: 0,
       netIncome: 0,
-    } as Expense;
+    } as HomeExpense;
     this.message = 'New Expense has been created for new entry...';
     return expense;
   }
@@ -280,8 +273,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This expense has been updated successfully!';
-          this.dataSource = new MatTableDataSource<Expense>();
+          : 'This expense has been updated successfully!';          
+        this.dataSource = new MatTableDataSource<HomeExpense>();
       },
       error: (e: any) => console.error(e),
     });
@@ -295,9 +288,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = res.message
           ? res.message
-          : 'This expense has been updated successfully!';
-          
-        this.dataSource = new MatTableDataSource<Expense>();
+          : 'This expense has been updated successfully!';          
+        this.dataSource = new MatTableDataSource<HomeExpense>();
       },
       error: (e: any) => console.error(e),
     });
@@ -314,8 +306,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
         console.log(res);
         this.message = 'Deleted successfully'
         this.router.navigate(['/properties']);
-        
-        this.dataSource = new MatTableDataSource<Expense>();
+        this.dataSource = new MatTableDataSource<HomeExpense>();
       },
       error: (e: any) => console.error(e),
     });
@@ -337,7 +328,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
           (result: any): void => {
             console.log('Result', result);
             this.expenses = result;
-            this.dataSource = new MatTableDataSource<Expense>(result);
+            this.dataSource = new MatTableDataSource<HomeExpense>(result);
             this.message = '';
             this.expenseService.updateBulk(this.expenses).subscribe({
               next: (res: any) => {

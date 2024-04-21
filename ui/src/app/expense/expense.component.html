@@ -34,8 +34,7 @@
             (change)="onFileSelected($event)"
             accept=".csv" 
             style="display:none"/>
-  </div>      
-  
+  </div>        
 </div>
 
 <p *ngIf="!year || (currentExpense && currentExpense.propertyName !== config.user.property.name)">
@@ -51,8 +50,7 @@
 
         <div style="display: flex">
           <h4 class="button-space">{{ currentExpense.propertyName | uppercase }} 
-            <span>{{ month | monthname }} {{ year }}</span> 
-            
+            <span>{{ month | monthname }} {{ year }}</span>             
           </h4>
 
           @if (viewMode) {
@@ -212,7 +210,7 @@
                 </div>
                 <div class="form-input" *ngSwitchCase="'read'">
                   @if (col.key === 'month'){
-                    @if (element[col.key]) {
+                    @if (element[col.key] > -1) {
                       {{ element[col.key] | monthname }}
                     } @else {
                       Total
@@ -261,5 +259,6 @@
     </div>
   </mat-card-actions>
 </mat-card>
+
 <br>
 </div>

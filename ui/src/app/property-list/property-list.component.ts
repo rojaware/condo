@@ -26,6 +26,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   currentIndex? = -1;
   name = '';
   searchTerm: string = '';
+  // selectedTabIndex: number;
   
   constructor(
     protected router: Router,
@@ -135,16 +136,16 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     this.currentIndex = -1;
   }
 
-  setActiveProperty(property: Property, index?: number): void {
+  setActiveProperty(property: Property, index?: number): void {    
     this.currentProperty = property;
     this.currentTenant = property.tenant;
     if (!this.config.user) {
       this.config.user = {} as User;
     }
     this.config.user.property = property;
-    this.currentIndex = index;
+    this.currentIndex = index;    
   }
-
+  
   removeAllProperty(): void {
     this.propertyService.deleteAll().subscribe({
       next: (res) => {
@@ -193,7 +194,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
     console.log('tabChangeEvent => ', tabChangeEvent);
-    console.log('index => ', tabChangeEvent.index);
+    console.log('index => ', tabChangeEvent.index ); // ==> should display property page by the new name...
   }
 
   search(searchTerm: string) {
