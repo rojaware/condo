@@ -17,6 +17,7 @@ export class BaseComponent implements OnInit {
   message: string;
   util =  Util;
   baseurl = '';
+  today = new Date();
 
   constructor(protected router: Router) {
     this.baseurl = this.config.baseUrl;

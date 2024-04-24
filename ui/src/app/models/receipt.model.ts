@@ -3,6 +3,7 @@ export interface Receipt {
   id?: number;
   propertyName: string;
   tenantName: string;
+  year: number;
   type: string;
   description: string;
   payment: number;
@@ -48,8 +49,9 @@ export const ReceiptColumns = [
   },
   {
     key: 'payment',
-    type: 'number',
+    type: 'currency',
     label: 'Payment',    
+    required: true,    
   },
   {
     key: 'updatedOn',

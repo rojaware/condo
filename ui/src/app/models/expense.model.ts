@@ -150,12 +150,12 @@ export const ExpenseColumns = [
   {
     key: 'totalExpense',
     type: 'read',
-    label: 'total Expense',
+    label: 'Total Expense',
   },
   {
     key: 'netIncome',
     type: 'read',
-    label: 'net Income',
+    label: 'Net Income',
   },
   {
     key: 'comment',
@@ -255,12 +255,12 @@ export const HomeExpenseColumns = [
   {
     key: 'totalExpense',
     type: 'read',
-    label: 'total Expense',
+    label: 'Total Expense',
   },
   {
     key: 'netIncome',
     type: 'read',
-    label: 'net Income',
+    label: 'Net Income',
   },
   {
     key: 'comment',

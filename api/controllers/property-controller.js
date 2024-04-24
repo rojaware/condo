@@ -1,33 +1,34 @@
 var config = require('../dbconfig');
 const sql = require('mssql');
 var util = require('../shared/util');
-
+const BASE_SQL = `SELECT [name], [id]
+                        ,[address]
+                        ,[rollNo]
+                        ,[propertyCustomerNo]
+                        ,[bank]
+                        ,[size]
+                        ,[builder]
+                        ,CONVERT(char(10), closingDate ,126) as closingDate
+                        ,CONVERT(char(10), occupancyDate ,126) as occupancyDate
+                        ,CONVERT(char(10), startDate ,126) as startDate
+                        ,CONVERT(char(10), endDate ,126) as endDate
+                        ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
+                        ,CONVERT(char(10), salesDate ,126) as salesDate
+                        ,[rentFee], managementFee
+                        ,[purchasePrice]
+                        ,mortgageAccountNo
+                        ,mortgageType
+                        ,mortgageRate, paymentFrequency, paymentAmount
+                        ,CONVERT(char(10), maturityDate ,126) as maturityDate
+                        ,comment
+                        ,imageUrl
+                        ,tscc
+                        ,insuranceCompany, policyNo, insuranceFee, propertyTax
+                        ,conciergePhone, managementPhone, managementEmail
+                        ,[owner]
+                  FROM Properties `
 async function getProperties() {
-    const query = `SELECT [name], [id]
-               ,[address]
-               ,[rollNo]
-               ,[propertyCustomerNo]
-               ,[bank]
-               ,[size]
-               ,[builder]
-               ,CONVERT(char(10), closingDate ,126) as closingDate
-               ,CONVERT(char(10), occupancyDate ,126) as occupancyDate
-               ,CONVERT(char(10), startDate ,126) as startDate
-               ,CONVERT(char(10), endDate ,126) as endDate
-               ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
-               ,CONVERT(char(10), salesDate ,126) as salesDate
-               ,[rentFee], managementFee
-               ,[purchasePrice]
-               ,mortgageAccountNo
-               ,mortgageType
-               ,mortgageRate, paymentFrequency, paymentAmount
-               ,CONVERT(char(10), maturityDate ,126) as maturityDate
-               ,comment
-               ,imageUrl
-               ,tscc
-               ,insuranceCompany, policyNo, insuranceFee, propertyTax
-               ,conciergePhone, managementPhone, managementEmail
-               ,[owner] from Properties WHERE salesDate is null`;               
+    const query = BASE_SQL + ` WHERE salesDate is null`;               
     try {
         let pool = await sql.connect(config);
         let properties = await pool.request().query(query);
@@ -41,29 +42,7 @@ async function getProperties() {
 }
 
 async function getProperty(name) {
-    const query = `SELECT [name], [id]
-               ,[address]
-               ,[rollNo]
-               ,[propertyCustomerNo]
-               ,[bank]
-               ,[size]
-               ,[builder]
-               ,CONVERT(char(10), closingDate ,126) as closingDate
-               ,CONVERT(char(10), occupancyDate ,126) as occupancyDate
-               ,CONVERT(char(10), startDate ,126) as startDate
-               ,CONVERT(char(10), extendedEndDate ,126) as extendedEndDate
-               ,CONVERT(char(10), salesDate ,126) as salesDate
-               ,[rentFee], managementFee
-               ,[purchasePrice]
-               ,mortgageAccountNo
-               ,mortgageType
-               ,mortgageRate, paymentFrequency, paymentAmount
-               ,CONVERT(char(10), maturityDate ,126) as maturityDate
-               ,comment
-               ,imageUrl, tscc
-               ,insuranceCompany, policyNo, insuranceFee, propertyTax
-               ,conciergePhone, managementPhone, managementEmail
-               ,[owner] from Properties where name = @name AND salesDate is null`;
+    const query = BASE_SQL + ` where name = @name AND salesDate is null`;
     try {
         let pool = await sql.connect(config);
         let property = await pool.request()

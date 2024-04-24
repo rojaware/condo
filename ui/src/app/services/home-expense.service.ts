@@ -34,7 +34,7 @@ export class HomeExpenseService extends BaseService {
       return this.http.get<HomeExpense[]>(`${this.baseUrl}ByPropertyYearMonth/${property}/${year}/${month}`);
     } else {
       if (!year) {
-        year = new Date().getFullYear();
+        year = this.today.getFullYear();
       }
       return this.http.get<HomeExpense[]>(`${this.baseUrl}ByPropertyYearMonth/${property}/${year}`);      
     }    

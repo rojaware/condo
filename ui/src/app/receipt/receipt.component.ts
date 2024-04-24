@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '@app/base/base.component';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,6 +7,8 @@ import { ConfirmDialogComponent } from '@app/confirm-dialog/confirm-dialog.compo
 import { SettingService } from '@app/services/setting.service';
 import { ReceiptColumns, Receipt, ReceiptTypeEnum } from '@app/models/receipt.model';
 import { ReceiptService } from '@app/services/receipt.service';
+import { CurrencyPipe } from '@angular/common';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-receipt',
@@ -15,6 +17,7 @@ import { ReceiptService } from '@app/services/receipt.service';
 })
 export class ReceiptComponent extends BaseComponent implements OnInit {
   @Input() currentPropertyName: string = '';
+  @ViewChild(MatAccordion) accordion: MatAccordion;
   displayedColumns: string[] = ReceiptColumns.map((col) => col.key)
   columnsSchema: any = ReceiptColumns
   dataSource = new MatTableDataSource<Receipt>()
@@ -26,17 +29,23 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
   batchMinute: number;
   time: any;
   total: number = 0;
+  currentYear: number = this.today.getFullYear();
+  searchYear: number;
+  searchTenant: string;
+  searchDescription: string;
   
   constructor(
     protected router: Router,
     private receiptService: ReceiptService,
-    public dialog: MatDialog, ) {
+    public dialog: MatDialog, 
+    private currencyPipe : CurrencyPipe) {
     super(router);
     this.message = '';
     this.errMessage = '';
   }
 
   ngOnInit() {
+    this.searchYear = this.currentYear;
     this.tenantTypes.push (this.config.user.property.tenant.primaryName);
     const secondaryTenant = this.config.user.property.tenant.secondaryName;
     if (secondaryTenant) {
@@ -46,17 +55,18 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
       // add extra logic to populate fields after result... here...
       this.dataSource.data = res;      
       this.message = "Refreshed..."
-      this.countTotal();
+      this.getTotalCost();
     })
   }
   
-  countTotal(): void {
+  getTotalCost(): number {
     const arr = this.dataSource.data.map(item => item.payment);
     const sum = arr.reduce((accumulator: number, currentValue: number) => {
       let y: number = +currentValue;
       return accumulator + y;
     }, 0);
     this.total = sum;
+    return sum;
   }
 
   saveRow(row: Receipt) {
@@ -65,13 +75,13 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
         row.id = newReceipt.id;
         row.isEdit = false;
         this.message = "Inserted Successfully";
-        this.countTotal();
+        this.getTotalCost();
       })
     } else {
       this.receiptService.update(row).subscribe(() => {
         row.isEdit = false;
         this.message = "Updated Successfully";
-        this.countTotal();
+        this.getTotalCost();
       })
     }
   }
@@ -80,7 +90,8 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
     const newRow: Receipt = {
       id: 0,
       propertyName: this.currentPropertyName,
-      tenantName: '',
+      tenantName: this.config.user.property.tenant.primaryName,
+      year: this.today.getFullYear(),
       type: ReceiptTypeEnum.Medical,
       description: '',
       payment: 0,
@@ -97,7 +108,7 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
       this.dataSource.data = this.dataSource.data.filter(
         (receipt: Receipt) => receipt.id !== id,
       );
-      this.countTotal();
+      this.getTotalCost();
     })
   }
 
@@ -112,17 +123,21 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
             this.dataSource.data = this.dataSource.data.filter(
               (receipt: Receipt) => !receipt.isSelected,
             );
-            this.countTotal();
+            this.getTotalCost();
           })
         }
       })
   }
 
-  inputHandler(e: any, id: number, key: string) {
+  inputHandler(e: any, id: number, col: any) {
     if (!this.valid[id]) {
       this.valid[id] = {}
     }
-    this.valid[id][key] = e.target.validity.valid
+    this.valid[id][col.key] = e.target.validity.valid
+    if (col.type === 'currency' && e.target.value) {
+      const formatted = this.currencyPipe.transform(e.target.value, '$');
+      e.target.value = formatted;
+    }
   }
 
   disableSubmit(id: number) {
@@ -146,4 +161,9 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
       isSelected: event.checked,
     }))
   }
+
+  /**
+   * Collapse Search Area
+   */
+  search(): void {}
 }

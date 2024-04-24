@@ -222,17 +222,14 @@
                   }
                 </div>
                 <div class="form-input" *ngSwitchCase="'write'">
-                  <textarea  
-                    [(ngModel)]="element[col.key]" > 
-                  </textarea>
+                  <textarea [(ngModel)]="element[col.key]" ></textarea>
                 </div>
 
                 <div class="form-input" *ngSwitchDefault >
-                  <input  
-                    [required]="col.required"
-                    [pattern]="col.pattern"
-                    [type]="col.type"
-                    [(ngModel)]="element[col.key]" /> 
+                  <input [required]="col.required"
+                         [pattern]="col.pattern"
+                         [type]="col.type"
+                         [(ngModel)]="element[col.key]" /> 
                     <!-- 
                     (change)="inputHandler($event, element.id, col.key)"-->
                 </div>

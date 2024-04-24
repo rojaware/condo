@@ -30,6 +30,7 @@ import { SearchFilterPipe } from './shared/search-filter.pipe';
 import { PhonePipe } from './shared/phone.pipe';
 import { HomeExpenseComponent } from './home-expense/home-expense.component';
 import { ReceiptComponent } from './receipt/receipt.component';
+import { CurrencyPipe } from '@angular/common';
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -69,6 +70,7 @@ export const initConfig =
     NgxCsvParserModule,
   ],
   providers: [
+    CurrencyPipe,
     {
       provide: APP_INITIALIZER,
       multi: true,
@@ -84,6 +86,6 @@ export const initConfig =
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent],  
 })
 export class AppModule {}

@@ -12,6 +12,8 @@ export class BaseService {
   util = Util;
   baseurl = '';
   config: Config;
+  today = new Date();
+
   constructor(protected http: HttpClient) {    
     this.baseurl = environment.apiUrl;  
   }

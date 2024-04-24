@@ -3,9 +3,48 @@
     <mat-card-content>
       <article class="table-header">
         <div>
-          <i>Receipt</i>
-        </div>
-        <div>
+          <mat-accordion class="example-headers-align">
+            <mat-expansion-panel >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Filter
+                </mat-panel-title>
+                <mat-panel-description>
+                  Filter by year, tenant or type
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+          
+              <mat-form-field>
+                <mat-label>Tenant name</mat-label>
+                <input id="searchTenant" 
+                       matInput
+                       [(ngModel)]="searchTenant" name="searchTenant"/>
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>Year</mat-label>
+                  <mat-select id="searchYear" [(ngModel)]="searchYear" name="searchYear" >
+                    <mat-option [value]="currentYear">{{currentYear}}</mat-option>
+                    <mat-option [value]="currentYear-1">{{currentYear-1}}</mat-option>
+                    <mat-option [value]="currentYear-2">{{currentYear-2}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Description</mat-label>
+                
+                <input id="searchDescription" 
+                       matInput
+                       [(ngModel)]="searchDescription" name="searchDescription"/>
+              </mat-form-field>
+              <mat-action-row>
+                <button mat-button color="primary" (click)="search()">Search</button>
+              </mat-action-row>
+            </mat-expansion-panel>
+          
+          </mat-accordion>
+          
+        
           <button mat-button color="primary" (click)="ngOnInit()">
             <mat-icon>refresh</mat-icon>
           </button>    
@@ -18,7 +57,7 @@
         </div>
       </article>
       
-      <!-- Table for Receipt List -->
+      <!-- Table for Receipt List --> 
       <table mat-table [dataSource]="dataSource">
         <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
           
@@ -58,9 +97,12 @@
                   <mat-icon>delete_forever</mat-icon>       
                 </button>
               </div>
+              <span *ngSwitchCase="'currency'" >
+                {{ element[col.key] | currency }} 
+              </span>
               <span *ngSwitchDefault >
                 {{ element[col.key] }} 
-              </span>
+              </span>              
             </div>
             <!-- Edit mode -->          
             <div [ngSwitch]="col.type" *ngIf="element.isEdit">
@@ -102,24 +144,37 @@
                     }
                 </mat-select>
               </div>
+              <div class="form-input" *ngSwitchCase="'currency'">
+                <input  matInput
+                        [required]="col.required"
+                        [pattern]="col.pattern"
+                        [type]="col.type"
+                        [(ngModel)]="element[col.key]"   
+                        (change)="inputHandler($event, element.id, col)" />                 
+              </div>
               <div class="form-input" *ngSwitchDefault>
                 <input  matInput
                         [required]="col.required"
                         [pattern]="col.pattern"
                         [type]="col.type"
                         [(ngModel)]="element[col.key]"
-                        (change)="inputHandler($event, element.id, col.key)" /> 
+                        (change)="inputHandler($event, element.id, col)" /> 
               </div>
             </div>
           </td>
+          <!-- Total row -->
+          <td mat-footer-cell *matFooterCellDef > 
+            <b *ngIf="col.key === 'isSelected'">Total</b>
+            <b *ngIf="col.key === 'payment'">{{ getTotalCost() | currency}}</b>
+          </td>    
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
       </table>
     </mat-card-content>
   </mat-card>
   
-      <div><i *ngIf="message">{{ message }}  </i></div>
-      <div><i>Total amount is {{ total }}</i></div>
-      <span *ngIf="errMessage" class="error">{{ errMessage }}</span>
+    <div><i *ngIf="message">{{ message }}  </i></div>
+    <span *ngIf="errMessage" class="error">{{ errMessage }}</span>
   </div>

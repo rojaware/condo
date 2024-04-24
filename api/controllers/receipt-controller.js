@@ -3,6 +3,7 @@ const sql = require('mssql');
 
 const BASE_SQL = `SELECT id, [propertyName]
                     ,[tenantName]
+                    ,[year]
                     ,[type]
                     ,[description]
                     ,[payment]
@@ -72,6 +73,7 @@ async function addReceipt(body) {
       INSERT INTO [dbo].[receipts]
                   ([propertyName]
                   ,[tenantName]
+                  ,[year]
                   ,[type]
                   ,[description]
                   ,[payment]
@@ -79,7 +81,7 @@ async function addReceipt(body) {
                   ,[comment])
     VALUES
         (@propertyName
-        ,@tenantName
+        ,@tenantName, @year
         ,@type, @description
         ,@payment, CURRENT_TIMESTAMP
         ,@comment
@@ -90,6 +92,7 @@ async function addReceipt(body) {
     let item = await pool.request()
       .input('propertyName', sql.NVarChar, body.propertyName)      
       .input('tenantName', sql.NVarChar, body.tenantName)
+      .input('year', sql.Int, body.year)
       .input('type', sql.NVarChar, body.type)
       .input('description', sql.NVarChar, body.description)
       .input('payment', sql.Money, body.payment)
@@ -108,6 +111,7 @@ async function updateReceipt(body) {
   const query = `UPDATE [dbo].[RECEIPTS]
         SET [propertyName] = @propertyName
             ,[tenantName] = @tenantName
+            ,[year] = @year
             ,[type] = @type
             ,[description] = @description
             ,[payment] = @payment
@@ -119,6 +123,7 @@ async function updateReceipt(body) {
         .input('id', sql.NVarChar, body.id)      
         .input('propertyName', sql.NVarChar, body.propertyName)   
         .input('tenantName', sql.NVarChar, body.tenantName)
+        .input('year', sql.Int, body.year)
         .input('type', sql.NVarChar, body.type)
         .input('description', sql.NVarChar, body.description)
         .input('payment', sql.Money, body.payment)
