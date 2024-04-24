@@ -162,13 +162,13 @@ async function deleteSettingById(id) {
   }
 }
 async function deleteSettingByIdList(idList) {
-  const query = `DELETE FROM [dbo].[labels] WHERE id in (@idList);`;
+  const statement = `DELETE FROM [dbo].[labels] WHERE id in (@idList);`;
 
   try {
+    statement = statement.replaceAll('@idList', idList);
     let pool = await sql.connect(config);
     let item = await pool.request()
-      .input('id', sql.Int, id)
-      .query(query);
+      .query(statement);
     return item.rowsAffected;
   }
   catch (err) {

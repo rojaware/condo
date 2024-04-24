@@ -106,6 +106,17 @@
             <app-home-expense [viewMode]="false" [currentPropertyName]="currentProperty.name"></app-home-expense>
           </div>
         </mat-tab>
+
+        <!-- Home Receipt tab -->
+        <mat-tab label="Expense" *ngIf="currentProperty.id && currentProperty.name.indexOf('home') > -1">
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">receipt</mat-icon>
+            Receipt
+          </ng-template>          
+          <div class="col-md-12">
+            <app-receipt  [currentPropertyName]="currentProperty.name"></app-receipt>
+          </div>
+        </mat-tab>        
       </mat-tab-group>
     </div>
   

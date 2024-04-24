@@ -1,0 +1,125 @@
+<div class="receipt-form" id="receipt">
+  <mat-card>
+    <mat-card-content>
+      <article class="table-header">
+        <div>
+          <i>Receipt</i>
+        </div>
+        <div>
+          <button mat-button color="primary" (click)="ngOnInit()">
+            <mat-icon>refresh</mat-icon>
+          </button>    
+          <button class="button-remove-rows" mat-button (click)="removeSelectedRows()">
+            Remove Rows
+          </button>
+          <button class="button-add-row" mat-button (click)="addRow()">
+            Add Row
+          </button>
+        </div>
+      </article>
+      
+      <!-- Table for Receipt List -->
+      <table mat-table [dataSource]="dataSource">
+        <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+          
+          <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+            <span *ngSwitchCase="'isSelected'">
+              <mat-checkbox (change)="selectAll($event)"
+                            [checked]="isAllSelected()"
+                            [indeterminate]="!isAllSelected() && isAnySelected()">
+              </mat-checkbox>
+            </span>
+            <span *ngSwitchDefault > {{ col.label }}</span>
+          </th>
+  
+          <!-- check box for selection -->    
+          <td mat-cell *matCellDef="let element">
+            <!-- View mode  {{ element | json }} -->
+            <div [ngSwitch]="col.type" *ngIf="!element.isEdit" >
+              <ng-container *ngSwitchCase="'isSelected'">
+                <mat-checkbox (change)="element.isSelected = $event.checked"
+                              [checked]="element.isSelected">
+                </mat-checkbox>
+              </ng-container>
+      
+              <div class="btn-edit" *ngSwitchCase="'isEdit'" >
+                @if ( ['Hour', 'Minute', 'Days'].includes(element.viewValue) ) {
+                  <button mat-button matTooltip="Use Email batch startup time picker at bottom">
+                    <mat-icon>stop</mat-icon>
+                  </button>
+                } @else {
+                  <button mat-button (click)="element.isEdit = !element.isEdit" matTooltip="Edit">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+                <button mat-button
+                        class="button-remove"
+                        (click)="removeRow(element.id)" matTooltip="Delete">
+                  <mat-icon>delete_forever</mat-icon>       
+                </button>
+              </div>
+              <span *ngSwitchDefault >
+                {{ element[col.key] }} 
+              </span>
+            </div>
+            <!-- Edit mode -->          
+            <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+              <ng-container *ngSwitchCase="'isSelected'"></ng-container>
+              <div class="btn-edit" *ngSwitchCase="'isEdit'">
+                <button mat-button
+                        (click)="saveRow(element)"
+                        [disabled]="disableSubmit(element.id)"
+                        matTooltip="Save">
+                        <mat-icon>save</mat-icon>
+                </button>
+                <button mat-button
+                        (click)="element.isEdit = false"
+                        [disabled]="disableSubmit(element.id)"
+                        matTooltip="Cancel">
+                        <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+              <div class="form-input" *ngSwitchCase="'read'">
+                {{ element[col.key] }} 
+              </div>
+              <div class="" *ngSwitchCase="'tenant_dropdown'">
+                <mat-select [(ngModel)]="element[col.key]" 
+                            [required]="col.required"
+                            [pattern]="col.pattern"                        
+                            (change)="inputHandler($event, element.id, col.key)">
+                    @for (receipt of tenantTypes; track receipt) {
+                      <mat-option [value]="receipt" style="font-size: x-small; padding-left: 9px;">{{receipt}}</mat-option>
+                    }
+                </mat-select>
+              </div>  
+              <div class="" *ngSwitchCase="'dropdown'">
+                <mat-select [(ngModel)]="element[col.key]" 
+                            [required]="col.required"
+                            [pattern]="col.pattern"                        
+                            (change)="inputHandler($event, element.id, col.key)">
+                    @for (receipt of receiptTypes; track receipt) {
+                      <mat-option [value]="receipt" style="font-size: x-small; padding-left: 9px;">{{receipt}}</mat-option>
+                    }
+                </mat-select>
+              </div>
+              <div class="form-input" *ngSwitchDefault>
+                <input  matInput
+                        [required]="col.required"
+                        [pattern]="col.pattern"
+                        [type]="col.type"
+                        [(ngModel)]="element[col.key]"
+                        (change)="inputHandler($event, element.id, col.key)" /> 
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+  
+      <div><i *ngIf="message">{{ message }}  </i></div>
+      <div><i>Total amount is {{ total }}</i></div>
+      <span *ngIf="errMessage" class="error">{{ errMessage }}</span>
+  </div>

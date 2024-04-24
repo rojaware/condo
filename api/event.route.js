@@ -10,6 +10,7 @@ const homeExpenseController = require('./controllers/home-expense-controller');
 const documentsController = require('./controllers/document-controller');
 const settingController = require('./controllers/setting-controller');
 const mortgageController = require('./controllers/mortgage-controller');
+const receiptController = require('./controllers/receipt-controller');
 var util = require('./shared/util');
 
 // Home page route.
@@ -788,9 +789,6 @@ router.route('/mortgages').delete((request, response) => {
   })
 })
 
-
-
-
 router.route('/mortgages').put((request, response) => {
 
   let mortgage = { ...request.body };
@@ -804,7 +802,141 @@ router.route('/mortgages').put((request, response) => {
   })
 })
 
-//############### mortgages api... ########################
+//############### END of mortgages api... ########################/
+//############### RECEIPTS API... ################################/
+
+router.route('/receipts').get((request, response) => {
+
+  receiptController.getReceipts().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.json(result[0]);
+    }
+  })
+})
+
+router.route('/receiptsByProperty/:name').get((request, response) => {
+
+  receiptController.getReceiptByProperty(request.params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/receiptsByTenant/:name').get((request, response) => {
+
+  receiptController.getReceiptByTenant(request.params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/receiptsById/:id').get((request, response) => {
+
+  receiptController.getReceiptById(request.params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/receipts').post((request, response) => {
+  let receipt = { ...request.body }
+  receiptController.addReceipt(receipt).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/receipts').put((request, response) => {
+
+  let receipt = { ...request.body };
+  receiptController.updateReceipt(receipt).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/receipts/:id').delete((request, response) => {
+  const params = request.params;
+  receiptController.deleteReceiptById(params.id).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/receiptsByIdList/:idList').delete((request, response) => {
+  const params = request.params;
+  receiptController.deleteReceiptByIdList(params.idList).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/receiptsByProperty/:name').delete((request, response) => {
+  const params = request.params;
+  receiptController.deleteReceiptByProperty(params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/receiptsByProperty/:name').delete((request, response) => {
+  const params = request.params;
+  receiptController.deleteReceiptByTenant(params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/receipts').delete((request, response) => {
+  const params = request.params;
+  receiptController.deleteAllReceipts(params.propertyName).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+
+/***************** End of Receipts API */
+
 
 
 module.exports = router;
