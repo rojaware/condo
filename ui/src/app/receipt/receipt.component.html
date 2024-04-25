@@ -1,8 +1,8 @@
 <div class="receipt-form" id="receipt">
   <mat-card>
     <mat-card-content>
-      <article class="table-header">
-        <div>
+      <div style="display: flex;">
+        <article class="table-header">
           <mat-accordion class="example-headers-align">
             <mat-expansion-panel >
               <mat-expansion-panel-header>
@@ -14,14 +14,14 @@
                   <mat-icon>account_circle</mat-icon>
                 </mat-panel-description>
               </mat-expansion-panel-header>
-          
+              <!-- Search by Tenant Name-->
               <mat-form-field>
                 <mat-label>Tenant name</mat-label>
                 <input id="searchTenant" 
-                       matInput
-                       [(ngModel)]="searchTenant" name="searchTenant"/>
+                        matInput
+                        [(ngModel)]="searchTenant" name="searchTenant"/>
               </mat-form-field>
-          
+              <!-- Search by Year -->
               <mat-form-field>
                 <mat-label>Year</mat-label>
                   <mat-select id="searchYear" [(ngModel)]="searchYear" name="searchYear" >
@@ -30,32 +30,27 @@
                     <mat-option [value]="currentYear-2">{{currentYear-2}}</mat-option>
                   </mat-select>
               </mat-form-field>
+              <!-- Search by Description -->
               <mat-form-field>
-                <mat-label>Description</mat-label>
-                
+                <mat-label>Description</mat-label>                
                 <input id="searchDescription" 
-                       matInput
-                       [(ngModel)]="searchDescription" name="searchDescription"/>
+                        matInput
+                        [(ngModel)]="searchDescription" name="searchDescription"/>
               </mat-form-field>
+              <!-- Search Button -->
               <mat-action-row>
-                <button mat-button color="primary" (click)="search()">Search</button>
+                <button  class="btn btn-primary" (click)="search()">Search</button>
               </mat-action-row>
-            </mat-expansion-panel>
-          
-          </mat-accordion>
-          
-        
-          <button mat-button color="primary" (click)="ngOnInit()">
-            <mat-icon>refresh</mat-icon>
-          </button>    
-          <button class="button-remove-rows" mat-button (click)="removeSelectedRows()">
-            Remove Rows
-          </button>
-          <button class="button-add-row" mat-button (click)="addRow()">
-            Add Row
-          </button>
-        </div>
-      </article>
+            </mat-expansion-panel>       
+          </mat-accordion>          
+        </article>
+        <!-- Refresh, Remove, Add Row buttons -->
+        <div>
+          <button mat-button color="primary" (click)="ngOnInit()"><mat-icon>refresh</mat-icon></button>         
+          <button class="button-remove-rows" mat-button (click)="removeSelectedRows()">Remove Rows</button>
+          <button class="button-add-row" mat-button (click)="addRow()">Add Row</button>
+        </div>        
+      </div>
       
       <!-- Table for Receipt List --> 
       <table mat-table [dataSource]="dataSource">

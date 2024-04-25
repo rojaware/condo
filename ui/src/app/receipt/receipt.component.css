@@ -16,8 +16,7 @@
     padding-top: 20px;
   }
   
-  .table-header {
-    width: 90%;
+  .table-header {    
     margin: auto;
     text-align: right;
     margin-bottom: 10px;
@@ -88,7 +87,4 @@
     text-align: justify !important;
   }
   
-  ::ng-deep .mat-expansion-panel {
-    max-width: 80% !important;
-  }
 }
