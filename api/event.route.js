@@ -840,6 +840,19 @@ router.route('/receiptsByTenant/:name').get((request, response) => {
     }
   })
 })
+router.route('/receiptsSearch').post((request, response) => {
+  let payload = { ...request.body }
+  
+  receiptController.search(payload).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
 router.route('/receiptsById/:id').get((request, response) => {
 
   receiptController.getReceiptById(request.params.id).then(result => {

@@ -7,7 +7,7 @@
             <mat-expansion-panel >
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Filter
+                  Advance Search
                 </mat-panel-title>
                 <mat-panel-description>
                   Filter by year, tenant or type
@@ -17,9 +17,11 @@
               <!-- Search by Tenant Name-->
               <mat-form-field>
                 <mat-label>Tenant name</mat-label>
-                <input id="searchTenant" 
-                        matInput
-                        [(ngModel)]="searchTenant" name="searchTenant"/>
+                <mat-select [(ngModel)]="searchTenant" >
+                    @for (tenant of tenantTypes; track tenant) {
+                      <mat-option [value]="tenant" >{{tenant}}</mat-option>
+                    }
+                </mat-select>                
               </mat-form-field>
               <!-- Search by Year -->
               <mat-form-field>
@@ -30,6 +32,7 @@
                     <mat-option [value]="currentYear-2">{{currentYear-2}}</mat-option>
                   </mat-select>
               </mat-form-field>
+              <br>
               <!-- Search by Description -->
               <mat-form-field>
                 <mat-label>Description</mat-label>                
@@ -37,6 +40,16 @@
                         matInput
                         [(ngModel)]="searchDescription" name="searchDescription"/>
               </mat-form-field>
+              
+              <!-- Search by Category -->
+              <mat-form-field>
+                <mat-label>Category</mat-label>
+                <mat-select [(ngModel)]="searchCategory" >
+                    @for (receipt of receiptTypes; track receipt) {
+                      <mat-option [value]="receipt" >{{receipt}}</mat-option>
+                    }
+                </mat-select>                
+              </mat-form-field>              
               <!-- Search Button -->
               <mat-action-row>
                 <button  class="btn btn-primary" (click)="search()">Search</button>
@@ -124,8 +137,8 @@
                             [required]="col.required"
                             [pattern]="col.pattern"                        
                             (change)="inputHandler($event, element.id, col.key)">
-                    @for (receipt of tenantTypes; track receipt) {
-                      <mat-option [value]="receipt" style="font-size: x-small; padding-left: 9px;">{{receipt}}</mat-option>
+                    @for (tenant of tenantTypes; track tenant) {
+                      <mat-option [value]="tenant" style="font-size: medium; padding-left: 9px;">{{tenant}}</mat-option>
                     }
                 </mat-select>
               </div>  
@@ -135,7 +148,7 @@
                             [pattern]="col.pattern"                        
                             (change)="inputHandler($event, element.id, col.key)">
                     @for (receipt of receiptTypes; track receipt) {
-                      <mat-option [value]="receipt" style="font-size: x-small; padding-left: 9px;">{{receipt}}</mat-option>
+                      <mat-option [value]="receipt" style="font-size: medium; padding-left: 9px;">{{receipt}}</mat-option>
                     }
                 </mat-select>
               </div>

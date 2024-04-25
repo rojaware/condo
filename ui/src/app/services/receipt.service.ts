@@ -28,8 +28,9 @@ export class ReceiptService extends BaseService {
     return this.http.get<Receipt>(`${this.baseUrl}ById/${id}`);
   }  
   
-  search(tenantName: string, description: string, year: number): Observable<Receipt[]> {
-    return this.http.get<Receipt[]>(`${this.baseUrl}Search/${tenantName}/${description}/${year}`);
+  search(data: any): Observable<any> {
+    const url = this.baseUrl + 'Search';
+    return this.http.post<Receipt[]>(url, data);
   }
   
   create(data: any): Observable<any> {

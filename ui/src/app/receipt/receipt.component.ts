@@ -33,6 +33,7 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
   searchYear: number;
   searchTenant: string;
   searchDescription: string;
+  searchCategory: string;
   
   constructor(
     protected router: Router,
@@ -44,8 +45,7 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
     this.errMessage = '';
   }
 
-  ngOnInit() {
-    this.searchYear = this.currentYear;
+  ngOnInit() {    
     this.tenantTypes.push (this.config.user.property.tenant.primaryName);
     const secondaryTenant = this.config.user.property.tenant.secondaryName;
     if (secondaryTenant) {
@@ -165,5 +165,20 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
   /**
    * Collapse Search Area
    */
-  search(): void {}
+  search(): void {
+    const propertyName = this.currentPropertyName.trim();
+    const payload = {
+      propertyName: propertyName,
+      tenantName: this.searchTenant, 
+      description: this.searchDescription,
+      year: this.searchYear, 
+      category: this.searchCategory
+    }
+    this.receiptService.search(payload).subscribe((res: any) => {
+      // add extra logic to populate fields after result... here...
+      this.dataSource.data = res;      
+      this.message = "Searched..."
+      this.getTotalCost();
+    })    
+  }
 }

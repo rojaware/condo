@@ -38,7 +38,6 @@ async function getReceiptByProperty(name) {
   }
 }
 
-
 async function getReceiptByTenant(name) {
   const query = BASE_SQL + `
                 where tenantName = @input_parameter`
@@ -46,6 +45,34 @@ async function getReceiptByTenant(name) {
     let pool = await sql.connect(config);
     let item = await pool.request()
       .input('input_parameter', sql.VarChar, name)
+      .query(query);
+    return item.recordsets;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+async function search(payload) {
+  const query = BASE_SQL + 
+               `  WHERE tenantName = COALESCE(@tenantName, tenantName)
+                  AND description LIKE '%' + COALESCE(@description, description) + '%'
+                  AND year = COALESCE(@year, year)
+                  AND type = COALESCE(@category, type)
+                  AND propertyName = @propertyName`;
+  const propertyName = payload.propertyName;
+  const tenantName = payload.tenantName;
+  const description = payload.description;
+  const year = payload.year;                 
+  const category = payload.category;                 
+  try {
+    let pool = await sql.connect(config);
+    let item = await pool.request()
+      .input('tenantName', sql.VarChar, tenantName)
+      .input('description', sql.VarChar, description)
+      .input('propertyName', sql.VarChar, propertyName)
+      .input('category', sql.VarChar, category)
+      .input('year', sql.Int, year)
       .query(query);
     return item.recordsets;
   }
@@ -224,5 +251,5 @@ module.exports = {
   deleteReceiptByProperty: deleteReceiptByProperty,
   deleteReceiptByTenant: deleteReceiptByTenant,
   deleteAllReceipts: deleteAllReceipts,
-  
+  search: search,
 }
