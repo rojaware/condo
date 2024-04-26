@@ -28,6 +28,7 @@ export class Expense {
   totalExpense: number;
   netIncome: number;
   comment: string;
+  [key: string]: any;
 }
 
 export class HomeExpense extends Expense {

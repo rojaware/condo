@@ -95,11 +95,23 @@
                   </div>
                 </div>
               </td>
+              <!-- Total row -->
+              <td mat-footer-cell *matFooterCellDef > 
+                @if (col.key === 'month') {
+                   Total
+                } @else {
+                  @if (['currency', 'read'].includes(col.type)) {
+                    {{ lastRow[col.key] | currency}}
+                  }                  
+                }
+                
+              </td>
             </ng-container>
   
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  
+            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      
           </table>
   
         </div>      

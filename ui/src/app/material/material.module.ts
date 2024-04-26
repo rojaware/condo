@@ -24,6 +24,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const material = [
   MatTabsModule,
@@ -47,7 +48,7 @@ const material = [
   MatListModule,
   // MatMenuModule,
   // MatNativeDateModule,
-  // MatPaginatorModule,
+  MatPaginatorModule,
   // MatProgressBarModule,
   // MatProgressSpinnerModule,
   MatRadioModule,

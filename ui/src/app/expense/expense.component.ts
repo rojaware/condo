@@ -18,6 +18,7 @@ import { Expense, ExpenseColumns, HomeExpenseColumns } from '@app/models/expense
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
+import { Util } from '@app/shared/util';
 
 const moment = _rollupMoment || _moment;
 
@@ -56,6 +57,7 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   columnsSchema: any = [];
   expenses: Expense[] = [];
   currentExpense: Expense;
+  lastRow: Expense;
 
   message = '';
 
@@ -145,8 +147,8 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
   private appendTotals(data: Expense[]): Expense[] {
     data.forEach((item) => this.calculateTotal(item));
     // attach total row at the bottom...
-    const lastRow = this.insertLastRow(data);
-    data.push(lastRow);
+    this.lastRow = this.insertLastRow(data);    
+    
     return data;
   }
   private insertLastRow(expenseList: Expense[]): Expense {
@@ -173,18 +175,19 @@ export class ExpenseComponent extends BaseComponent implements OnInit {
 
   private calculateTotal(expense: Expense): Expense {
     expense.totalExpense =
-      expense.travel +
-      expense.maintenance +
-      expense.commission +
-      expense.insurance +
-      expense.legal +
-      expense.managementFee +
-      expense.mortgageInterest +
-      expense.repairs +
-      expense.supplies +
-      expense.tax +
-      expense.utilities +
-      expense.depreciation;
+      Util.num(expense.travel) +
+      Util.num(expense.maintenance) +
+      Util.num(expense.commission) +
+      Util.num(expense.insurance) +
+      Util.num(expense.legal) +
+      Util.num(expense.managementFee) +
+      Util.num(expense.mortgageInterest) +
+      Util.num(expense.repairs) +
+      Util.num(expense.supplies) +
+      Util.num(expense.tax) +
+      Util.num(expense.utilities) +
+      Util.num(expense.depreciation);
+
     expense.netIncome = expense.income - expense.totalExpense;
     return expense;
   }

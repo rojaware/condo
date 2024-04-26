@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { HomeExpenseService } from '@app/services/home-expense.service';
+import { Util } from '@app/shared/util';
 
 const moment = _rollupMoment || _moment;
 
@@ -56,6 +57,7 @@ export class HomeExpenseComponent extends BaseComponent implements OnInit {
   columnsSchema: any = [];
   expenses: HomeExpense[] = [];
   currentExpense: HomeExpense;
+  lastRow: HomeExpense;
 
   message = '';
 
@@ -145,65 +147,75 @@ export class HomeExpenseComponent extends BaseComponent implements OnInit {
   private appendTotals(data: HomeExpense[]): HomeExpense[] {
     data.forEach((item) => this.calculateTotal(item));
     // attach total row at the bottom...
-    const lastRow = this.insertLastRow(data);
-    data.push(lastRow);
+    this.lastRow = this.insertLastRow(data);
+    
     return data;
   }
-  private insertLastRow(expenseList: HomeExpense[]): HomeExpense {
+  sum(expenseList: HomeExpense[], key: string): number {
+    return expenseList.map((item: HomeExpense) => Number.isNaN(item[key])? 0: item[key]).reduce((acc, curr) => 
+      acc + curr, 0);
+  }
+  insertLastRow(expenseList: HomeExpense[]): any {
     let lastRow = new HomeExpense();
-    lastRow.id = -1;
-    lastRow['income'] = expenseList.map((item: HomeExpense) => item['income']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['travel'] = expenseList.map((item: HomeExpense) => item['travel']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['maintenance'] = expenseList.map((item: HomeExpense) => item['maintenance']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['commission'] = expenseList.map((item: HomeExpense) => item['commission']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['insurance'] = expenseList.map((item: HomeExpense) => item['insurance']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['legal'] = expenseList.map((item: HomeExpense) => item['legal']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['managementFee'] = expenseList.map((item: HomeExpense) => item['managementFee']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['mortgageInterest'] = expenseList.map((item: HomeExpense) => item['mortgageInterest']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['repairs'] = expenseList.map((item: HomeExpense) => item['repairs']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['supplies'] = expenseList.map((item: HomeExpense) => item['supplies']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['tax'] = expenseList.map((item: HomeExpense) => item['tax']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['utilities'] = expenseList.map((item: HomeExpense) => item['utilities']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['autoInsurance'] = expenseList.map((item: HomeExpense) => item['autoInsurance']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['gas'] = expenseList.map((item: HomeExpense) => item['gas']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['hydro'] = expenseList.map((item: HomeExpense) => item['hydro']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['water'] = expenseList.map((item: HomeExpense) => item['water']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['waterHeaterRental'] = expenseList.map((item: HomeExpense) => item['waterHeaterRental']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['internet'] = expenseList.map((item: HomeExpense) => item['internet']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['mobile'] = expenseList.map((item: HomeExpense) => item['mobile']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['netflix'] = expenseList.map((item: HomeExpense) => item['netflix']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['youtube'] = expenseList.map((item: HomeExpense) => item['youtube']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['depreciation'] = expenseList.map((item: HomeExpense) => item['depreciation']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['totalExpense'] = expenseList.map((item: HomeExpense) => item['totalExpense']).reduce((acc, curr) => acc + curr, 0);
-    lastRow['netIncome'] = expenseList.map((item: HomeExpense) => item['netIncome']).reduce((acc, curr) => acc + curr, 0);
+    HomeExpenseColumns.forEach(col => {
+      if (['currency','read'].includes(col.type) ) {
+        lastRow[col.key] = this.sum(expenseList, col.key);
+      }
+    });
+    // let lastRow: {[key: string]:any} = {} as HomeExpense;
+    lastRow['id'] = -1;
+    // lastRow['income'] = this.sum(expenseList, 'income') //expenseList.map((item: HomeExpense) => item['income']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['travel'] = this.sum(expenseList, 'travel') //expenseList.map((item: HomeExpense) => item['travel']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['maintenance'] = expenseList.map((item: HomeExpense) => item['maintenance']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['commission'] = expenseList.map((item: HomeExpense) => item['commission']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['insurance'] = expenseList.map((item: HomeExpense) => item['insurance']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['legal'] = expenseList.map((item: HomeExpense) => item['legal']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['managementFee'] = expenseList.map((item: HomeExpense) => item['managementFee']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['mortgageInterest'] = expenseList.map((item: HomeExpense) => item['mortgageInterest']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['repairs'] = expenseList.map((item: HomeExpense) => item['repairs']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['supplies'] = expenseList.map((item: HomeExpense) => item['supplies']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['tax'] = expenseList.map((item: HomeExpense) => item['tax']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['utilities'] = expenseList.map((item: HomeExpense) => item['utilities']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['autoInsurance'] = expenseList.map((item: HomeExpense) => item['autoInsurance']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['gas'] = expenseList.map((item: HomeExpense) => item['gas']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['hydro'] = expenseList.map((item: HomeExpense) => item['hydro']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['water'] = expenseList.map((item: HomeExpense) => item['water']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['waterHeaterRental'] = expenseList.map((item: HomeExpense) => item['waterHeaterRental']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['internet'] = expenseList.map((item: HomeExpense) => item['internet']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['mobile'] = expenseList.map((item: HomeExpense) => item['mobile']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['netflix'] = expenseList.map((item: HomeExpense) => item['netflix']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['youtube'] = expenseList.map((item: HomeExpense) => item['youtube']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['depreciation'] = expenseList.map((item: HomeExpense) => item['depreciation']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['totalExpense'] = expenseList.map((item: HomeExpense) => item['totalExpense']).reduce((acc, curr) => acc + curr, 0);
+    // lastRow['netIncome'] = expenseList.map((item: HomeExpense) => item['netIncome']).reduce((acc, curr) => acc + curr, 0);
     
     return lastRow;
   }
 
   private calculateTotal(expense: HomeExpense): HomeExpense {
     expense.totalExpense =
-      expense.travel +
-      expense.maintenance +
-      expense.commission +
-      expense.insurance +
-      expense.legal +
-      expense.managementFee +
-      expense.mortgageInterest +
-      expense.repairs +
-      expense.supplies +
-      expense.tax +
-      expense.utilities +
-      expense.depreciation +
-      
-      expense.autoInsurance +
-      expense.gas +
-      expense.hydro +
-      expense.water +
-      expense.waterHeaterRental +
-      expense.internet +
-      expense.mobile +
-      expense.netflix +
-      expense.youtube 
+      Util.num(expense.travel) +
+      Util.num(expense.maintenance) +
+      Util.num(expense.commission) +
+      Util.num(expense.insurance) +
+      Util.num(expense.legal) +
+      Util.num(expense.managementFee) +
+      Util.num(expense.mortgageInterest) +
+      Util.num(expense.repairs) +
+      Util.num(expense.supplies) +
+      Util.num(expense.tax) +
+      Util.num(expense.utilities) +
+      Util.num(expense.depreciation) +
+
+      Util.num(expense.autoInsurance) +
+      Util.num(expense.gas) +
+      Util.num(expense.hydro) +
+      Util.num(expense.water) +
+      Util.num(expense.waterHeaterRental) +
+      Util.num(expense.internet) +
+      Util.num(expense.mobile) +
+      Util.num(expense.netflix) +
+      Util.num(expense.youtube )
     expense.netIncome = expense.income - expense.totalExpense;
     return expense;
   }
@@ -403,4 +415,13 @@ export class HomeExpenseComponent extends BaseComponent implements OnInit {
     return csvContent;
   }
 
+  // getTotalCost(): number {
+  //   const arr = this.dataSource.data.map(item => item.payment);
+  //   const sum = arr.reduce((accumulator: number, currentValue: number) => {
+  //     let y: number = +currentValue;
+  //     return accumulator + y;
+  //   }, 0);
+  //   this.total = sum;
+  //   return sum;
+  // }
 }

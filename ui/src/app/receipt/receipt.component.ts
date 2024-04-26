@@ -9,6 +9,7 @@ import { ReceiptColumns, Receipt, ReceiptTypeEnum } from '@app/models/receipt.mo
 import { ReceiptService } from '@app/services/receipt.service';
 import { CurrencyPipe } from '@angular/common';
 import { MatAccordion } from '@angular/material/expansion';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-receipt',
@@ -17,7 +18,8 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class ReceiptComponent extends BaseComponent implements OnInit {
   @Input() currentPropertyName: string = '';
-  @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild(MatAccordion) accordion: MatAccordion;  
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns: string[] = ReceiptColumns.map((col) => col.key)
   columnsSchema: any = ReceiptColumns
   dataSource = new MatTableDataSource<Receipt>()
@@ -58,7 +60,9 @@ export class ReceiptComponent extends BaseComponent implements OnInit {
       this.getTotalCost();
     })
   }
-  
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
   getTotalCost(): number {
     const arr = this.dataSource.data.map(item => item.payment);
     const sum = arr.reduce((accumulator: number, currentValue: number) => {

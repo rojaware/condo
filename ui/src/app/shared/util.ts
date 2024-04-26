@@ -91,4 +91,12 @@ export class Util {
     return daysDifference;
   }
 
+  static num(value: any): number {
+    if (!value || Number.isNaN(value)) {
+      return 0;
+    } else {
+      return value;
+    }
+    
+  }
 }
