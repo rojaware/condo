@@ -35,14 +35,23 @@
           matTooltip="{{property.address}}"
           >
         @if (property.owner && property.owner.includes('angela')) {          
-          <div  matBadge="4" matBadgeOverlap="true" matBadgePosition="above after" matBadgeSize="small">
+          <div  matBadge="4" 
+                matBadgeOverlap="true" 
+                matBadgePosition="above after" 
+                matBadgeSize="small">
             {{ property.name }} 
             <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
           </div>
         } @else {
-          <div  matBadgeOverlap="true" >{{ property.name }} 
-            <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
-          </div>
+          @if (property.name.includes('home')) {
+            <div  matBadgeOverlap="true" >{{ property.name }} 
+              <mat-icon>home</mat-icon>
+            </div>
+          } @else {
+            <div  matBadgeOverlap="true" >{{ property.name }} 
+              <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
+            </div>
+          }
         } 
       </li>
       }
