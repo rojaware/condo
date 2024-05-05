@@ -29,6 +29,9 @@ export class PropertyService extends BaseService {
     return this.http.get<Property[]>(`${this.baseUrl}LeaseDates`);
   }
 
+  getMaturityDates(): Observable<Property[]> {
+    return this.http.get<Property[]>(`${this.baseUrl}MaturityDates`);
+  }
   create(data: any): Observable<any> {
     return this.http.post(this.baseUrl, data);
   }

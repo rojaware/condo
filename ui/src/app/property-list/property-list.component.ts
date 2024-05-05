@@ -164,6 +164,7 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
       propertyCustomerNo: '',
       owner: [],
       bank: '',
+      username: '',
       size: 0,
       builder: '',
       closingDate: '',

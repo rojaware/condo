@@ -25,7 +25,7 @@ const BASE_SQL = `SELECT [name], [id]
                         ,tscc
                         ,insuranceCompany, policyNo, insuranceFee, propertyTax
                         ,conciergePhone, managementPhone, managementEmail
-                        ,[owner]
+                        ,[owner], username
                   FROM Properties `
 async function getProperties() {
     const query = BASE_SQL + ` WHERE salesDate is null`;               
@@ -85,7 +85,7 @@ async function createProperty(property) {
                ,maturityDate, comment, imageUrl, tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
                ,conciergePhone, managementPhone, managementEmail
-               ,[owner])
+               ,[owner], username)
          VALUES
                (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder,
                 @closingDate, 
@@ -98,7 +98,7 @@ async function createProperty(property) {
                 ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@insuranceCompany, @policyNo, @insuranceFee, @propertyTax
                 ,@conciergePhone, @managementPhone, @managementEmail
-                ,@owner);
+                ,@owner, @username);
          SELECT  IDENT_CURRENT('properties') as id ;`;
          console.log('property.occupancyDate ==> ' + property.occupancyDate)
     try {
@@ -108,6 +108,7 @@ async function createProperty(property) {
             .input('address', sql.NVarChar, property.address)
             .input('rollNo', sql.NVarChar, property.rollNo)
             .input('owner', sql.NVarChar, property.owner)
+            .input('username', sql.NVarChar, property.username)
             .input('propertyCustomerNo', sql.NVarChar, property.propertyCustomerNo)
             .input('bank', sql.NVarChar, property.bank)
             .input('size', sql.Int, property.size)
@@ -153,6 +154,7 @@ async function updateProperty(property) {
        ,[rollNo] = @rollNo
        ,[propertyCustomerNo] = @propertyCustomerNo
        ,[owner] = @owner
+       ,[username] = @username
        ,[bank] = @bank
        ,[size] = @size
        ,[builder] = @builder
@@ -191,6 +193,7 @@ async function updateProperty(property) {
             .input('rollNo', sql.NVarChar, property.rollNo)
             .input('propertyCustomerNo', sql.NVarChar, property.propertyCustomerNo)
             .input('owner', sql.NVarChar, property.owner)
+            .input('username', sql.NVarChar, property.username)
             .input('bank', sql.NVarChar, property.bank)
             .input('id', sql.Int, property.id)
             .input('size', sql.Int, property.size)
@@ -309,6 +312,28 @@ async function getLeaseDates() {
     }
 }
 
+
+async function getMaturityDates() {
+    const query = `SELECT name,builder
+                        ,CONVERT(char(10), startDate ,126) as startDate
+                        ,CONVERT(char(10), endDate ,126) as endDate          
+                        ,CONVERT(char(10), maturityDate ,126) as maturityDate      
+                    FROM properties 
+                    WHERE salesDate is null 
+                    AND maturityDate is not null 
+                    ORDER BY maturityDate`;               
+    try {
+        let pool = await sql.connect(config);
+        let properties = await pool.request().query(query);
+        console.log('successful, Returning total ' + properties.rowsAffected + ' records')
+        return properties.recordsets;
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 module.exports = {
     getProperties: getProperties,
     getProperty : getProperty,
@@ -317,4 +342,5 @@ module.exports = {
     updateProperty : updateProperty,
     getPropertyLeaseEnding: getPropertyLeaseEnding,
     getLeaseDates: getLeaseDates,
+    getMaturityDates: getMaturityDates,
 }

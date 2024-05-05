@@ -120,6 +120,19 @@ router.route('/propertiesLeaseDates').get((request, response) => {
     }
   })
 })
+
+
+router.route('/propertiesMaturityDates').get((request, response) => {
+  propertyController.getMaturityDates().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.json(result[0]);
+    }
+  })
+})
 //############### tenants api... ########################
 
 router.route('/tenants').get((request, response) => {

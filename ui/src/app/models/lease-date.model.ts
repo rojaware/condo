@@ -3,6 +3,7 @@ export interface LeaseDate {
   builder: string;
   startDate: string;
   endDate: string;
+  maturityDate?: string;
 }
 
 export const LeaseDateColumns = [  
@@ -31,3 +32,11 @@ export const LeaseDateColumns = [
     hidden: true,
   },
 ];
+export const MaturityDateColumns = LeaseDateColumns.concat(  
+  {
+    key: 'maturityDate',
+    type: 'text',
+    label: 'Maturity Date',    
+    hidden: true,
+  }
+)

@@ -8,6 +8,7 @@ export class Property {
   rollNo: string;
   propertyCustomerNo: string;
   owner?: string[];
+  username?: string;
 
   size: number;
   builder: string;

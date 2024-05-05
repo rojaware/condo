@@ -25,5 +25,6 @@ export class MortgageComponent extends BaseComponent implements OnInit {
 
   save(): void {
     this.isMortgageSaved.emit(true);
+    this.message = "Saved"
   }
 }
