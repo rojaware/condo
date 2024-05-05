@@ -26,7 +26,7 @@
 
   <!-- side property list -->
   <div class="col-md-2">
-    <h4>Property List</h4>
+    <h4>Property List </h4>
     <ul class="list-group" *ngIf="properties">
       @for (property of properties | searchFilter: searchTerm ; track property.name; let i = $index) {
       <li class="list-group-item"
@@ -39,16 +39,16 @@
                 matBadgeOverlap="true" 
                 matBadgePosition="above after" 
                 matBadgeSize="small">
-            {{ property.name }} 
+            {{ i+1 }}. {{ property.name }} 
             <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
           </div>
         } @else {
           @if (property.name.includes('home')) {
-            <div  matBadgeOverlap="true" >{{ property.name }} 
+            <div  matBadgeOverlap="true" >{{ i+1 }}. {{ property.name }} 
               <mat-icon>home</mat-icon>
             </div>
           } @else {
-            <div  matBadgeOverlap="true" >{{ property.name }} 
+            <div  matBadgeOverlap="true" >{{ i+1 }}. {{ property.name }} 
               <span *ngIf="!util.isEmpty(property.builder)">{{ property.builder }}</span>
             </div>
           }
