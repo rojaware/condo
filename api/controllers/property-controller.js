@@ -25,7 +25,7 @@ const BASE_SQL = `SELECT [name], [id]
                         ,tscc
                         ,insuranceCompany, policyNo, insuranceFee, propertyTax
                         ,conciergePhone, managementPhone, managementEmail
-                        ,[owner], username
+                        ,[owner], businessNo
                   FROM Properties `
 async function getProperties() {
     const query = BASE_SQL + ` WHERE salesDate is null`;               
@@ -85,7 +85,7 @@ async function createProperty(property) {
                ,maturityDate, comment, imageUrl, tscc
                ,insuranceCompany, policyNo, insuranceFee, propertyTax
                ,conciergePhone, managementPhone, managementEmail
-               ,[owner], username)
+               ,[owner], businessNo)
          VALUES
                (@name ,@address, @rollNo, @propertyCustomerNo, @bank ,@size, @builder,
                 @closingDate, 
@@ -98,7 +98,7 @@ async function createProperty(property) {
                 ,@maturityDate, @comment, @imageUrl, @tscc
                 ,@insuranceCompany, @policyNo, @insuranceFee, @propertyTax
                 ,@conciergePhone, @managementPhone, @managementEmail
-                ,@owner, @username);
+                ,@owner, @businessNo);
          SELECT  IDENT_CURRENT('properties') as id ;`;
          console.log('property.occupancyDate ==> ' + property.occupancyDate)
     try {
@@ -108,7 +108,7 @@ async function createProperty(property) {
             .input('address', sql.NVarChar, property.address)
             .input('rollNo', sql.NVarChar, property.rollNo)
             .input('owner', sql.NVarChar, property.owner)
-            .input('username', sql.NVarChar, property.username)
+            .input('businessNo', sql.NVarChar, property.businessNo)
             .input('propertyCustomerNo', sql.NVarChar, property.propertyCustomerNo)
             .input('bank', sql.NVarChar, property.bank)
             .input('size', sql.Int, property.size)
@@ -154,7 +154,7 @@ async function updateProperty(property) {
        ,[rollNo] = @rollNo
        ,[propertyCustomerNo] = @propertyCustomerNo
        ,[owner] = @owner
-       ,[username] = @username
+       ,[businessNo] = @businessNo
        ,[bank] = @bank
        ,[size] = @size
        ,[builder] = @builder
@@ -193,7 +193,7 @@ async function updateProperty(property) {
             .input('rollNo', sql.NVarChar, property.rollNo)
             .input('propertyCustomerNo', sql.NVarChar, property.propertyCustomerNo)
             .input('owner', sql.NVarChar, property.owner)
-            .input('username', sql.NVarChar, property.username)
+            .input('businessNo', sql.NVarChar, property.businessNo)
             .input('bank', sql.NVarChar, property.bank)
             .input('id', sql.Int, property.id)
             .input('size', sql.Int, property.size)

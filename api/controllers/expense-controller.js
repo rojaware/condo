@@ -194,8 +194,6 @@ async function purgeExpense() {
   }
 }
 
-
-
 module.exports = {
   getExpenses: getExpenses,
   getExpenseByYearMonth: getExpenseByYearMonth,
