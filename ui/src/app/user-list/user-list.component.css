@@ -1,0 +1,105 @@
+.user-list-form {
+  p {
+    font-family: Lato;
+  }
+  table {
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+  }
+  .btn-edit {
+    text-align: right;
+    display: flex;
+  }
+  h2 {
+    text-align: center;
+    padding-top: 20px;
+  }
+  
+  .table-header {    
+    margin: auto;
+    text-align: right;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .button-add-row {
+    background: #1b9e1b;
+    color: #ffffff;
+  }
+  
+  .button-remove-rows {
+    background: red;
+    color: #ffffff;
+    margin-right: 5px;
+  }
+  .button-reloadAll-rows {
+    background: brown;
+    color: #ffffff;
+    margin-right: 5px;
+  }
+  
+  .button-reload-rows {
+    background: rgb(26, 58, 103);
+    color: #ffffff;
+    margin-right: 5px;
+  }
+  .button-remove {
+    color: black;
+  }
+  
+  ::ng-deep .mat-form-field-infix {
+    width: 100% !important;
+  }
+  .mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 0 0 0; 
+  }
+  
+  .form-input {
+    padding-right: 5px;
+  }
+  div i {
+    font-style: italic;
+    color:mediumslateblue;
+    font-weight: 600;
+  }
+  th span {
+    font-style: italic;    
+    font-weight: 600;
+  }
+  .mat-mdc-row {
+    height: auto !important;
+  }
+  .mat-mdc-select {
+    font-size: small !important;
+  }
+
+  .batch-input {
+    width: 60%;
+    margin: auto;
+    text-align: right;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+    margin-left: 8px;
+  }
+  ::ng-deep .mat-expansion-panel-body {
+    text-align: justify !important;
+  }
+  .example-button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+  }
+  
+}

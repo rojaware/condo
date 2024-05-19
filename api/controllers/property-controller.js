@@ -27,11 +27,16 @@ const BASE_SQL = `SELECT [name], [id]
                         ,conciergePhone, managementPhone, managementEmail
                         ,[owner], businessNo
                   FROM Properties `
-async function getProperties() {
-    const query = BASE_SQL + ` WHERE salesDate is null`;               
+async function getProperties(businessNo) {    
+    let query = BASE_SQL + ` WHERE salesDate is null `;               
+    if (!util.isEmpty(businessNo)) {
+        query += `AND businessNo = @businessNo`
+    }
     try {
         let pool = await sql.connect(config);
-        let properties = await pool.request().query(query);
+        let properties = await pool.request()
+            .input('businessNo', sql.VarChar, businessNo)
+            .query(query);
         console.log('successful, Returning total ' + properties.rowsAffected + ' records')
         return properties.recordsets;
     }

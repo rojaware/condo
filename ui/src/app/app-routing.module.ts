@@ -8,6 +8,7 @@ import { DocumentComponent } from './document/document.component';
 import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
 import { HomeExpenseComponent } from './home-expense/home-expense.component';
+import { UserListComponent } from './user-list/user-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'properties', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'documents', component: DocumentComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'overview', component: OverviewComponent },
+  { path: 'users', component: UserListComponent },
 ];
 
 @NgModule({

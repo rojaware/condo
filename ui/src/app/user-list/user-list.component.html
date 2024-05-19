@@ -1,0 +1,154 @@
+<div class="user-list-form" id="user-list">
+  <mat-card>
+    <mat-card-content>
+      <div style="display: flex;">
+        <article class="table-header">
+          <mat-accordion class="example-headers-align">
+            <mat-expansion-panel >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Advance Search
+                </mat-panel-title>
+                <mat-panel-description>
+                  Filter by business no or username
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              
+              <br>
+              <!-- Search by username -->
+              <mat-form-field>
+                <mat-label>Username</mat-label>                
+                <input id="searchUsername" 
+                        matInput
+                        [(ngModel)]="searchUsername" name="searchUsername"/>
+              </mat-form-field>
+              <!-- Search by Business no -->
+              <mat-form-field>
+                <mat-label>Business No</mat-label>                
+                <input id="searchBusinessNo" 
+                        matInput
+                        [(ngModel)]="searchBusinessNo" name="searchBusinessNo"/>
+              </mat-form-field>
+              
+              <!-- Search Button -->
+              <mat-action-row>
+                <button  class="btn btn-primary" (click)="search()">Search</button>
+              </mat-action-row>
+            </mat-expansion-panel>       
+          </mat-accordion>          
+        </article>
+        <!-- Refresh, Remove, Add Row buttons -->
+        <div>
+          <button class="button-reloadAll-rows"  mat-button color="primary" (click)="loadAllUsers()" matTooltip="load global users">Reload All <mat-icon matSuffix>supervised_user_circle</mat-icon></button>         
+          <button class="button-reload-rows" mat-button color="accent"  (click)="reload()" matTooltip="load users by current business number">Refresh <mat-icon matSuffix>refresh</mat-icon></button>         
+          <button class="button-remove-rows" mat-button (click)="removeSelectedRows()">Remove Rows</button>
+          <button class="button-add-row" mat-button (click)="addRow()">Add Row</button>
+        </div>        
+      </div>
+      
+      <!-- Table for User List --> 
+      <table mat-table [dataSource]="dataSource">
+        <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+          
+          <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+            <span *ngSwitchCase="'isSelected'">
+              <mat-checkbox (change)="selectAll($event)"
+                            [checked]="isAllSelected()"
+                            [indeterminate]="!isAllSelected() && isAnySelected()">
+              </mat-checkbox>
+            </span>
+            <span *ngSwitchDefault > {{ col.label }}</span>
+          </th>
+  
+          <!-- check box for selection -->    
+          <td mat-cell *matCellDef="let element">
+            <!-- View mode  {{ element | json }} -->
+            <div [ngSwitch]="col.type" *ngIf="!element.isEdit" >
+              <ng-container *ngSwitchCase="'isSelected'">
+                <mat-checkbox (change)="element.isSelected = $event.checked"
+                              [checked]="element.isSelected">
+                </mat-checkbox>
+              </ng-container>
+      
+              <div class="btn-edit" *ngSwitchCase="'isEdit'" >
+                @if ( ['Hour', 'Minute', 'Days'].includes(element.viewValue) ) {
+                  <button mat-button matTooltip="Use Email batch startup time picker at bottom">
+                    <mat-icon>stop</mat-icon>
+                  </button>
+                } @else {
+                  <button mat-button (click)="element.isEdit = !element.isEdit" matTooltip="Edit">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+                <button mat-button
+                        class="button-remove"
+                        (click)="removeRow(element.username)" matTooltip="Delete">
+                  <mat-icon>delete_forever</mat-icon>       
+                </button>
+              </div>
+              
+              <span *ngSwitchDefault >
+                {{ element[col.key] }} 
+              </span>              
+            </div>
+            <!-- Edit mode -->          
+            <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+              <ng-container *ngSwitchCase="'isSelected'"></ng-container>
+              <div class="btn-edit" *ngSwitchCase="'isEdit'">
+                <button mat-button
+                        (click)="saveRow(element)"
+                        [disabled]="disableSubmit(element.username)"
+                        matTooltip="Save">
+                        <mat-icon>save</mat-icon>
+                </button>
+                <button mat-button
+                        (click)="element.isEdit = false"
+                        [disabled]="disableSubmit(element.username)"
+                        matTooltip="Cancel">
+                        <mat-icon>cancel</mat-icon>
+                </button>
+              </div>
+              <div class="form-input" *ngSwitchCase="'read'">
+                {{ element[col.key] }} 
+              </div>
+              <div class="" *ngSwitchCase="'dropdown'">
+                <mat-select [(ngModel)]="element[col.key]" 
+                            [required]="col.required"
+                            [pattern]="col.pattern"                        
+                            (change)="inputHandler($event, element.username, col.key)">
+                    @for (role of roleTypes; track role) {
+                      <mat-option [value]="role" style="font-size: medium; padding-left: 9px;">{{role}}</mat-option>
+                    }
+                </mat-select>
+              </div>
+              <div class="form-input" *ngSwitchDefault>
+                <input  matInput
+                        [required]="col.required"
+                        [pattern]="col.pattern"
+                        [type]="col.type"
+                        [(ngModel)]="element[col.key]"
+                        (change)="inputHandler($event, element.username, col)" /> 
+              </div>
+            </div>
+          </td>
+          <!-- Total row -->
+          <td mat-footer-cell *matFooterCellDef > 
+            <b *ngIf="col.key === 'isSelected'">Total</b>
+            <b *ngIf="col.key === 'username'">{{ total }}</b>
+          </td>    
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+  
+    <div><i *ngIf="message">{{ message }}  </i></div>
+    <span *ngIf="errMessage" class="error">{{ errMessage }}</span>
+  </div>

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TenantService } from '@app/services/tenant.service';
 import { Tenant } from '@app/models/tenant.model';
 import { BaseComponent } from '@app/base/base.component';
-import { User } from '@app/models/user.model';
+import { User, UserProfile } from '@app/models/user.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LabelTypeEnum } from '@app/models/label.model';
 import { SettingService } from '@app/services/setting.service';
@@ -78,7 +78,8 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
   }
 
   async retrievePropertyList(): Promise<void> {
-    await this.propertyService.getAll().subscribe({
+    const businessNo = this.config.user.profile?.businessNo;
+    await this.propertyService.getAll(businessNo).subscribe({
       next: (data) => {        
         // retrieve all tenants by property
         if (data) {
@@ -141,6 +142,9 @@ export class PropertyListComponent extends BaseComponent implements OnInit, Afte
     this.currentTenant = property.tenant;
     if (!this.config.user) {
       this.config.user = {} as User;
+    }
+    if (!this.config.user.profile) {
+      this.config.user.profile = new UserProfile();
     }
     this.config.user.property = property;
     this.currentIndex = index;    

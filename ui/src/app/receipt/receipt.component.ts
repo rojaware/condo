@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@app/confirm-dialog/confirm-dialog.component';
-import { SettingService } from '@app/services/setting.service';
 import { ReceiptColumns, Receipt, ReceiptTypeEnum } from '@app/models/receipt.model';
 import { ReceiptService } from '@app/services/receipt.service';
 import { CurrencyPipe } from '@angular/common';

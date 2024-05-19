@@ -16,9 +16,9 @@ export class PropertyService extends BaseService {
     this.baseUrl = this.baseurl + 'properties';
   }
 
-  getAll(): Observable<Property[]> {    
+  getAll(businessNo: any): Observable<Property[]> {    
     console.log('config base url in property  service is.... ' + this.baseurl)
-    return this.http.get<Property[]>(this.baseUrl);
+    return this.http.get<Property[]>(`${this.baseUrl}All/${businessNo}`);
   }
 
   get(name: any): Observable<Property> {

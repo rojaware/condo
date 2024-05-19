@@ -31,6 +31,7 @@ import { PhonePipe } from './shared/phone.pipe';
 import { HomeExpenseComponent } from './home-expense/home-expense.component';
 import { ReceiptComponent } from './receipt/receipt.component';
 import { CurrencyPipe } from '@angular/common';
+import { UserListComponent } from './user-list/user-list.component';
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -56,6 +57,7 @@ export const initConfig =
     PhonePipe,
     HomeExpenseComponent,
     ReceiptComponent,
+    UserListComponent,
   ],
   imports: [
     HttpClientModule,
