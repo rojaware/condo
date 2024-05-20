@@ -9,21 +9,29 @@ import { SettingsComponent } from './settings/settings.component';
 import { OverviewComponent } from './overview/overview.component';
 import { HomeExpenseComponent } from './home-expense/home-expense.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { AdminComponent } from './admin/admin.component';
+import { LoginComponent } from './login/login.component';
+import { authGuard } from './services/auth.guard';
+import { SignupComponent } from './signup/signup.component';
 
-const routes: Routes = [
-  { path: '', redirectTo: 'properties', pathMatch: 'full' },
-  { path: 'properties', component: PropertyListComponent },
-  { path: 'properties/:name', component: PropertyComponent },
-  { path: 'tenants', component: TenantComponent },
-  { path: 'tenants/:propertyName', component: TenantComponent },
-  { path: 'expenses', component: ExpenseComponent },
-  { path: 'expenses/:propertyName/:year', component: ExpenseComponent },
-  { path: 'homeExpenses', component: HomeExpenseComponent },
-  { path: 'homeExpenses/:propertyName/:year', component: HomeExpenseComponent },  
-  { path: 'documents', component: DocumentComponent },
-  { path: 'settings', component: SettingsComponent },
-  { path: 'overview', component: OverviewComponent },
-  { path: 'users', component: UserListComponent },
+export const routes: Routes = [
+  // { path: '', redirectTo: 'properties', pathMatch: 'full', canActivate: [authGuard] },
+  { path: '', redirectTo: '/login', pathMatch: 'full'},
+  { path: 'login', component: LoginComponent},
+  { path: 'signup', component: SignupComponent},
+  { path: 'admin', component: AdminComponent, canActivate: [authGuard]},
+  { path: 'properties', component: PropertyListComponent, canActivate: [authGuard] },
+  { path: 'properties/:name', component: PropertyComponent, canActivate: [authGuard] },
+  { path: 'tenants', component: TenantComponent, canActivate: [authGuard] },
+  { path: 'tenants/:propertyName', component: TenantComponent, canActivate: [authGuard] },
+  { path: 'expenses', component: ExpenseComponent, canActivate: [authGuard] },
+  { path: 'expenses/:propertyName/:year', component: ExpenseComponent, canActivate: [authGuard] },
+  { path: 'homeExpenses', component: HomeExpenseComponent, canActivate: [authGuard] },
+  { path: 'homeExpenses/:propertyName/:year', component: HomeExpenseComponent, canActivate: [authGuard] },  
+  { path: 'documents', component: DocumentComponent, canActivate: [authGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [authGuard] },
+  { path: 'overview', component: OverviewComponent, canActivate: [authGuard] },
+  { path: 'users', component: UserListComponent, canActivate: [authGuard] },
 ];
 
 @NgModule({

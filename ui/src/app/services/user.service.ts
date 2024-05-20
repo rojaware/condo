@@ -25,9 +25,6 @@ export class UserService extends BaseService {
   getByBusinessNo(businessNo: string): Observable<UserProfile[]> {
     return this.http.get<UserProfile[]>(`${this.baseUrl}ByBusinessNo/${businessNo}`);
   }
-  getByName(name: string): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${this.baseUrl}ByName/${name}`);
-  }  
   
   search(data: any): Observable<any> {
     const url = this.baseUrl + 'Search';

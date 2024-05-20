@@ -16,6 +16,7 @@ export class UserProfile {
   role: string;
   businessNo: string;
   isEdit?: boolean;
+  token?: string;
 
   constructor() {
     this.businessNo = '502416996';

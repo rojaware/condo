@@ -32,6 +32,15 @@ import { HomeExpenseComponent } from './home-expense/home-expense.component';
 import { ReceiptComponent } from './receipt/receipt.component';
 import { CurrencyPipe } from '@angular/common';
 import { UserListComponent } from './user-list/user-list.component';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
+import { AdminComponent } from './admin/admin.component';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export const tokenGetter = () => {
+  const config = ConfigService.config;
+  return config.user? config.user.profile.token : null;
+};
 
 export const initConfig =
   (configService: ConfigService): any =>
@@ -58,12 +67,23 @@ export const initConfig =
     HomeExpenseComponent,
     ReceiptComponent,
     UserListComponent,
+    LoginComponent,
+    SignupComponent,
+    AdminComponent,
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    // Add this import here
+    // JwtModule.forRoot({
+    //   config: {
+    //     tokenGetter,
+    //     allowedDomains: ['https://rcs-nodejs.azurewebsites.net'],
+    //     disallowedRoutes: ['https://rcs-nodejs.azurewebsites.net/api/auth']
+    //   }
+    // }),
     HttpClientModule,
     MaterialModule,
     BrowserAnimationsModule,

@@ -5,7 +5,7 @@ const BASE_SQL = `SELECT  [username]
 ,[password]
 ,CONVERT(char(10), createdOn ,126) as createdOn
 ,CONVERT(char(10), updatedOn ,126) as updatedOn
-,[role], [businessNo] from USERS`;
+,[role], [businessNo] from USERS `;
 
 async function getUsers() {
 
@@ -51,20 +51,27 @@ async function getUsersByProperty(propertyName) {
   }
 }
 
-async function getUser(name) {
-  const query = BASE_SQL + `where username = @name`
+async function findUser(user) {
+  const query = BASE_SQL + ` WHERE username = @username AND password = @password`
   try {
     let pool = await sql.connect(config);
     let item = await pool.request()
-      .input('username', sql.VarChar, name)
+      .input('username', sql.VarChar, user.username)
+      .input('password', sql.VarChar, user.password)
       .query(query);
-    return item.recordset;
+    return item.recordset[0];
   }
   catch (error) {
     console.log(error);
   }
 }
 
+// helper functions
+
+function omitPassword(user) {
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}
 /**
  * Check if this is unique username before calling this query
  * @param {*} body 
@@ -215,8 +222,7 @@ async function search(payload) {
 module.exports = {
   getUsers: getUsers,
   getUsersByProperty: getUsersByProperty,
-  getUsersByBusinessNo: getUsersByBusinessNo,
-  getUser: getUser,
+  getUsersByBusinessNo: getUsersByBusinessNo,  
   addUser: addUser,
   updateUser: updateUser,
   deleteUser: deleteUser,
@@ -224,4 +230,5 @@ module.exports = {
   deleteUserByBusinessNo: deleteUserByBusinessNo,
   purge: purge,
   search: search,
+  findUser: findUser,
 }

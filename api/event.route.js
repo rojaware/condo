@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const multer = require('multer');
+const config = require('./config.json');
 
 // Require controller modules.
 const propertyController = require('./controllers/property-controller');
@@ -11,7 +12,9 @@ const documentsController = require('./controllers/document-controller');
 const settingController = require('./controllers/setting-controller');
 const mortgageController = require('./controllers/mortgage-controller');
 const receiptController = require('./controllers/receipt-controller');
+const userController = require('./controllers/user-controller');
 var util = require('./shared/util');
+const jwt = require('jsonwebtoken');
 
 // Home page route.
 router.get("/", function (req, res) {
@@ -27,8 +30,8 @@ router.use((request, response, next) => {
   next();
 })
 
-router.route('/properties').get((request, response) => {
-  propertyController.getProperties().then(result => {
+router.route('/propertiesAll/:businessNo').get((request, response) => {  
+  propertyController.getProperties(request.params.businessNo).then(result => {
     if (!result) {
       console.log("no data...");
       response.status(404)
@@ -960,8 +963,154 @@ router.route('/receipts').delete((request, response) => {
   })
 })
 
+//############### USERS API... ################################/
 
-/***************** End of Receipts API */
+router.route('/users').get((request, response) => {
+
+  userController.getUsers().then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404)
+      response.send('no data')
+    } else {
+      response.json(result[0]);
+    }
+  })
+})
+
+router.route('/usersByBusinessNo/:businessNo').get((request, response) => {
+
+  userController.getUsersByBusinessNo(request.params.businessNo).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/usersByProperty/:name').get((request, response) => {
+
+  userController.getUsersByProperty(request.params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/usersByName/:name/:').get((request, response) => {
+
+  userController.getUser(request.params.name).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/users').post((request, response) => {
+  let user = { ...request.body }
+  userController.addUser(user).then(result => {
+    if (result === 0) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/users').put((request, response) => {
+  let user = { ...request.body };
+  userController.updateUser(user).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/users/:username').delete((request, response) => {
+  const params = request.params;
+  userController.deleteUser(params.username).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/usersByUsernameList/:usernameList').delete((request, response) => {
+  const params = request.params;
+  userController.deleteUserByUsernameList(params.usernameList).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+router.route('/usersByBueinssNo/:businessNo').delete((request, response) => {
+  const params = request.params;
+  userController.deleteUserByBusinessNo(params.businessNo).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/users').delete((request, response) => {
+  const params = request.params;
+  userController.purge(params.propertyName).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+router.route('/usersSearch').post((request, response) => {
+  let payload = { ...request.body }
+  
+  userController.search(payload).then(result => {
+    if (!result) {
+      console.log("no data...");
+      response.status(404).send('no data')
+    } else {
+      response.status(201).json(result[0]);
+    }
+  })
+})
+
+/***************** End of Users API */
+
+router.route('/auth/login').post((request, response) => {
+  let user = { ...request.body }
+  userController.findUser(user).then(result => {
+    if (!result) {
+      console.log("Username or password is incorrect");
+      response.status(404).send('Username or password is incorrect')
+    } else {
+      // create a jwt token that is valid for 7 days
+      const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
+      response.json({ token, ...result});      
+    }
+  })
+})
 
 
 

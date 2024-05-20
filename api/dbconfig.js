@@ -16,7 +16,7 @@ const  config = {
       instancename:  'SQLEXPRESS'  // SQL Server instance name,      
     },
     trustServerCertificate: true,
-    port:  1433
+    port:  1433,
   }
   
   module.exports = config;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Util } from '../shared/util';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Config } from '@app/models/config.model';
 import { ConfigService } from './config.service';
 import { environment } from 'environments/environment';
@@ -20,6 +20,15 @@ export class BaseService {
 
   setBaseUrl(url: string): void {
     this.baseurl = url;
+  }
+
+  protected setHeaders(): HttpHeaders {
+    const headersConfig = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + this.config.user.profile.token,
+    };
+    return new HttpHeaders(headersConfig);
   }
   
 }
