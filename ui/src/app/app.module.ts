@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +36,9 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
 import { JwtModule } from '@auth0/angular-jwt';
+import { AuthInterceptor } from './shared/auth.interceptor';
+
+
 
 export const tokenGetter = () => {
   const config = ConfigService.config;
@@ -100,7 +103,13 @@ export const initConfig =
       useFactory: (configService: ConfigService) => {
         return () => configService.load();
       },
-    },
+    },    
+      {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthInterceptor, 
+          multi: true 
+      }
+  ,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

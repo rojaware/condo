@@ -18,49 +18,33 @@ export class PropertyService extends BaseService {
   }
 
   getAll(businessNo: any): Observable<Property[]> {    
-    return this.http.get<Property[]>(`${this.baseUrl}All/${businessNo}`, {
-      headers : this.setHeaders()
-    });
+    return this.http.get<Property[]>(`${this.baseUrl}All/${businessNo}`);
   }
 
   get(name: any): Observable<Property> {
-    return this.http.get<Property>(`${this.baseUrl}/${name}, {
-      headers : this.setHeaders()
-    }`);
+    return this.http.get<Property>(`${this.baseUrl}/${name}`);
   }
   
   getLeaseDates(): Observable<Property[]> {
-    return this.http.get<Property[]>(`${this.baseUrl}LeaseDates`, {
-      headers : this.setHeaders()
-    });
+    return this.http.get<Property[]>(`${this.baseUrl}LeaseDates`);
   }
 
   getMaturityDates(): Observable<Property[]> {
-    return this.http.get<Property[]>(`${this.baseUrl}MaturityDates`, {
-      headers : this.setHeaders()
-    });
+    return this.http.get<Property[]>(`${this.baseUrl}MaturityDates`);
   }
   create(data: any): Observable<any> {
-    return this.http.post(this.baseUrl, data, {
-      headers : this.setHeaders()
-    });
+    return this.http.post(this.baseUrl, data);
   }
 
   update(data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}`, data, {
-      headers : this.setHeaders()
-    });
+    return this.http.put(`${this.baseUrl}`, data);
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`, {
-      headers : this.setHeaders()
-    });
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
   deleteAll(): Observable<any> {
-    return this.http.delete(this.baseUrl, {
-      headers : this.setHeaders()
-    });
+    return this.http.delete(this.baseUrl);
   }
 }

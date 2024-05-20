@@ -22,6 +22,9 @@ export class BaseService {
     this.baseurl = url;
   }
 
+  /** 
+   * @deprecated use authInterceptor ....   * 
+   */
   protected setHeaders(): HttpHeaders {
     const headersConfig = {
       'Content-Type': 'application/json',

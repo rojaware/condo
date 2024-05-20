@@ -35,7 +35,7 @@ export class AuthService extends BaseService {
   login(data: any): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/login`, data)
       .pipe(tap((result) => {
-        localStorage.setItem('authUser', JSON.stringify(result));
+       
         // set user detail
         const profile = result as UserProfile;
         let userProfile = new UserProfile();
@@ -44,7 +44,10 @@ export class AuthService extends BaseService {
         userProfile.username = profile.username;
         userProfile.createdOn = profile.createdOn;
         userProfile.updatedOn = profile.updatedOn;
-        userProfile.token = profile.token;
+        
+        if (profile.token) {
+          localStorage.setItem('token', profile.token);
+        }
         if (!this.config.user) {
           this.config.user = {} as User;        
         }
@@ -58,14 +61,14 @@ export class AuthService extends BaseService {
       }));
   }
   logout() {
-    localStorage.removeItem('authUser');
+    localStorage.removeItem('token');
   }
   isLoggedIn() {
-    return localStorage.getItem('authUser') !== null;
+    return localStorage.getItem('token') !== null;
   }
   // alternative way to ckeck login staty by reading config.user.token...
   public get loggedIn(): boolean {
-    if (this.config && this.config.user && this.config.user.profile.token) {
+    if (this.config && this.config.user ) {
       return true;
     } else {
       return false;
