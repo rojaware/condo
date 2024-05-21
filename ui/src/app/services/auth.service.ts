@@ -20,18 +20,6 @@ export class AuthService extends BaseService {
   signup(data: any) {
     return this.httpClient.post(`${this.baseUrl}/register`, data);
   }
-  // login(data: any): Observable<any> {
-  //   return this.httpClient.post(`${this.baseUrl}/login`, data)
-  //     .pipe(tap((result: UserProfile) => {
-  //       localStorage.setItem('authUser', JSON.stringify(result));
-  //       // set user detail
-  //       let userProfile = new UserProfile();
-  //       userProfile.businessNo = result.businessNo;
-  //       this.config.user.profile = userProfile;
-        
-        
-  //     }));
-  // }
   login(data: any): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/login`, data)
       .pipe(tap((result) => {

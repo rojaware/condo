@@ -9,13 +9,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatMenuTrigger, MatMenuModule} from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
@@ -41,12 +42,15 @@ const material = [
   MatChipsModule,
   MatDatepickerModule,
   MatDialogModule,
+  MatDialogContent, 
+  MatDialogActions, 
+  MatDialogClose, 
   MatDividerModule,
   MatExpansionModule,
   MatGridListModule,
   MatIconModule,
   MatListModule,
-  // MatMenuModule,
+  MatMenuModule,
   // MatNativeDateModule,
   MatPaginatorModule,
   // MatProgressBarModule,

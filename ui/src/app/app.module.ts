@@ -37,6 +37,7 @@ import { SignupComponent } from './signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthInterceptor } from './shared/auth.interceptor';
+import { HeaderComponent } from './header/header.component';
 
 
 
@@ -73,6 +74,7 @@ export const initConfig =
     LoginComponent,
     SignupComponent,
     AdminComponent,
+    HeaderComponent,
   ],
   imports: [
     HttpClientModule,
