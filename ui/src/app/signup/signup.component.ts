@@ -11,7 +11,7 @@ import { AuthService } from '@app/services/auth.service';
 })
 
 export class SignupComponent extends BaseComponent implements OnInit {  
-  
+  Roles: any = ['Admin', 'Manager', 'Operator'];
   constructor(
     protected router: Router,
     protected authService: AuthService) {
@@ -20,9 +20,10 @@ export class SignupComponent extends BaseComponent implements OnInit {
     router = inject(Router);  
   }
   public signupForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required]),
+    businessNo: new FormControl('', [Validators.required])
   })
 
   public onSubmit() {

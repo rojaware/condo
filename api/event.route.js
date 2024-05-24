@@ -1112,6 +1112,17 @@ router.route('/auth/login').post((request, response) => {
   })
 })
 
-
-
+router.route('/auth/register').post((request, response) => {
+  let user = { ...request.body }
+  userController.addUser(user).then(result => {
+    if (!result) {
+      console.log("Username or password is incorrect");
+      response.status(404).send('Username or password is incorrect')
+    } else {
+      // create a jwt token that is valid for 7 days
+      const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
+      response.json({ token, ...result});      
+    }
+  })
+})
 module.exports = router;

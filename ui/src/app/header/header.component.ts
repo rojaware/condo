@@ -6,6 +6,7 @@ import { BaseComponent } from '@app/base/base.component';
 import { UserService } from '@app/services/user.service';
 import {MatMenuTrigger} from '@angular/material/menu';
 import { ConfigService } from '@app/services/config.service';
+import { AuthService } from '@app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -15,9 +16,11 @@ import { ConfigService } from '@app/services/config.service';
 export class HeaderComponent extends BaseComponent implements OnInit {
   
   @ViewChild('menuTrigger') menuTrigger: MatMenuTrigger;
+  isLogged: boolean;
+
   constructor(
     protected router: Router,
-    private userService: UserService,
+    private authService: AuthService,
     public dialog: MatDialog, ) {
     super(router);
   }
@@ -25,7 +28,6 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.config =  ConfigService.config;
   }
 
-  
   openDialog() {
     // #docregion focus-restoration
     const dialogRef = this.dialog.open(DialogFromMenuExampleDialog, {restoreFocus: false});
@@ -34,6 +36,13 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     // opens the dialog won't be in the DOM any more when the dialog closes.
     dialogRef.afterClosed().subscribe(() => this.menuTrigger.focus());
     // #enddocregion focus-restoration
+  }
+  isLoggedIn(): void {
+    this.isLogged = this.authService.isLoggedIn();
+  }
+  public logout(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
 

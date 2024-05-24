@@ -44,15 +44,13 @@ export class AuthService extends BaseService {
         } else {
           this.config.user.profile = userProfile;
         }
-        
-        
       }));
   }
   logout() {
     localStorage.removeItem('token');
   }
   isLoggedIn() {
-    return localStorage.getItem('token') !== null;
+    return localStorage.getItem('token') !== null ;//|| !this.util.isBlank(this.config.user);
   }
   // alternative way to ckeck login staty by reading config.user.token...
   public get loggedIn(): boolean {

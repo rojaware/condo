@@ -16,23 +16,17 @@
     <li class="nav-item" >      
       <button mat-button class="nav-link" [matMenuTriggerFor]="menu" #menuTrigger><mat-icon>person_pin</mat-icon></button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openDialog()"><pre> {{ config.user | json }} </pre></button>
+        <button mat-menu-item (click)="openDialog()"><pre>{{ config.user | json }} </pre></button>
       </mat-menu>
+    </li>    
+    <li class="nav-item">
+      {{isLogged}}<a href="#" class="navbar-brand" (click)="logout()" matTooltip="Log out"><mat-icon>exit_to_app</mat-icon></a>                
     </li>
     
-    <li class="nav-item" >
-      <a href="#" class="navbar-brand"><mat-icon>exit_to_app</mat-icon></a>
-              
-    </li>
     <!-- setting icon on top right corner -->
     <li class="nav-item" style="position:fixed; right: 0;">
       <a routerLink="settings" class="nav-link" ><mat-icon>settings</mat-icon></a>
     </li>
-    <li class="nav-item" style="position:fixed; right: 0;">
-      <button mat-button [matMenuTriggerFor]="menu" #menuTrigger><mat-icon>person_pin</mat-icon></button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openDialog()">Open dialog</button>
-      </mat-menu>
-    </li>
+    
   </div>
 </nav>

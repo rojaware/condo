@@ -4,11 +4,49 @@
       <span>Already have an account? <a routerLink="/login">Sign In</a></span>
   </div>
   <form class="form-group" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <input type="text" name="name" placeholder="Name" formControlName="name">
-      <input type="email" name="email" placeholder="Email" formControlName="email">
-      <input type="password" name="password" placeholder="Password" formControlName="password">
-      <input type="submit" value="Signup">
+    <div class="form-group">
+        <mat-form-field class="edit-form-field" >
+            <mat-label>Username</mat-label>
+            <input id="username" 
+                   matInput 
+                   formControlName="username" 
+                   name="username" />
+        </mat-form-field>      
+    </div>
+    <div class="form-group">
+        <mat-form-field class="edit-form-field" >
+            <mat-label>Email</mat-label>
+            <input id="email" 
+                   matInput 
+                   formControlName="email" 
+                   name="email" />
+        </mat-form-field>         
+    </div>
+        
+    <div class="form-group">
+        <mat-form-field class="edit-form-field" >
+            <mat-label>Password</mat-label>
+            <input id="password" 
+                   matInput 
+                   formControlName="password" 
+                   name="password" />
+        </mat-form-field>         
+    </div>        
+    <div class="form-group">        
+        <mat-form-field class="edit-form-field" >
+            <mat-label>Business Number</mat-label>
+            <input id="businessNo" 
+                   matInput 
+                   formControlName="businessNo" 
+                   name="businessNo" />
+        </mat-form-field>         
+    </div>          
+
+    <div class="form-group">        
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>        
   </form>
+  <div *ngIf="message" class="alert alert-danger">{{ message }}</div>
   <div class="card-terms">
       <input type="checkbox"> <span>I have read and agree to the <a href="">Terms of Service</a></span>
   </div>

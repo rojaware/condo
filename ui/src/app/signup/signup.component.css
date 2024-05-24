@@ -8,14 +8,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(253, 101, 133, 1);
+  background-color: rgb(234, 243, 217);
 }
 
 .signup-card {
   border-radius: 10px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
   width: 40%;
-  height: 450px;
+  height: 550px;
   background-color: #ffffff;
   padding: 10px 30px;
 }
@@ -59,4 +59,10 @@
 .card-terms span {
   margin: 5px;
   font-size: 13px;
+}
+
+.edit-form-field {
+  width: -webkit-fill-available;
+  margin-bottom: -2em;
+  padding-right: 10px;
 }
